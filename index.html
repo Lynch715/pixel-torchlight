@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#08060b">
 <title>像素火炬之光</title>
 <style>
-:root{--vh:1vh;--vw:1vw;--hud:86px;--orb:64px;--sk:48px;--lb:170px;--mini:110px}
+:root{--vh:1vh;--vw:1vw;--hud:86px;--orb:64px;--sk:48px;--lb:170px;--mini:110px;--ab:80px;--sb:67px}
 @supports (height:1dvh){:root{--vh:1dvh}}
 *{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
 html,body{overscroll-behavior:none;touch-action:none}
@@ -67,7 +67,11 @@ h4:first-of-type{margin-top:4px}
 .slot.up1{box-shadow:inset 0 0 0 1px #40e06099}
 .slot .better{position:absolute;top:-3px;right:1px;font-size:10px;color:#40e060;text-shadow:1px 1px 0 #000;line-height:1}
 #grid{display:grid;grid-template-columns:repeat(6,44px);gap:5px}
-.r0{border-color:#666}.r1{border-color:#5b9bd5}.r2{border-color:#e8c840}.r3{border-color:#e07820}.r4{border-color:#40c040}
+.r0{border-color:#666}
+.r1{border-color:#5b9bd5;box-shadow:inset 0 0 6px #5b9bd533}
+.r2{border-color:#e8c840;box-shadow:inset 0 0 7px #e8c84044,0 0 4px #e8c84033}
+.r3{border-color:#e07820;box-shadow:inset 0 0 8px #e0782055,0 0 7px #e0782066}
+.r4{border-color:#40c040;box-shadow:inset 0 0 8px #40c04055,0 0 7px #40c04066}
 #tip{position:absolute;background:#0d0912;border:2px solid #5b4a6e;box-shadow:0 0 0 2px #0a0710,0 4px 16px #000;
  padding:9px 10px;font-size:12px;z-index:99;display:none;pointer-events:none;max-width:250px;line-height:1.55}
 #chr table{font-size:13px;width:100%;line-height:1.75}
@@ -96,6 +100,27 @@ button:disabled{opacity:.4;cursor:default}
  padding:5px 10px;font-size:12px;color:#f2d060;pointer-events:auto;cursor:pointer;transform:translate(-50%,0)}
 
 /* ============ 移动端适配 ============ */
+/* 右下角动作键：仅移动端显示 */
+#actBtns{display:none}
+body.mobile #actBtns{display:block;position:absolute;inset:0;pointer-events:none;z-index:6}
+.ab{position:absolute;border-radius:50%;background:rgba(24,18,30,.88);border:3px solid #5b4a6e;
+ display:flex;align-items:center;justify-content:center;pointer-events:auto;cursor:pointer;
+ box-shadow:0 0 0 2px #0a0710,0 3px 10px #000}
+.ab img.ico{width:56%;height:56%}
+.ab .cd{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,.68);color:#e0d0f0;
+ display:none;align-items:center;justify-content:center;font-size:17px;font-weight:bold}
+.ab .tag{position:absolute;bottom:-3px;left:50%;transform:translateX(-50%);font-size:9px;color:#7a6a90;
+ background:#141019;padding:0 4px;border:1px solid #3a2c48;white-space:nowrap}
+.ab.lock{opacity:.4}
+.ab:active{border-color:#f2d060;background:rgba(58,44,72,.9)}
+#atkBtn{width:var(--ab);height:var(--ab);right:calc(18px + env(safe-area-inset-right));
+ bottom:calc(18px + env(safe-area-inset-bottom));border-color:#7a5a3a}
+#spellBtn{width:var(--sb);height:var(--sb);right:calc(var(--ab) + 30px + env(safe-area-inset-right));
+ bottom:calc(var(--ab)*0.55 + 18px + env(safe-area-inset-bottom))}
+#spellPick{left:50%;top:50%;transform:translate(-50%,-50%);width:min(calc(var(--vw)*90),330px)}
+#spellList .row{cursor:pointer}
+#spellList .row.on{background:#2a2038;border-left:3px solid #f2d060}
+#spellList .row.lk{opacity:.45}
 #sysBtns{position:absolute;top:10px;left:10px;display:none;gap:8px;z-index:6}
 #sysBtns .sb{width:44px;height:44px;background:rgba(20,16,25,.9);border:2px solid #3a2c48;cursor:pointer;
  pointer-events:auto;display:flex;align-items:center;justify-content:center}
@@ -119,10 +144,13 @@ body.mobile .orb{width:var(--orb);height:var(--orb);bottom:calc(12px + env(safe-
 body.mobile #hpOrb{left:calc(12px + env(safe-area-inset-left))}
 body.mobile #mpOrb{left:calc(20px + var(--orb) + env(safe-area-inset-left))}
 body.mobile .orb .txt{font-size:12px}
-body.mobile #xpBar{left:calc(var(--lb) + 6px);right:14px;bottom:calc(78px + env(safe-area-inset-bottom));height:9px}
-/* 技能栏占据球体右侧的剩余带宽后居中，窄屏也不会压到球上 */
-body.mobile #skills{left:var(--lb);right:12px;transform:none;justify-content:center;
- gap:7px;bottom:calc(12px + env(safe-area-inset-bottom))}
+body.mobile #xpBar{left:calc(var(--lb) + 6px);right:calc(var(--ab) + var(--sb) + 76px);
+ bottom:calc(78px + env(safe-area-inset-bottom));height:9px}
+/* 移动端底部只留两瓶药水，五个法术改由右侧法术槽承载 */
+body.mobile .sk[data-k="1"],body.mobile .sk[data-k="2"],body.mobile .sk[data-k="3"],
+body.mobile .sk[data-k="4"],body.mobile .sk[data-k="5"]{display:none}
+body.mobile #skills{left:auto;right:calc(var(--ab) + var(--sb) + 52px + env(safe-area-inset-right));
+ transform:none;gap:8px;bottom:calc(18px + env(safe-area-inset-bottom))}
 body.mobile .sk{width:var(--sk);height:var(--sk)}
 body.mobile .sk .ico{width:calc(var(--sk)*0.68);height:calc(var(--sk)*0.68)}
 body.mobile #sysBtns .sb .ico{width:28px;height:28px}
@@ -143,7 +171,7 @@ body.mobile .panel{position:fixed;overflow-y:auto;-webkit-overflow-scrolling:tou
 body.mobile #inv,body.mobile #chr,body.mobile #help,body.mobile #shop,body.mobile #smith,body.mobile #quest{
  left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);
  top:calc((var(--vh)*100 - var(--hud))/2 + 6px)}
-body.mobile #inv{width:min(calc(var(--vw)*94),352px)}
+body.mobile #inv{width:min(calc(var(--vw)*94),360px)}
 body.mobile #chr{width:min(calc(var(--vw)*94),330px)}
 body.mobile #shop,body.mobile #smith{width:min(calc(var(--vw)*94),420px)}
 body.mobile #quest{width:min(calc(var(--vw)*94),410px)}
@@ -184,6 +212,12 @@ body.short.mobile h4{margin:8px 0 4px}
   <div id="goldHud"></div>
   <div id="hint">左键移动/攻击 · 1-5技能 · Q/E药水 · I背包 · C角色 · J任务 · T回城 · H帮助</div>
 </div>
+<div id="actBtns">
+  <div class="ab" id="atkBtn" data-ic="ic_sword" title="普通攻击"><img class="ico"><div class="cd"></div></div>
+  <div class="ab" id="spellBtn" title="法术（长按切换）"><img class="ico"><div class="cd"></div><span class="tag">长按</span></div>
+</div>
+<div id="spellPick" class="panel"><div class="pclose">&#10005;</div><h3>选择法术</h3><div id="spellList"></div>
+  <div style="color:#887a99;font-size:11px;margin-top:8px">长按右侧法术键可随时呼出</div></div>
 <div id="sysBtns">
   <div class="sb" data-p="inv" data-ic="ic_bag" title="背包"><img class="ico"></div>
   <div class="sb" data-p="chr" data-ic="ic_char" title="角色"><img class="ico"></div>
@@ -193,18 +227,23 @@ body.short.mobile h4{margin:8px 0 4px}
   <div class="sb" id="fsBtn" data-ic="ic_full" title="全屏"><img class="ico"></div>
 </div>
 <div id="inv" class="panel"><div class="pclose">&#10005;</div><h3>背包 (I)</h3>
-  <h4>装备</h4><div id="eqRow"></div><h4>物品 <span id="invCnt"></span></h4><div id="grid"></div></div>
+  <h4>装备</h4><div id="eqRow"></div><h4>物品 <span id="invCnt"></span></h4><div id="grid"></div>
+  <h4>详情</h4><div id="invDetail" style="min-height:44px;font-size:12px;line-height:1.6"></div></div>
 <div id="chr" class="panel"><div class="pclose">&#10005;</div><h3>角色 (C)</h3><div id="chrBody"></div></div>
 <div id="shop" class="panel"><div class="pclose">&#10005;</div><h3>杂货商人</h3><div id="shopBody"></div></div>
 <div id="smith" class="panel"><div class="pclose">&#10005;</div><h3>铁匠铺</h3><div id="smithBody"></div></div>
 <div id="quest" class="panel"><div class="pclose">&#10005;</div><h3>任务 (J)</h3><div id="questBody"></div></div>
 <div id="help" class="panel"><div class="pclose">&#10005;</div><h3>像素火炬之光</h3>
 <span id="helpDesk">左键点击：移动 / 攻击怪物<br>1-5 技能 · Q/E 药水 · T 回城<br>I 背包 · C 角色 · J 任务 · H 帮助<br></span>
-<span id="helpMob" style="display:none">左半屏按住拖动 = 虚拟摇杆走位，靠近敌人自动普攻<br>左半屏轻点或点右半屏 = 老的点击寻路，点怪物追击<br>两种操作可以同时用，摇杆优先<br>底部按钮释放技能与药水，技能自动锁定最近敌人<br>左上角：背包 / 角色 / 任务 / 回城 / 帮助 / 全屏<br></span>
+<span id="helpMob" style="display:none">左半屏按住拖动 = 虚拟摇杆走位<br>右下大键 = 普通攻击（按住可连击），旁边小键 = 法术<br>长按法术键可切换要用的法术<br>底部两瓶为生命/法力药水<br>底部按钮释放技能与药水，技能自动锁定最近敌人<br>左上角：背包 / 角色 / 任务 / 回城 / 帮助 / 全屏<br></span>
 共 4 个区域 20 层，每 5 层有区域首领。<br>
 地牢里有宝藏室、精英巢穴、神龛与陷阱，小地图上会标出。<br>
 城镇里可以找商人买卖、找铁匠强化与镶嵌宝石、接任务。<br>
 每层随机刷新悬赏任务，完成后自动结算。<br>
+<span style="color:#e08080">生命与法力药水共用冷却，且有携带上限。<br>
+回城需要站定吟唱，移动或受伤会打断。<br>
+死亡会把进度退回本区域第一层。<br>
+精英怪带随机词缀，首领有阶段与狂暴，地面红圈必须走开。</span><br>
 击败虚空之主可开启更高难度周目。<br>
 <span style="color:#887a99">进度每 30 秒自动保存</span></div>
 <div id="tip"></div>
@@ -221,29 +260,27 @@ const pick=a=>a[ri(0,a.length-1)];
 let AC=null;
 function sfx(f,d,tp,v){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=tp||'square';o.frequency.setValueAtTime(f,AC.currentTime);o.frequency.exponentialRampToValueAtTime(Math.max(30,f*0.5),AC.currentTime+d);g.gain.setValueAtTime(v||0.03,AC.currentTime);g.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d);}catch(e){}}
 // ============ 像素图 ============
-function makeSprite(rows,pal){const h=rows.length,w=rows[0].length;const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');for(let y=0;y<h;y++)for(let x=0;x<w;x++){const ch=rows[y][x];if(ch!=='.'&&pal[ch]){g.fillStyle=pal[ch];g.fillRect(x,y,1,1);}}return c;}
+function makeSprite(rows,pal){const h=rows.length,w=rows[0].length;
+ const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');
+ let bottom=0,top=h;
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){const ch=rows[y][x];
+  if(ch!=='.'&&pal[ch]){g.fillStyle=pal[ch];g.fillRect(x,y,1,1);
+   if(y+1>bottom)bottom=y+1;if(y<top)top=y;}}
+ // bottom = 最低一行实心像素，用来把精灵"踩"在地面上而不是浮空
+ c.meta={bottom:bottom||h,top:top,w:w,h:h};
+ return c;}
 const ROWS={};
-ROWS.hero=["................",".....kkkkkk.....","....khhhhhhk....","....khhhhhhk....","....kssssssk....","....kskssksk....",".....ssssss.....","....rrrrrrrr....","...rrgrrrrgrr...","..ssrrrrrrrrss..","..ss.rrrrrr.ss..",".....rrrrrr.....",".....dd..dd.....",".....dd..dd.....",".....kk..kk.....","................"];
-ROWS.wolf=["................","................","..w..w..........","..wwww..........","..wkww..........","..wwwwwwwwww....","..wwwwwwwwwww...","...wwwwwwwwwww..","...ww...www..w..","...ww...ww......","...kk...kk......","................","................","................","................","................"];
-ROWS.slime=["................","................","................","................","................",".....gggggg.....","....gggggggg....","...gggwwggggg...","...ggwwgggggg...","..gggggggggggg..","..gggggggggggg..","..gggggggggggg..","...gggggggggg...","................","................","................"];
-ROWS.bat=["................","................","................","..p..........p..",".ppp........ppp.",".pppp..pp..pppp.","..pppppppppppp..","...pppkppkppp...","....pppppppp....","......pppp......","................","................","................","................","................","................"];
-ROWS.skel=["................",".....wwwwww.....","....wwwwwwww....","....wkwwwwkw....","....wwwwwwww....",".....w.ww.w.....","......wwww......","....wwwwwwww....","...w.wwwwww.w...","...w.w.ww.w.w...",".....wwwwww.....",".....w.ww.w.....",".....w....w.....","....ww....ww....","................","................"];
-ROWS.eye=["................","................","................",".....pppppp.....","...pppwwwwppp...","..ppwwwwwwwwpp..","..pwwwrrrrwwwp..",".ppwwrrkkrrwwpp.",".ppwwrrkkrrwwpp.","..pwwwrrrrwwwp..","..ppwwwwwwwwpp..","...pppwwwwppp...",".....pppppp.....","................","................","................"];
-ROWS.boss=["..k..........k..","..kk........kk..","...kk......kk...","..rrrrrrrrrrrr..",".rrrrrrrrrrrrrr.",".rrykrrrrrrkyrr.",".rrrrrrrrrrrrrr.","..rrrkkkkkkrrr..","..rrrrrrrrrrrr..",".rrr.rrrrrr.rrr.",".rr..rrrrrr..rr.",".....rrrrrr.....","....rrr..rrr....","....rr....rr....","....kk....kk....","................"];
-ROWS.imp=["................","...k........k...","...kk......kk...","....rrrrrrrr....","...rrrrrrrrrr...","...ryrrrrrryr...","...rrrkkkkrrr...","....rrrrrrrr....","..k..rrrrrr..k..",".kkrrrrrrrrrrkk.","..k..rrrrrr..k..","......rrrr......",".....rr..rr.....",".....k....k.....","................","................"];
-ROWS.wraith=["................","......cccc......",".....cccccc.....","....ccwccwcc....","....cccccccc....","....cccccccc....","...cccccccccc...","..cccccccccccc..","..cc.cccccc.cc..","..c...cccc...c..","......cccc......",".....cc..cc....."," ....c....c.....","................","................","................"];
-ROWS.golem=[".....wwwwww.....","....wwwwwwww....","....wkwwwwkw....","....wwwwwwww....","...wwwwwwwwww...","..wwwwwwwwwwww..","..wwwwwwwwwwww..","..ww.wwwwww.ww..","..ww.wwwwww.ww..","..ww.wwwwww.ww..",".....wwwwww.....","....www..www....","....ww....ww....","....ww....ww....","...www....www...","................"];
+ROWS.hero=["................................", "...........kkkkkkkkkk...........", ".........kkkiiiiiiiikkk.........", "........kkiihhhhhhhhiikk........", "........kihhhhhhhhhhhhik........", "........kHHHHHHHHHHHHHHkkkkk....", "........kHHHHHHHHHHHHHHkknnk....", "........kihhhhhhhhhhhhHkknnk....", "........kihhhhhhhhhhhhHkknnk....", "........kihhhhhhhhhhhhHkknnk....", "........kihhhhhhhhhhhhHkknnk....", "........kklsheehhheesSkkknnk....", ".........klsseessseesSk.knnk....", ".....kkkkkklssssssssSkkkknnk....", ".....knnnnnmsssssssmmnnnnnnk....", ".....knmmmmmrssssssmmmmmmnnk....", ".....knmmmmmbrrrrrrmmmmmmnnkk...", ".....knmmmmmrbrrrrrmmmmmggggk...", ".....kktrrrrrrbrrrrrrrrrggggk...", "......ktrrrrrrrbrrrrrrrrggggk...", "......ktrrrrrrrrbrrrrrrrRkkkk...", "......ktrrrrrrrrrbrrrrrrRk......", "......ktrrrrrrrrrrbrrrrrRk......", "......klsssrrrrrrrrbrsssSk......", "......klsssbbbbggbbbbsssSk......", "......klSSSbbbbggbbbbSSSSk......", "......kkkkkkbdDkkbdDkkkkkk......", "...........kbdDkkbdDk...........", "..........kkbdDkkbdDkk..........", "..........kDDDDDDDDDDk..........", "..........kDDDDDDDDDDk..........", "..........kDDDDDDDDDDk.........."];
+ROWS.wolf=["................................", "................................", "................................", "................................", "................................", "................................", "................................", "................................", "................................", ".....kkk.kkk....................", ".....klk.klk..............kkkkkk", "....kklkkklkk............kkllllk", "....klmlklmlkk...........klmmmml", "..kkklmmlmmmlkk........kkklmmmmd", "..kllmmmmmmmmlkkkkkkkkkkllmmmmmd", "..klmmmmmmmmmmllllllllklmmmmmmmd", "..klmmmeemmmmmmmmmmmmmlmmmmmmmdk", ".kklmmmeemmmmmmmmmmmmmmmmmmmmmdk", ".knnmmmmmmmmmmmmmmmmmmmmmmmmmmdk", ".knnmmmmmmmmmmmmmmmmmmmmmdddddkk", ".klddddddmmmmmmmmmmmmmmmdkkkkkk.", ".kkkkkkkklmmmmmmmmmmmmmmdk......", "........klmmmmmmmmmmmmmmdk......", "........kklmmmmmmmmmmmmdkkk.....", ".........kkdddddddddddddddk.....", "..........kdddkdddkkddddddk.....", "..........kdddkdddkkddddddk.....", "..........kdddkdddkkddddddk.....", "..........kdddkdddkkddddddk.....", "..........kdddkdddkkddddddk.....", "..........kkkkkkkkkkkkkkkkk.....", "................................"];
+ROWS.slime=["................................", "................................", "................................", "................................", "................................", "................................", "................................", "................................", "................................", "................................", "................................", "..........kkkkkkkkkkkk..........", "........kkkllllllllllkkk........", ".......kkllmmmmmmmmmmllkk.......", "......kkhhhhhhhmmmmmmmmlkk......", ".....kklhhhhhhmmmmmmmmmmlkk.....", "....kklmhhhhhhmmmmmmmmmmmlkk....", "....klmmhhhhhhmmmmmmmmmmmmlk....", "...kklmmmmmmmmmmmmmmmmmmmmdkk...", "...klmmmmmmmmmmmmmmmmmmmmmmlk...", "...klmmmmmmmheemmmheemmmmmmdk...", "...klmmmmmmmeeemmmeeemmmmmmdkk..", "...klmmmmmmmeeemmmeeemmmmmmmlk..", "...klmmmmmmmmmmmmmmmmmmmmmmmdk..", "...klmmmmmmmmmmmmmmmmmmmmmmmdk..", "...klmmmmmmmmmmmmmmmmmmmmmmmdk..", "...klmmmmmmmmmmmmmmmmmmmmmmmdk..", "...klmmmmmmmmmmmmmmmmmmmmmmmdk..", "...klmmmmmmmmmmmmmmmmmmmmmmmdk..", "...klddddddddddddddddddddddddk..", "...kkkkkkkkkkkkkkkkkkkkkkkkkkk..", "................................"];
+ROWS.bat=["................................", "................................", "................................", "................................", "................................", "................................", "................................", "kkk...........................kk", "klkkk.......kkk...kkk.......kkkl", "kkllkkk.....klk...klk.....kkkllk", ".klmllkkkk.kklk...klkk.kkkkllmdk", ".klmmmlllkkkldkkkkkllkkklllmmmdk", ".klmmmmmmllklmlllllmdkllmmmmmmdk", ".klmmmmmmmmlmmmmmmmmmlmmmmmmmmdk", ".klmmmmmmmmmmmmmmmmmmmmmmmmmmmdk", ".kklmmmmmmmmmmeemmeedmmmmmmmmdkk", "..klmmmmmmddmmeemmeekldmmmmmmdk.", "..klmmmmmdkklmmmmmmdkkklmmmmmdk.", "..klmmmddkllmmmmmmmmlllkldmmmdk.", "..klmmdkllmmmmmmmmmmmmmldklmmdk.", "..kldddldmmmmmmnmnmdmmmmdlddddk.", "..klkkkkklddmddddddkldddkkkkklk.", "..kkk...kkkklkkkkkkklkkkk...kkk.", "...........kkk.....kkk..........", "................................", "................................", "................................", "................................", "................................", "................................", "................................", "................................"];
+ROWS.skel=["................................", "................................", "............kkkkkkkk............", "..........kkkllllllkkk..........", "..........kllmmmmmmllk..........", ".........kklmmmmmmmmdkk.........", ".........klmmmmmmmmmmlk.........", ".........klmmmmmmmmmmdk.........", ".........klmeeemmmeeedk.........", ".........klmeeemmmeeedk.........", ".........klmeeemmmeeedk.........", ".........klmeeeeemeeedk.........", ".........kklmmmeemmmdkk.........", "..........klmmmmmmmmdk..........", "..........kklmmmmmmmdk..........", "...........kledemedddk..........", "......kkkkkkkkkldkkkkkkkkk......", "......kllllllllmmllllllllk......", "......klmdkkkkkldkkkkklmdk......", "......kldklllllmmlllllkldk......", "......kldkkkkkkldkkkkkkldk......", "......kldklllllmmlllllkldk......", "......kldkkkkkkldkkkkkkldk......", "......kldkkllllmmllllkkldk......", "......kldkklmmmmmmmmdkkldk......", "......kldkklmmmddmmmdkkldk......", "......kkkkkklmdkklmdkkkkkk......", "...........klmdkklmdk...........", "...........klmdkklmdk...........", "...........klmdkklmdk...........", "...........klddkklddk...........", "...........kkkkkkkkkk..........."];
+ROWS.eye=["................................", "................................", "................................", "................................", "..........kkkkkkkkkkkk..........", "........kkkllllllllllkkk........", ".......kkllmmmmmmmmmmllkk.......", "......kklmmmmmmmmmmmmmmlkk......", ".....kklmmmmwwwwwwwwmmmmlkk.....", ".....klmmmwwwwwwwwwwwwmmmlk.....", "....kklmmwwwwrrrrrrwwwwmmdkk....", "....klmmwwwwrrrrrrrrwwwwmmlk....", "....klmmwwwrrWWeeerrrwwwmmdk....", "....klmmwRRrrWeeeeerrwRRmmdk....", "....klmmwwwRReeeeeerRRwwmmdk....", "....klmmwwwrreeeeeerrwwwmmdk....", "....klmmwwwrreeeeeerrwwwmmdk....", "....klmmwwwrrreeeerrrwwwmmdk....", "....klmmwwwwRRrrrrrrwwwwmmdk....", "....kklmmwwRwrrrrrrwwwwmmdkk....", ".....klmmmwwwwwwwwwwwwmmmdk.....", ".....kklmmmmwwwwwwwwmmmmdkk.....", "......kklmmmmmmmmmmmmmmdkk......", ".....kkkkldmmmmmmmmmmdddkkkk....", ".....klllkkldmddmddmdkkklllk....", ".....klkkkkkklkklkklkk.kkklk....", ".....kkk..kklkkklkkklkk..kkk....", "..........klkk.klk.kklk.........", "..........klk..klk..klk.........", "..........kkk..klk..kkk.........", "...............kkk..............", "................................"];
+ROWS.boss=[".......khk.............khk......", "kk.....khk.............khk......", "dkk...kkhkkkkkkkkkkkk.kkhkk...kk", "kdkkk.khhhkkllllllllkkkhhhk.kkkd", "kdddkkkhhhklmmmmmmmmlkkhhhkkkddd", "kdddddhhhhhmmmmmmmmmmlhhhhhddddd", "kdddddddkhhmmmmmmmmmmmhhkddddddd", "kdddddddddmheEemmmeEehkddddddddd", "kdddddddddmmeeemmmeeemdddddddddd", "kkddddddddmmeeemmmeeemdddddddddk", ".kddddddddmmmmmmmmmmmdkddddddddk", ".kddddddddmmmnhnhnhnmdkddddddddk", ".kdddddddmmmmhhhhhhhmmlkdddddddk", ".kddddddklmmmnhnhnhnmmmdkddddddk", ".kdddddddmmmmmmmmmmmmmmddddddddk", ".kkdddmmmmmmmmmmmmmmmmmmmmddddkk", ".kddddmmmmmmgggggggggmmmmmdddddk", ".kkdddmmmmmmgggggggggmmmmmddddkk", "..kdddmmmmmmgggggggggmmmmmddddk.", "..kdkklmmmmmmmmmmmmmmmmmmmdkkdk.", "..kdkklmmmmmmmmmmmmmmmmmmdkkkdk.", "..kkklmmmmmmmmmmmmmmmmmmmdkkkkk.", "...klmmmmmmmmmmmmmmmmmmmmmlk....", "...klmmmmmmmmmmmmmmmmmmmmmdk....", "...klmmmmmdmmmmmdmmmmmmmmmdk....", "...klmmmmdklmmmdklmmmmmmmmdk....", "...kkldddkklmmmdklmmmmddddkk....", "....kkkkkkklmmmdklmmmdkkkkk.....", "..........klmmmdklmmmdk.........", ".........kklmmmdklmmmdkk........", ".........khhhhhhkhhhhhhk........", ".........khhhhhhkhhhhhhk........"];
+ROWS.imp=["................................", "................................", ".........kkk.........kkk........", ".........khk.........khk........", ".........khk.........khk........", "........kkhkk.......kkhkk.......", "........khhhkkkkkkkkkhhhk.......", ".......kkhhhllllllllkhhhkk......", ".......khhhhmmmmmmmmlhhhhk......", ".kkk...kkklmhmmmmmmmhdkkkk...kkk", ".kdkkkkkkklmmmmmmmmmmdk.kkkkkkdk", ".kkdddddkklmmeemmmeemdkkkdddddkk", "..kdddddddmmmeemmmeemmddddddddk.", "..kdddddddmmmmmmmmmmmmddddddddk.", "..kddddddddmmmmmmmmmmdddddddddk.", "..kkddddddklmmhhhhhmdkkddddddkk.", "...kddddddklmmhnhnhmdkkddddddk..", "...kdddddklmmmmmmmmmmlkkdddddk..", "...kddddmlmmmmmmmmmmmmllmddddk..", "...kkdddmmmmmmmmmmmmmmmmmdddkk..", "....kddklmmmmmmmmmmmmmmmdkddk...", "....kdkklmmmmmmmmmmmmmmmdkkdk...", "....kdkklmmmmmmmmmmmmdmmdkkdk...", "....kkkklddmmmmmmmmmdklddkkkk...", ".......kkkklmmmmmmmmdkkkkk......", "..........kklmmdddmmdklkkkkkkk..", "...........klmdkkklmdkklllkkdkk.", "...........klmdk.klmdkkkkklkddkk", "...........klmdk.klmdk...kkldddk", "...........klddk.klddk....kddddd", "...........kkkkk.kkkkk....kkkkkk", "................................"];
+ROWS.wraith=["................................", "................................", "...........kkkkkkkkkk...........", "..........kkllllllllkk..........", ".........kklmmmmmmmmlkk.........", "........kklmmmmmmmmmmlkk........", ".......kklmmmmmmmmmmmmlkk.......", ".......klmmmmhhhhhhmmmmlk.......", ".......klmmmhhhhhhhhmmmdk.......", ".......klmmhhhhhhhhhhmmdk.......", ".......klmmhhhhhhhhhhmmdk.......", ".......klmmhhhhhhhhhhmmdk.......", ".......klmmhheehhheehmmdk.......", ".......klmmhheehhheehmmdk.......", ".......klmmhhhhhhhhhhmmdk.......", "....kkkklmmmhhhhhhhhmmmdkkkk....", "...kklllmmmmmhhhmhhmmmmmlllkk...", "...klmmmmmmmmmmmmmmmmmmmmmmlk...", "...klmmmmmmmmmmmmmmmmmmmmmmdk...", "...klmmmmmmmmmmmmmmmmmmmmmmdk...", "...klmmmmmddmmmmmmmmmdmmmmmdk...", "...klmmmmdkklmmmmmmmdklmmmmdk...", "...klmmmmdklmmmmmmmmmldmmmmdk...", "...kkldddkklmmmmmmmmmdkldddkk...", "....kkkkkklmmmmmmmmmmmlkkkkk....", ".......kklmmmmmmmmmmmmmlkk......", "......kklmmmmmmmmmmmmmmmlkk.....", "......klmddmmddmmddmmddmmlk.....", "......kldkkldkkldkkldkkldkkkk...", "......kldkkldkkldkkldkkldkklk...", "......kkkkkkkkkkkkkkkkkkkkkkk...", "................................"];
+ROWS.golem=["................................", "................................", "................................", "...........kkkkkkkkkk...........", "...........kllllllllk...........", "...........klmmmmmmdk...........", "...........kleemmeedk...........", "...........kleemmeedk...........", "...........kleemmeedk...........", "...........klmmmmmmdk...........", "...........klmmmmmmdk...........", "...........klmmmmmmdk...........", "..kkkkkkkkkklmmmmmmdkkkkkkkkkk..", "..klllllklllmmmhmmmmlllklllllk..", "..klmmmdklmmmmmhmmmmmmdklmmmdk..", "..klmmmdklmmmmmhmmmmmmdklmmmdk..", "..klmmmdklmmmmmhmmmmmmdklmmmdk..", "..klmmmdkklmmmmhmmmmmdkklmmmdk..", "..khhhhhkklmmmmhmmmmmdkkhhhhhk..", "..klmmmdkkhhhhhhhhhhhhkklmmmdk..", "..klmmmdkklmmmmmmhmmmdkklmmmdk..", "..klmmmdkklmmmmmmhmmmdkklmmmdk..", ".kklmmmdkklmmmmmmhmmmdkklmmmdkk.", ".klmmmmmlklmmmmmmhmmmdklmmmmmlk.", ".klmmmmmdklmmmmmdhmmmdklmmmmmdk.", ".klmmmmmdkklmmmdklmmmdklmmmmmdk.", ".klmmmmmdkklmmmdklmmmdklmmmmmdk.", ".klddddddkklmmmdklmmmdklddddddk.", ".kkkkkkkkkklmmmdklmmmdkkkkkkkkk.", "..........klmmmdklmmmdk.........", "..........klmmmdklmmmdk.........", "..........klddddklddddk........."];
 ROWS.chest=["................","................","................","................","...bbbbbbbbbb...","..bbbbbbbbbbbb..","..bggggggggggb..","..bbbbbbbbbbbb..","..bbbbbggbbbbb..","..bbbbbggbbbbb..","..bbbbbbbbbbbb..","..kkkkkkkkkkkk..","................","................","................","................"];
-ROWS.pot=["................","................","......ww........","......ww........",".....wwww.......","....crrrrc......","...crrrrrrc.....","...crrrrrrc.....","...crrrrrrc.....","....crrrrc......",".....cccc.......","................","................","................","................","................"];
-ROWS.sword=["................","..........ww....",".........www....","........www.....",".......www......","......www.......",".....www........","..g.www.........","...gww..........","...ggg..........","..g..g..........","................","................","................","................","................"];
-ROWS.shield=["................","................","...mmmmmmmm.....","...mmmmmmmm.....","...mmgggmmm.....","...mmgggmmm.....","...mmmmmmmm.....","...mmmmmmmm.....","....mmmmmm......","....mmmmmm......",".....mmmm.......","......mm........","................","................","................","................"];
-ROWS.helm=["................","................","................","................",".....mmmmmm.....","....mmmmmmmm....","...mmmmmmmmmm...","...mmmmmmmmmm...","...mmm.mm.mmm...","...mmm.mm.mmm...","...mm......mm...","................","................","................","................","................"];
-ROWS.armor=["................","................","................","...mm......mm...","...mmmmmmmmmm...","...mmmmmmmmmm...","....mmmmmmmm....","....mmgmmgmm....","....mmmmmmmm....","....mmmmmmmm....","....mmmmmmmm....","................","................","................","................","................"];
-ROWS.legs=["................","................","................","....mmmmmmmm....","....mmmmmmmm....","....mmm..mmm....","....mmm..mmm....","....mm....mm....","....mm....mm....","....mm....mm....","....mmm..mmm....","....mmm..mmm....","................","................","................","................"];
-ROWS.ring=["................","................","................","......rr........","......rr........",".....g..g.......","....g....g......","....g....g......",".....g..g.......","......gg........","................","................","................","................","................","................"];
-ROWS.amulet=["................","....g......g....",".....g....g.....","......g..g......",".......gg.......","......gccg......",".....gccccg.....",".....gccccg.....","......gccg......",".......gg.......","................","................","................","................","................","................"];
-ROWS.gold=["................","................","................","................","................","................","................","................","................","....gg..gg......","...gggggggg.....","..gggggggggg....","..gggggggggg....","................","................","................"];
-ROWS.gem=["................","................","................","......gggg......",".....gwwwwg.....","....gwggggwg....","...gwgggggggw...","...ggggggggg....","....ggggggg.....",".....ggggg......","......ggg.......",".......g........","................","................","................","................"];
 ROWS.shrine=["................","......yyyy......",".....y....y.....",".....y.ww.y.....",".....y.ww.y.....","......yyyy......",".......yy.......","......yyyy......",".....yyyyyy.....","....yyyyyyyy....","...yyyyyyyyyy...","...bbbbbbbbbb...","..bbbbbbbbbbbb..","................","................","................"];
 
 // ---- UI 图标 ----
@@ -272,49 +309,111 @@ ROWS.prop_crate=["................","................","................","...bb
 ROWS.prop_barrel=["................","................","................","....bbbbbbbb....","...bbbbbbbbbb...","...kkkkkkkkkk...","...bbbbbbbbbb...","...bbbbbbbbbb...","...kkkkkkkkkk...","...bbbbbbbbbb...","...bbbbbbbbbb...","...kkkkkkkkkk...","....bbbbbbbb....","................","................","................"];
 ROWS.prop_anvil=["................","................","................","................","...mmmmmmmmm....","..mmmmmmmmmmm...","..mmmmmmmmmmm...","....mmmmmmm.....","......mmm.......","......mmm.......",".....mmmmm......","....mmmmmmm.....","....kkkkkkk.....","................","................","................"];
 ROWS.prop_board=["................","..kk........kk..","..kbbbbbbbbbbk..","..kbwwwwwwwwbk..","..kbwkkkkkkwbk..","..kbwwwwwwwwbk..","..kbwkkkkkwwbk..","..kbwwwwwwwwbk..","..kbwkkkkwwwbk..","..kbbbbbbbbbbk..","......kk.kk.....","......kk.kk.....","......kk.kk.....","................","................","................"];
+ROWS.npc_merchant=["................................", "................................", "................................", "...........kkkkkkkkkk...........", "..........kkllllllllkk..........", ".........kklmmmmmmmmlkk.........", "........kklmmmmmmmmmmlkk........", "........klmmmmmmmmmmmmlk........", "........klmmmssssssmmmdk........", "........klmssssssssssmdk........", "........klmssssssssssmdk........", "........klmssssssssssmdk........", "........klmsseessseesmdk........", "........kklsseessseesdkk........", ".........kksssssssssskk.........", "..........kklssssssdkk..........", "...........kklmmmmmdk...........", "...........kklmmmmmBkk..........", "...........klmmmmmmmBkkkkkk.....", "...........klmmmmmmmmBggggkk....", ".........kkklmmmmmmmmbBbbbgk....", ".........kggbbbggbbbbbbBbbBk....", "........kkgbbbbggbbbbbbbbbBk....", ".......kkgmmmmmmmmmmmbbbbbBk....", ".......kgbbbmmmmmmmmmbbbbbBk....", ".......kgbbbmmmmmmmmmbbbbbBk....", ".......kgbbbmmmmmmmmmmbbbBkk....", ".......kgbbbmmmmmmmmmmmmdkk.....", "......kklmmmmmmmmmmmmmmmdkk.....", "......klddddBBBddBBBdddddlk.....", "......kkkkkkBBBkkBBBkkkkkkk.....", "...........kkkkkkkkkk..........."];
+ROWS.npc_smith=["................................", "................................", "................................", "............kkkkkkkk............", "........kkkkknnnnnnkkkkk........", "........krrrrrrrrrrrrrrk........", "........krrrrrrrrrrrrrrk........", "........krrrrrrrrrrrrrrk........", "........krrrrrrrrrrrrrrk.kkkkkkk", "........krrssssssssssrrk.knnnnnn", "........krrssssssssssrrk.knnnnng", "........kknsseessseesSkk.knnnnng", ".........knsseessseesSk..knnnnng", ".........kknssssssssSkk..knggggg", ".........kknSSSSSSSSSkk..kkkldkk", "....kkkkkklmSSSSSSSSSlkkkkkkldk.", "....knnnnnmmllllllllmmnnnnnkldk.", "....knssssmmllllllllmmssssSkldk.", "....knssssmmmmmmmmmmmmssssSkldk.", "....knssssmmmmmmmmmmmmssssSkldk.", "....knssssmmmmmmmmmmmmssssSkldk.", "....knssssmmmmmmmmmmmmssssSkldk.", "....knssssmmmmmmmmmmmmssssSkldk.", "....knssssmmmmmmmmmmmmssssSkldk.", "....knssssmmmmmmmmmmmmssssSkldk.", "....knSSSSmmmmmmmmmmmmSSSSSkldk.", "....kkkkkkldddddddddddkkkkkkldk.", ".........kkddddkkddddkk....kkkk.", "..........kddddkkddddk..........", "..........kddddkkddddk..........", "..........kddddkkddddk..........", "..........kkkkkkkkkkkk.........."];
+ROWS.npc_quest=["................................", "..........kkkkkkkkkkkk..........", ".........kkwwwwwwwwwwkk.........", "........kkwyyyyyyyyyywkk........", "........kwyyyyyyyyyyyywk........", "........kwyyyyyyyyyyyygk........", "........kwyyyyyyyyyyyygk........", "........kwyyyyyyyyyyyygk........", "........kwyyyyyyyyyyyygk........", "........kksyyyyyyyyyyskk........", ".........kssseessseessk.........", ".........kssseessseessk.........", ".........kksssssssssskk.........", "..........kssssssssssk..........", "..........kkksssssskkk..........", "............kkklmdkk............", ".............klmmmlkkkkkkkkkk...", "............kklmmmdkkggwwwggk...", "............klmmmmmlkggwwwggk...", ".........kkkklmmmmmdkgggggggk...", ".........kwwwyyyyyyywggwwwggk...", ".........kwyyyyyyyyyygggggggk...", ".........kklmmmmmmmmmggwwwggk...", ".........kklmmmmmmmmmggggwggk...", ".........klmmmmmmmmmmggwwwggk...", "........kklmmmmmmmmmmggwwwggk...", "........klmmmmmmmmmmmmmdkkkkk...", ".......kklmmmmmmmmmmmmmdkk......", "......kklmmmmmmmmmmmmmmmlkk.....", "......kldddddddddddddddddlk.....", "......kkkkkkddddkddddkkkkkk.....", "...........kkkkkkkkkkk.........."];
+ROWS.weapon_0=["...............kkk..............", "...............klk..............", "..............kklkk.............", "..............klmlk.............", ".............kklmdkk............", ".............klmmmlk............", ".............kklmdkk............", "..............klmdk.............", "..............klmdk.............", "..............klmdk.............", "..............klmdk.............", "..............klmdk.............", "..............klmdk.............", "..............klmdk.............", "..............klmdk.............", "..............klmdk.............", "..............klmdk.............", "..............klmdk.............", "..............klmdk.............", "..........kkkkklmdkkkkk.........", "..........kAAAAaaaAAAAk.........", "..........kAaaaaaaaaakk.........", "..........kAkkkaaakkkkk.........", "..........kkkkkAakkkkkk.........", "..............kAakk.............", "..............kAakk.............", ".............kkAakk.............", ".............kAAAAk.............", ".............kAAAAk.............", ".............kAAAAk.............", ".............kAAAAk.............", ".............kkkkkk............."];
+ROWS.weapon_1=["...............kkk..............", "...............klk..............", "..............kklkk.............", ".............kklllkk............", ".............klmlmlk............", "............kklmlmdkk...........", "...........kklmmlmmlkk..........", "...........klmmmlmmmlk..........", "...........klmmmlmmmdk..........", "...........klmmmlmmmdk..........", "..........kklmmmlmmmdk..........", ".........kkllmmmlmmmdk..........", "........kklllmmmlmmmlkk.........", "........kllllmmmlmmmllkk........", "........kkkklmmmlmmmlllkk.......", "...........klmmmlmmmllllk.......", "...........klmmmlmmmlkkkk.......", "...........klmmmlmmmdk..........", "........kkkklmmmlmmmdkkkk.......", "........kAAAaaaaaaaaaAAAk.......", "........kAaaaaaaaaaaaaakk.......", "........kAaaaaaaaaaaaaakk.......", "........kAkkkkkaaakkkkkkk.......", "........kkkkkkkAakkkkkkkk.......", "..............kAakk.............", "..............kAakk.............", "............kkkAakkk............", "............kAAAAAAk............", "............kAAAAAAk............", "............kAAAAAAk............", "............kAAAAAAk............", "............kkkkkkkk............"];
+ROWS.weapon_2=["................................", "................................", "................................", "................................", "......kkkkkkkkkkkkkkkkkkkkk.....", "......klllllllllllllllllllk.....", "....kkklmmmmmmmmmmmmmmmmmdkkk...", "....kllmmlllllllllllllllmmllk...", "....klmmmlllllllllllllllmmmdk...", "....klmmmllllgggggglllllmmmdk...", "....klmmmmmmmggggggmmmmmmmmdk...", "....klmmmmmmmggggggmmmmmmmmdk...", "....klmmmmmmmggggggmmmmmmmmdk...", "....klmmmmmmmmmmmmmmmmmmmmmdk...", "....kldmmdddddddddddddddmmddk...", "....kkklmdddddddddddddddmdkkk...", "......klddddddmmmmmdddddddk.....", "......kkkkkkkkAaaakkkkkkkkk.....", ".............kAaaakk............", ".............kAaaakk............", ".............kAaaakk............", ".............kAaaakk............", ".............kAaaakk............", ".............kAaaakk............", ".............kAaaakk............", ".............kAaaakk............", ".............kAaaakk............", "............kkAaaakkk...........", "............kAAAAAAAk...........", "............kAAAAAAAk...........", "............kAAAAAAAk...........", "............kkkkkkkkk..........."];
+ROWS.weapon_3=["...............klk..............", "...............klkk.............", "...............kllk.............", "...............kllkk............", "...............klllk............", "...............klldkk...........", "...............kllmlk...........", "...............kllmdkk..........", "...............kllmmlk..........", "..............kkllmmdkk.........", "..............klmlmmmlk.........", "..............kkllmmdkk.........", "..............klmlmmdk..........", "..............kkllmmdk..........", "...............kllmdkk..........", "...............kllmdk...........", "...............kllmdk...........", "...............kkldkk...........", "................kldk............", ".............kkkkldk............", "..........kkkkggggkkkkkk........", "..........kAAAggggAAAAAk........", "..........kAaaggggaaaakk........", "..........kAkkgaaakkkkkk........", "..........kkkkkAakkkkkkk........", "..............kAakk.............", "..............kAakk.............", "..............kAakk.............", ".............kkAakk.............", ".............kAAAAk.............", ".............kAAAAk.............", ".............kkkkkk............."];
+ROWS.offhand_0=["................................", "................................", "................................", "..........kkkkkkkkkkkk..........", ".........kkllllllllllkk.........", "........kklmmmmmmmmmmlkk........", ".......kklmmmmmmmmmmmmlkk.......", "......kklmmmmmmmmmmmmmmlkk......", ".....kklmmmmaaaaaaaammmmlkk.....", ".....klmmmmaaaaaaaaaammmmlk.....", "....kklmmmaaaaaaaaaaaammmdkk....", "....klmmmmaaaaaaaaaaaammmmlk....", "....klmmmaaaaaaaaaaaaaammmdk....", "....klmmmaaaaaAAAAaaaaammmdk....", "....klmmmaaaaAAAAAAaaaammmdk....", "....klmmmaaaaAAAAAAaaaammmdk....", "....klmmmaaaaAAAAAAaaaammmdk....", "....klmmmaaaaAAAAAAaaaammmdk....", "....klmmmaaaaaAAAAaaaaammmdk....", "....klmmmaaaaaaaaaaaaaammmdk....", "....klmmmmaaaaaaaaaaaammmmdk....", "....kklmmmaaaaaaaaaaaammmdkk....", ".....klmmmmaaaaaaaaaammmmdk.....", ".....kklmmmmaaaaaaaammmmdkk.....", "......kklmmmmmmmmmmmmmmdkk......", ".......kklmmmmmmmmmmmmdkk.......", "........kklmmmmmmmmmmdkk........", ".........kkldddddddddkk.........", "..........kkkkkkkkkkkk..........", "................................", "................................", "................................"];
+ROWS.offhand_1=["................................", "................................", "...............kkk..............", "..............kklkk.............", ".............kklmlkk............", "............kklmmmlkk...........", "...........kklmmmmmlkk..........", "..........kklmmmmmmmlkk.........", ".........kklmmmmammmmlkk........", "........kklmmmmaalmmmmlkk.......", ".......kklmmmmaaallmmmmlkk......", "......kklmmmmaaaalllmmmmlkk.....", ".....kklmmmmaagggglllmmmmlkk....", "...kkklmmmmaaaggggllllmmmmlkkk..", "...kllmmmmaaaagggglllllmmmmllk..", "...kklmmmaaaaaggggllllllmmmdkk..", "....kklmmmaaaagggglllllmmmdkk...", ".....kklmmmaaaggggllllmmmdkk....", "......kklmmmaaaaallllmmmdkk.....", ".......klmmmmaaaalllmmmmdk......", ".......kklmmmaaaalllmmmdkk......", "........kklmmmaaallmmmdkk.......", ".........kklmmmaalmmmdkk........", "..........kklmmmammmdkk.........", "...........klmmmammmdk..........", "...........kklmmmmmdkk..........", "............kklmmmdkk...........", ".............kklmdkk............", "..............kklkk.............", "...............klk..............", "...............kkk..............", "................................"];
+ROWS.offhand_2=["................................", "................................", "................................", "....kkkkkkkkkkkkkkkkkkkkkkkkk...", "....klllllllllllllllllllllllk...", "....klmmmmmmmmmmmmmmmmmmmmmdk...", "....klmmmmmmmmmmmmmmmmmmmmmdk...", "....klmmaaaaaaaaaaaaaaaaammdk...", "....klmmaaaaaaaaaaaaaaaaammdk...", "....klmmaaaaaaaaaaaaaaaaammdk...", "....klmmmmmmmmmmmmmmmmmmmmmdk...", "....klmmmmmmmggggggmmmmmmmmdk...", "....klmmmmmmggggggggmmmmmmmdk...", "....klmmmmmmggwwwwggmmmmmmmdk...", "....klmmmmmmggwwwwggmmmmmmmdk...", "....klmmmmmmggwwwwggmmmmmmmdk...", "....klmmmmmmggwwwwggmmmmmmmdk...", "....klmmmmmmggggggggmmmmmmmdk...", "....klmmmmmmmggggggmmmmmmmmdk...", "....klmmaaaaaaaaaaaaaaaaammdk...", "....klmmaaaaaaaaaaaaaaaaammdk...", "....klmmaaaaaaaaaaaaaaaaammdk...", "....klmmmmmmmmmmmmmmmmmmmmmdk...", "....klmmmmmmmmmmmmmmmmmmmmmdk...", "....kldmmmmmmmmmmmmmmmmmmmddk...", "....kkkldmmmmmmmmmmmmmmmddkkk...", "......kkkldmmmmmmmmmmmddkkk.....", "........kkkldmmmmmmmddkkk.......", "..........kkkldmmmddkkk.........", "............kkklmdkkk...........", "..............kklkk.............", "...............kkk.............."];
+ROWS.offhand_3=["................................", "................................", "..........kkkkkkkkkkkk..........", "........kkkAAAAAAAAAAkkk........", ".......kkAAaaaaaaaaaaAAkk.......", "......kkAaaaaaaaaaaaaaaAkk......", ".....kkAaaaaaaaaaaaaaaaaAkk.....", ".....kAaaaammaaaaaaaammaaAk.....", "....kkAaaaammmaaaaaammmaakkk....", "....kAaaaaaammaaaaaammaaaaAk....", "...kkAaaaaaammmaaaammmaaaakkk...", "...kAaaaaaaaammaaaammaaaaaaAk...", "...kAaaaaaaaammmmmmmmaaaaaakk...", "...kAaaaaaaammmmmmmmaaaaaaakk...", "...kAaaaaaaammggggmmaaaaaaakk...", "...kAaaaaaaammggggmmaaaaaaakk...", "...kAammmmmmmmggggmmmmmmmmmdk...", "...kAammmmmmmmggggmmmmmmmmmdk...", "...kAaaaaaaammmmmmmmaaaaaaakk...", "...kAaaaaaaaammmmmmmaaaaaaakk...", "...kAaaaaaaaaammmammaaaaaaakk...", "...kkAaaaaaaaammaammmaaaaakkk...", "....kAaaaaaaammmaaammaaaaakk....", "....kkAaaaaaammaaaammmaaakkk....", ".....kAaaaaammmaaaaammaaakk.....", ".....kkAaaaammaaaaaammmakkk.....", "......kkAaaammaaaaaaammkkk......", ".......kkAkaaaaaaaaaakkkk.......", "........kkkAkkkkkkkkkkkk........", "..........kkkkkkkkkkkk..........", "................................", "................................"];
+ROWS.helm_0=["................................", "................................", "................................", "................................", "...........kkkkkkkkkk...........", ".........kkkllllllllkkk.........", "........kkllmmmmmmmmllkk........", ".......kklmmmmmmmmmmmmlkk.......", ".......klmmmmmmmmmmmmmmlk.......", "......kklmmmmmmmmmmmmmmdkk......", "......klmmmmmmmmmmmmmmmmlk......", "......klmmmmmmmmmmmmmmmmdk......", "......klmmmmmmmmmmmmmmmmdk......", "......klmmmmmmmmmmmmmmmmdkk.....", "......kldddddddmmmdddddddlk.....", "......klkkkkkkklmdkkkkkkklk.....", "......klkkkkkkklmdkkkkkkklk.....", "......klkkkkkkklmdkkkkkkklk.....", "......kllllllllmmmllllllldk.....", "......klmmmmmmmmmmmmmmmmmdk.....", "......klmmmmdmdmdmdmdmmmmdk.....", "......klmmmdklklklklklmmmdk.....", "......klmmmmlmlmlmlmlmmmmdk.....", "......kldmmmmmmmmmmmmmmmddk.....", "......kkklmmmmmmmmmmmmmdkkk.....", ".......kklmmmmmmmmmmmmmdkk......", ".......kAaaaaaaaaaaaaaaaAk......", ".......kAaaaaaaaaaaaaaaakk......", ".......kAkkkkkkkkkkkkkkkkk......", ".......kkkkkkkkkkkkkkkkkkk......", "................................", "................................"];
+ROWS.helm_1=["................................", "................................", "kkk...........................kk", "klkk.........................kkl", "kklkkk.....kkkkkkkkkk......kkklk", ".kkllkk..kkkllllllllkkk...kkllkk", "..kkllkkkkllmmmmmmmmllkkkkkllkk.", "...kllllklmmmmmmmmmmmmlkkllllk..", "...kklllllmmmmmmmmmmmmmlllllkk..", "....kklllmmmmmmmmmmmmmmmlllkk...", ".....kklmmmmmmmmmmmmmmmmmlkk....", "......klmmmmmmmmmmmmmmmmmlk.....", "......klmmmmmmmmmmmmmmmmdkk.....", "......klmmmmmmmmmmmmmmmmdkk.....", "......kldddddddmmmdddddddlk.....", "......klkkkkkkklmdkkkkkkklk.....", "......klkkkkkkklmdkkkkkkklk.....", "......klkkkkkkklmdkkkkkkklk.....", "......kllllllllmmmllllllldk.....", "......klmmmmmmmmmmmmmmmmmdk.....", "......klmmmmdmdmdmdmdmmmmdk.....", "......klmmmdklklklklklmmmdk.....", "......klmmmmlmlmlmlmlmmmmdk.....", "......kldmmmmmmmmmmmmmmmddk.....", "......kkklmmmmmmmmmmmmmdkkk.....", ".......kklmmmmmmmmmmmmmdkk......", ".......kAaaaaaaaaaaaaaaaAk......", ".......kAaaaaaaaaaaaaaaakk......", ".......kAkkkkkkkkkkkkkkkkk......", ".......kkkkkkkkkkkkkkkkkkk......", "................................", "................................"];
+ROWS.helm_2=["...........kggggggggk...........", "...........kggggggggk...........", "...........kggggggggk...........", "...........kggggggggk...........", "...........kkkAaaakkk...........", ".........kkkllaaaaalkkk.........", "........kkllmmaaaaamllkk........", ".......kklmmmmaaaaammmlkk.......", ".......klmmmmmaaaaammmmlk.......", "......kklmmmmmmmmmmmmmmdkk......", "......klmmmmmmmmmmmmmmmmlk......", "......klmmmmmmmmmmmmmmmmdk......", "......klmmmmmmmmmmmmmmmmdk......", "......klmmmmmmmmmmmmmmmmdkk.....", "......kldddddddmmmdddddddlk.....", "......klkkkkkkklmdkkkkkkklk.....", "......klkkkkkkklmdkkkkkkklk.....", "......klkkkkkkklmdkkkkkkklk.....", "......kllllllllmmmllllllldk.....", "......klmmmmmmmmmmmmmmmmmdk.....", "......klmmmmdmdmdmdmdmmmmdk.....", "......klmmmdklklklklklmmmdk.....", "......klmmmmlmlmlmlmlmmmmdk.....", "......kldmmmmmmmmmmmmmmmddk.....", "......kkklmmmmmmmmmmmmmdkkk.....", ".......kklmmmmmmmmmmmmmdkk......", ".......kAaaaaaaaaaaaaaaaAk......", ".......kAaaaaaaaaaaaaaaakk......", ".......kAkkkkkkkkkkkkkkkkk......", ".......kkkkkkkkkkkkkkkkkkk......", "................................", "................................"];
+ROWS.helm_3=["...kAkk...................kkAk..", "...kkAkkk...............kkkAkk..", "....kkAAkkk...........kkkAAkk...", ".....kAaAAkkk.......kkkAAakk....", ".....kkAaaAAkkkkkkkkkAAaakkk....", "......kkAaaaAAlllllAAaaakkk.....", ".......kAaaammmmmmmmmaaakk......", ".......kkAammmmmmmmmmmakkk......", ".......klammmmggggmmmmmkk.......", "......kklmmmmmggggmmmmmdkk......", "......klmmmmmmggggmmmmmmlk......", "......klmmmmmmggggmmmmmmdk......", "......klmmmmmmmmmmmmmmmmdk......", "......klmmmmmmmmmmmmmmmmdkk.....", "......kldddddddmmmdddddddlk.....", "......klkkkkkkklmdkkkkkkklk.....", "......klkkkkkkklmdkkkkkkklk.....", "......klkkkkkkklmdkkkkkkklk.....", "......kllllllllmmmllllllldk.....", "......klmmmmmmmmmmmmmmmmmdk.....", "......klmmmmdmdmdmdmdmmmmdk.....", "......klmmmdklklklklklmmmdk.....", "......klmmmmlmlmlmlmlmmmmdk.....", "......kldmmmmmmmmmmmmmmmddk.....", "......kkklmmmmmmmmmmmmmdkkk.....", ".......kklmmmmmmmmmmmmmdkk......", ".......kAaaaaaaaaaaaaaaaAk......", ".......kAaaaaaaaaaaaaaaakk......", ".......kAkkkkkkkkkkkkkkkkk......", ".......kkkkkkkkkkkkkkkkkkk......", "................................", "................................"];
+ROWS.armor_0=["................................", "................................", "................................", "................................", "................................", "................................", "...kkkkkkkk.kkkkkkkk.kkkkkkkk...", "..kkllllllkkkkkkkkkkkkllllllkk..", ".kklmmmmmmllkkkkkkkkllmmmmmmlkk.", ".klmmmmmmmmdkkkkkkkklmmmmmmmmlk.", ".klmmmmmmmmmllllllllmmmmmmmmmdk.", ".klmmmmmmmmmmmmmdmmmmmmmmmmmmdk.", ".klmmmmmmmmmmmmmdmmmmmmmmmmmmdk.", ".klmmmmmmmmmmmmmdmmmmmmmmmmmmdk.", ".klmmmmmmmmmmmmmdmmmmmmmmmmmmdk.", ".kklmmmmmmmmmmmmdmmmmmmmmmmmdkk.", "..kkldddddmmmmmmdmmmmmmdddddkk..", "...kkkkkkklmmmmmdmmmmmdkkkkkk...", ".........klmmmmmdmmmmmdk........", ".........klmmmmmdmmmmmdk........", ".........kkAaaaaaaaaakkk........", "..........kAaaaaaaaaakk.........", "..........klmmmmdmmmmdk.........", "..........klmmmmdmmmmdk.........", "..........klaaaaaaaaadk.........", "..........klaaaaaaaaadk.........", "..........kklmmmmmmmdkk.........", "...........klmmmmmmmdk..........", "...........klddddddddk..........", "...........kkkkkkkkkkk..........", "................................", "................................"];
+ROWS.armor_1=["................................", "................................", "................................", "................................", "................................", "................................", "...kkkkkkkk.kkkkkkkk.kkkkkkkk...", "..kkllllllkkkkkkkkkkkkllllllkk..", ".kklmmmmmmllkkkkkkkkllmmmmmmlkk.", ".klmmmmmmmmdkkkkkkkklmmmmmmmmlk.", ".klmmmmmmmmmllllllllmmmmmmmmmdk.", ".klmmmmmmmmmmmmmdmmmmmmmmmmmmdk.", ".klmmmmmmmmmmmggggmmmmmmmmmmmdk.", ".klmmmmmmmmllgggggglllmmmmmmmdk.", ".klmmmmmmmmmmggggggmmmmmmmmmmdk.", ".kklmmmmmmmmmggggggmmmmmmmmmdkk.", "..kkldddddmllgggggglllmdddddkk..", "...kkkkkkklmmmggggmmmmdkkkkkk...", ".........klmmmmmdmmmmmdk........", ".........klllllllllllldk........", ".........kklmmmmdmmmmdkk........", "..........klmmmmdmmmmdk.........", "..........klllllllllllk.........", "..........klmmmmdmmmmdk.........", "..........klmmmmdmmmmdk.........", "..........klmmmmmmmmmdk.........", "..........kklmmmmmmmdkk.........", "...........klmmmmmmmdk..........", "...........klddddddddk..........", "...........kkkkkkkkkkk..........", "................................", "................................"];
+ROWS.armor_2=["................................", "................................", "................................", "................................", "................................", "................................", "...kkkkkkkk.kkkkkkkk.kkkkkkkk...", "..kkllllllkkkkkkkkkkkkllllllkk..", ".kklmmmmmmllkkkkkkkkllmmmmmmlkk.", ".klmmmmmmmmdkkkkkkkklmmmmmmmmlk.", ".klmmmmmmmmmlgggggglmmmmmmmmmdk.", ".klmmmmmmmmmggggggggmmmmmmmmmdk.", ".klmmmmmmmmmggggggggmmmmmmmmmdk.", ".klmmmmmmmmmggggggggmmmmmmmmmdk.", ".klmmmmmmmmmggggggggmmmmmmmmmdk.", ".kklmmmmmmmmmggggggmmmmmmmmmdkk.", "..kkldddddmmmmmmdmmmmmmdddddkk..", "...kkkkkkklmmmmmdmmmmmdkkkkkk...", ".........kAaaaaaaaaaaakk........", ".........kAaaaaaaaaaaakk........", ".........kAaaaaaaaaaaakk........", ".........kklmmmmdmmmmdkk........", "..........klmmmmdmmmmdk.........", "..........klaaaaaaaaadk.........", "..........klmmmmdmmmmdk.........", "..........klmmmmmmmmmdk.........", "..........kklaaaaaaadkk.........", "...........klmmmmmmmdk..........", "...........klddddddddk..........", "...........kkkkkkkkkkk..........", "................................", "................................"];
+ROWS.armor_3=["................................", "................................", "................................", "................................", "................................", "................................", "...kkkkkkkk.kkkkkkkk.kkkkkkkk...", "..kkllllllkkkkkkkkkkkkllllllkk..", ".kklmmmmmmllkkkkkkkkllmmmmmmlkk.", ".klmmmmmmmmdkkkkAkkklmmmmmmmmlk.", ".klmmmmmmmmmllllalllmmmmmmmmmdk.", ".klmmmmmmmmmmmggggmmmmmmmmmmmdk.", ".klmmmmmmmmmmggggggmmmmmmmmmmdk.", ".klmmmmmmmmmmggggggmmmmmmmmmmdk.", ".klmmmmmmmmmmggggggammmmmmmmmdk.", ".kklmmmmmmmmaggggggaammmmmmmdkk.", "..kkldddddmmaaggggaaammdddddkk..", "...kkkkkkklaaaaaaaaaaadkkkkkk...", ".........kAaaaaaaaaaaakk........", ".........klmmmmmdmmmmmdk........", ".........kklmmmmdmmmmdkk........", "..........kAaaaaaaaaakk.........", "..........kAaaaaaaaaakk.........", "..........kAaaaaaaaaakk.........", "..........klmmmmdmmmmdk.........", "..........klmmmmmmmmmdk.........", "..........kklmmmmmmmdkk.........", "...........klmmmmmmmdk..........", "...........klddddddddk..........", "...........kkkkkkkkkkk..........", "................................", "................................"];
+ROWS.legs_0=["................................", "................................", "................................", "......kkkkkkkkkkkkkkkkkkkkk.....", "......kAAAAAAAAAAAAAAAAAAAk.....", "......kAaaaaaaaaaaaaaaaaakk.....", "......kAaaaaaaaaaaaaaaaaakk.....", "......kAaaaaaaaaaaaaaaaaakk.....", "......kAmmmmmmmmmmmmmmmmmkk.....", "......kklmmmmmmmmmmmmmmmdkk.....", ".......klmmmmmmmmmmmmmmmdk......", ".......klmmmmmmmmmmmmmmmdk......", ".......klmmmmmmmmmmmmmmmdk......", ".......klmmmmmmdddmmmmmmdk......", ".......klmmmmmdkkklmmmmmdk......", ".......klmmmmmdk.klmmmmmdk......", ".......klmmmmmdk.klmmmmmdk......", ".......klmmmmmdk.klmmmmmdk......", ".......klmmmmmdk.klmmmmmdk......", ".......klmmmmmdk.klmmmmmdk......", ".......klmmmmmdk.klmmmmmdk......", ".......klmmmmmdk.klmmmmmdk......", ".......klmmmmmdk.klmmmmmdk......", ".......klmmmmmdk.klmmmmmdk......", ".....kkklmmmmmdkkklmmmmmdkkk....", ".....kllmmmmmmmlklmmmmmmmllk....", ".....klmmmmmmmmdklmmmmmmmmdk....", ".....klmmmmmmmmdklmmmmmmmmdk....", ".....klmmmmmmmmdklmmmmmmmmdk....", ".....kAaaaaaaaakkAaaaaaaaakk....", ".....kAkkkkkkkkkkAkkkkkkkkkk....", ".....kkkkkkkkkkkkkkkkkkkkkkk...."];
+ROWS.legs_1=["................................", "................................", "................................", "......kkkkkkkkkkkkkkkkkkkkk.....", "......kAAAAAAAAAAAAAAAAAAAk.....", "......kAaaaaaaaaaaaaaaaaakk.....", "......kAaaaaaaaaaaaaaaaaakk.....", "......kAaaaaaaaaaaaaaaaaakk.....", "......kAmmmmmmmmmmmmmmmmmkk.....", "......kklmmmmmmmmmmmmmmmdkk.....", ".......klmmmmmmmmmmmmmmmdk......", ".......klmmmmmmmmmmmmmmmdk......", ".......klmmmmmmmmmmmmmmmdk......", ".......klmmmmmmdddmmmmmmdk......", ".......klmmmmmdkkklmmmmmdk......", ".......klllllldk.klllllldk......", ".......klmmmmmdk.klmmmmmdk......", ".......klmmmmmdk.klmmmmmdk......", ".......klmmmmmdk.klmmmmmdk......", ".......klllllldk.klllllldk......", ".......klmmmmmdk.klmmmmmdk......", ".......klmmmmmdk.klmmmmmdk......", ".......klmmmmmdk.klmmmmmdk......", ".......klllllldk.klllllldk......", ".....kkklmmmmmdkkklmmmmmdkkk....", ".....kllmmmmmmmlklmmmmmmmllk....", ".....klmmmmmmmmdklmmmmmmmmdk....", ".....klmmmmmmmmdklmmmmmmmmdk....", ".....klmmmmmmmmdklmmmmmmmmdk....", ".....kAaaaaaaaakkAaaaaaaaakk....", ".....kAkkkkkkkkkkAkkkkkkkkkk....", ".....kkkkkkkkkkkkkkkkkkkkkkk...."];
+ROWS.legs_2=["................................", "................................", "................................", "......kkkkkkkkkkkkkkkkkkkkk.....", "......kAAAAAAAAAAAAAAAAAAAk.....", "......kAaaaaaaaaaaaaaaaaakk.....", "......kAaaaaaaaaaaaaaaaaakk.....", "......kAaaaaaaaaaaaaaaaaakk.....", "......kAmmmmmmmmmmmmmmmmmkk.....", "......kklmmmmmmmmmmmmmmmdkk.....", ".......klmmmmmmmmmmmmmmmdk......", ".......klmmmmmmmmmmmmmmmdk......", ".......klmmmmmmmmmmmmmmmdk......", ".......klmmmmmmdddmmmmmmdk......", ".......klmmmmmdkkklmmmmmdk......", ".......klggggmdk.klggggmdk......", ".......klggggmdk.klggggmdk......", ".......klggggmdk.klggggmdk......", ".......klggggmdk.klggggmdk......", ".......klmmmmmdk.klmmmmmdk......", ".......klmmmmmdk.klmmmmmdk......", ".......kAaaaaakk.kAaaaaakk......", ".......kAaaaaakk.kAaaaaakk......", ".......klmmmmmdk.klmmmmmdk......", ".....kkklmmmmmdkkklmmmmmdkkk....", ".....kllmmmmmmmlklmmmmmmmllk....", ".....klmmmmmmmmdklmmmmmmmmdk....", ".....klmmmmmmmmdklmmmmmmmmdk....", ".....klmmmmmmmmdklmmmmmmmmdk....", ".....kAaaaaaaaakkAaaaaaaaakk....", ".....kAkkkkkkkkkkAkkkkkkkkkk....", ".....kkkkkkkkkkkkkkkkkkkkkkk...."];
+ROWS.legs_3=["................................", "................................", "................................", "......kkkkkkkkkkkkkkkkkkkkk.....", "......kAAAAAAggggggAAAAAAAk.....", "......kAaaaaaggggggaaaaaakk.....", "......kAaaaaaggggggaaaaaakk.....", "......kAaaaaaggggggaaaaaakk.....", "......kAmmmmmmmmmmmmmmmmmkk.....", "......kklmmmmmmmmmmmmmmmdkk.....", ".......klmmmmmmmmmmmmmmmdk......", ".......klmmmmmmmmmmmmmmmdk......", ".......klmmmmmmmmmmmmmmmdk......", ".......klmmmmmmdddmmmmmmdk......", ".......klmammmdkkklmmmamdk......", ".......klmammmdk.klmmmamdk......", ".......klmammmdk.klmmmamdk......", ".......klmammmdk.klmmmamdk......", ".......klmammmdk.klmmmamdk......", ".......klmammmdk.klmmmamdk......", ".......klmammmdk.klmmmamdk......", ".......klmammmdk.klmmmamdk......", ".......klmammmdk.klmmmamdk......", ".......klmammmdk.klmmmamdk......", ".....kkklmammmdkkklmmmamdkkk....", ".....kllmmmmmmmlklmmmmmmmllk....", ".....klmmmmmmmmdklmmmmmmmmdk....", ".....klmmmmmmmmdklmmmmmmmmdk....", ".....klmmmmmmmmdklmmmmmmmmdk....", ".....kAaaaaaaaakkAaaaaaaaakk....", ".....kAkkkkkkkkkkAkkkkkkkkkk....", ".....kkkkkkkkkkkkkkkkkkkkkkk...."];
+ROWS.ring_0=["................................", "................................", "................................", "................................", "............kkkkkkkk............", "...........kkggggggkk...........", "...........kggggggggk...........", "...........kggwwwwggk...........", "...........kggwwwwggk...........", "...........kggwwwwggk...........", "..........kkggwwwwggkk..........", ".........kklgggggggglkk.........", ".......kkklmmggggggmmlkkk.......", "......kkllmmmmmmmmmmmmllkk......", "......klmmmmmddddddmmmmmlk......", ".....kklmmmddkkkkkkldmmmdkk.....", ".....klmmmdkkk....kkklmmmlk.....", ".....klmmmdk........klmmmdk.....", ".....klmmdkk........kklmmdk.....", ".....klmmdk..........klmmdk.....", ".....klmmdk..........klmmdk.....", ".....klmmdk..........klmmdk.....", ".....klmmdk..........klmmdk.....", ".....klmmdkk........kklmmdk.....", ".....kklmmlk........klmmdkk.....", "......klmmdkkk....kkklmmdk......", "......kkldmllkkkkkkllmddkk......", ".......kkklmmllllllmmdkkk.......", ".........kkldddddddddkk.........", "..........kkkkkkkkkkkk..........", "................................", "................................"];
+ROWS.ring_1=["................................", "................................", "...............kkk..............", "...............kgk..............", "..............kkgkk.............", ".............kkgggkk............", "............kkgggggkk...........", "............kgggggggk...........", "...........kkggwggggkk..........", "..........kkggwggggggkk.........", ".........kkgggggggggggkk........", ".........kgggggggggggggk........", ".......kkklgggggggggggkkk.......", "......kkllmmgggggggggmllkk......", "......klmmmmmgggggggmmmmlk......", ".....kklmmmddkgggggddmmmdkk.....", ".....klmmmdkkkkgggkkklmmmlk.....", ".....klmmmdk..kkgkk.klmmmdk.....", ".....klmmdkk...kkk..kklmmdk.....", ".....klmmdk..........klmmdk.....", ".....klmmdk..........klmmdk.....", ".....klmmdk..........klmmdk.....", ".....klmmdk..........klmmdk.....", ".....klmmdkk........kklmmdk.....", ".....kklmmlk........klmmdkk.....", "......klmmdkkk....kkklmmdk......", "......kkldmllkkkkkkllmddkk......", ".......kkklmmllllllmmdkkk.......", ".........kkldddddddddkk.........", "..........kkkkkkkkkkkk..........", "................................", "................................"];
+ROWS.ring_2=["................................", "................................", "................................", "................................", "............kkkkkkkk............", "..........kkkaaaaaakkk..........", "..........kaaaggggaaak..........", "..........kaaggggggaak..........", "..........kaaggwgggaak..........", "..........kaaggggggaak..........", "..........kaaggggggaak..........", ".........kkaaaggggaaakk.........", ".......kkklmmaaaaaammlkkk.......", "......kkllmmmmmmmmmmmmllkk......", "......klmmmmmddddddmmmmmlk......", ".....kklmmmddkkkkkkldmmmdkk.....", ".....klmmmdkkk....kkklmmmlk.....", ".....klmmmdk........klmmmdk.....", ".....klmmdkk........kklmmdk.....", ".....klmmdk..........klmmdk.....", ".....klmmdk..........klmmdk.....", ".....klmmdk..........klmmdk.....", ".....klmmdk..........klmmdk.....", ".....klmmdkk........kklmmdk.....", ".....kklmmlk........klmmdkk.....", "......klmmdkkk....kkklmmdk......", "......kkldmllkkkkkkllmddkk......", ".......kkklmmllllllmmdkkk.......", ".........kkldddddddddkk.........", "..........kkkkkkkkkkkk..........", "................................", "................................"];
+ROWS.ring_3=["................................", "...............kkk..............", "...............kgk..............", "..............kkgkk.............", "..............kgggk.............", ".............kkgggkk............", "............kkgggggkk...........", "............kgwgggggk...........", "...........kkgggggggkk..........", "..........kkgggggggggkk.........", "..........kgggggggggggk.........", ".........kkgggggggggggk.........", ".......kkklgggggggggggkkk.......", "......kkllmgggggggggggllkk......", "......klmmmmmddddddmmmmmlk......", ".....kklmmmddkkkkkkldmmmdkk.....", ".....klmmmdkkk....kkklmmmlk.....", ".....klmmmdk........klmmmdk.....", ".....klmmdkk........kklmmdk.....", ".....klmmdk..........klmmdk.....", ".....klmmdk..........klmmdk.....", ".....klmmdk..........klmmdk.....", ".....klmmdk..........klmmdk.....", ".....klmmdkk........kklmmdk.....", ".....kklmmlk........klmmdkk.....", "......klmmdkkk....kkklmmdk......", "......kkldmllkkkkkkllmddkk......", ".......kkklmmllllllmmdkkk.......", ".........kkldddddddddkk.........", "..........kkkkkkkkkkkk..........", "................................", "................................"];
+ROWS.amulet_0=["................................", "................................", "................................", ".............kkk.kkk............", "............kkwk.kwkk...........", "...........kkwkk.kkwkk..........", "..........kkwkk...kkwkk.........", ".........kkwkk.....kkwkk........", "........kkwkk.......kkwkk.......", ".......kkwkk.........kkwkk......", "......kkwkk...........kkwkk.....", ".....kkwkk.............kkwkk....", ".....kwkk...............kkwk....", ".....kwkk...............kkwk....", ".....kkwk...............kwkk....", "......kwkk.............kkwk.....", "......kkwk.............kwkk.....", ".......kwkk.kkkkkkkk..kkwk......", ".......kkwkkkllllllkk.kwkk......", "........kwkklmmmmmmlkkkwk.......", "........kkwlmmmmmmmmlkwkk.......", ".........kklmmggggmmdkkk........", "..........klmmggggmmdk..........", "..........klmmggggmmdk..........", "..........klmmggggmmdk..........", "..........klmmmmmmmmdk..........", "..........kklmmmmmmdkk..........", "...........kkldddddkk...........", "............kkkkkkkk............", "................................", "................................", "................................"];
+ROWS.amulet_1=["................................", "................................", "................................", ".............kkk.kkk............", "............kkwk.kwkk...........", "...........kkwkk.kkwkk..........", "..........kkwkk...kkwkk.........", ".........kkwkk.....kkwkk........", "........kkwkk.......kkwkk.......", ".......kkwkk.........kkwkk......", "......kkwkk...........kkwkk.....", ".....kkwkk.............kkwkk....", ".....kwkk...............kkwk....", ".....kwkk...............kkwk....", ".....kkwk...............kwkk....", "......kwkk.....kkk.....kkwk.....", "......kkwk....kklkk....kwkk.....", ".......kwkk..kklmlkk..kkwk......", ".......kkwk.kklmmmlkk.kwkk......", "........kwkkklmmmmmlkkkwk.......", "........kkwklmggggmmlkwkk.......", ".........kklmmggggmmmlkk........", "........kklmmmggggmmmmlkk.......", "........klmmmmggggmmmmmlk.......", "........kklmmmggggmmmmdkk.......", ".........kklmmggggmmmdkk........", "..........kklmmmmmmmdkk.........", "...........kklmmmmmdkk..........", "............kklmmmdkk...........", ".............kklmdkk............", "..............kklkk.............", "...............kkk.............."];
+ROWS.amulet_2=["................................", "................................", "................................", ".............kkk.kkk............", "............kkwk.kwkk...........", "...........kkwkk.kkwkk..........", "..........kkwkk...kkwkk.........", ".........kkwkk.....kkwkk........", "........kkwkk.......kkwkk.......", ".......kkwkk.........kkwkk......", "......kkwkk...........kkwkk.....", ".....kkwkk.............kkwkk....", ".....kwkk...............kkwk....", ".....kwkk...............kkwk....", ".....kkwk...............kwkk....", "......kwkk.............kkwk.....", "......kkwk..kkkkkkkk...kwkk.....", ".......kwkkkkllllllkkkkkwk......", ".......kkwkllmmmmmmllkkwkk......", "........kwklmmmmmmmmdkkwk.......", "........kklmmmggggmmmlwkk.......", ".........klmmgwggggmmdkk........", ".........klmmggggggmmdk.........", ".........klmmggggggmmdk.........", ".........klmmggggggmmdk.........", ".........klmmmggggmmmdk.........", ".........kklmmmmmmmmdkk.........", "..........kldmmmmmmddk..........", "..........kkkldddddkkk..........", "............kkkkkkkk............", "................................", "................................"];
+ROWS.amulet_3=["................................", "................................", "................................", ".............kkk.kkk............", "............kkwk.kwkk...........", "...........kkwkk.kkwkk..........", "..........kkwkk...kkwkk.........", ".........kkwkk.....kkwkk........", "........kkwkk.......kkwkk.......", ".......kkwkk.........kkwkk......", "......kkwkk...........kkwkk.....", ".....kkwkk.............kkwkk....", ".....kwkk...............kkwk....", ".....kwkk...............kkwk....", ".....kkwk......kkk......kwkk....", "......kwkk.....klk.....kkwk.....", "......kkwk....kklkk....kwkk.....", ".......kwkk..kklmlkk..kkwk......", ".......kkwk.kklmmmlkk.kwkk......", "........kwkkklmmmmmlkkkwk.......", "........kkwkklmmmmmdkkwkk.......", ".........kkklmggggmmlkkk........", ".........kklmmggggmmmlkk........", ".........klmmmggggmmmmlk........", ".........kklmmggggmmmdkk........", "..........kklmmmmmmmdkk.........", "...........kklmmmmmdkk..........", "............klmmmmmdk...........", "............kklmmmdkk...........", ".............kklmdkk............", "..............kklkk.............", "...............klk.............."];
+ROWS.potion=["................................", "................................", "............kkkkkkkkk...........", "............kgggggggk...........", "............kgggggggk...........", "............kgggggggk...........", "...........kkgggggggkk..........", "...........kGGGGGGGGGk..........", "...........kGGGGGGGGGk..........", "...........kGGGGGGGGGk..........", ".........kkkwcccccccCkk.........", "........kkwwcccccccccwkk........", "........kwccccccccccccwk........", ".......kkwccrrrrrrrrccCkk.......", "......kkwccwwwwrrrrrrccwkk......", "......kwccrwwwwrrrrrrrccwk......", "......kwccrwwwwrrrrrrrccCk......", "......kwcrrwwwwrrrrrrrrcCk......", "......kwcrrwwwwrrrrrrrrcCk......", "......kwcrrwwwwrrrrrrrrcCk......", "......kwcrrrrrrrrrrrrrrcCk......", "......kwcrrrrrrrrrrrrrrcCk......", "......kwcrrrrrrrrrrrrrrcCk......", "......kwcrrrrrrrrrrrrrrcCk......", "......kwcrrrrrrrrrrrrrrcCk......", "......kkwcrrrrrrrrrrrrcCkk......", ".......kkwrrrrrrrrrrrrCkk.......", "........kwcrrrrrrrrrrcCk........", "........kkwCrrrrrrrrCCkk........", ".........kkkwCCCCCCCkkk.........", "...........kkkkkkkkkk...........", "................................"];
+ROWS.gold=["................................", "................................", "................................", "................................", "................................", "................................", "................................", "................................", "................................", "...........kkkkkkkkkk...........", ".........kkkllllllllkkk.........", "........kkllggggggggllkk........", "........klgggggggggggglk........", "........klgggwwwwwwgggdk........", "........klgggwwwwwwgggdk........", "........klgggwwwwwwgggdk........", "........klgggwwwwwwgggdk........", "........klggggggggggggdk........", "........kklwwwwggggggdkk........", ".....kkkkklwwwwggggggdkkkkk.....", "....kkllllggggggggggggllllkk....", "...kklgggggggggggggggggggglkk...", "...klgggggggggggggggggggggglk...", "...klggggggggggggggggggggggdk...", "...klggggggggggggggggggggggdk...", "...klggggggggggddggggggggggdk...", "...kklggggggggdkklggggggggdkk...", "....kkldddddddkkkkldddddddkk....", ".....kkkkkkkkkk..kkkkkkkkkk.....", "................................", "................................", "................................"];
+ROWS.gem=["................................", "................................", "...............kkk..............", "..............kkwkk.............", ".............kkllwkk............", "............kklglgwkk...........", "...........kklgglggwkk..........", ".........kkklggglgggwkkk........", "........kkllgggglggggwwkk.......", ".......kklgggggglggggggwkk......", "......kklggggggglgggggggwkk.....", ".....kklgggggggglggggggggwkk....", "....kklggggggggglgggggggggwkk...", "....kldddddddddddddddddddddwk...", "....kklggggggggglgggggggggdkk...", ".....kklgggggggglggggggggdkk....", "......kklggggggglgggggggdkk.....", ".......klggggggglgggggggdk......", ".......kklgggggglggggggdkk......", "........kklggggglgggggdkk.......", ".........klggggglgggggdk........", ".........kklgggglggggdkk........", "..........kklggglgggdkk.........", "...........klggglgggdk..........", "...........kklgglggdkk..........", "............kklglgdkk...........", ".............klglgdk............", ".............kklldkk............", "..............kklkk.............", "...............klk..............", "...............kkk..............", "................................"];
 const SPR={};
-SPR.hero=makeSprite(ROWS.hero,{k:'#241726',h:'#8a4b23',s:'#efc08f',r:'#a8342e',g:'#e0a63c',d:'#5a3a20'});
-SPR.wolf=makeSprite(ROWS.wolf,{w:'#8a93a6',k:'#241726'});
-SPR.slime=makeSprite(ROWS.slime,{g:'#4fae4f',w:'#bdf0bd'});
-SPR.slime_ice=makeSprite(ROWS.slime,{g:'#4f9ede',w:'#cfeeff'});
-SPR.slime_lava=makeSprite(ROWS.slime,{g:'#e06a20',w:'#ffd070'});
-SPR.slime_void=makeSprite(ROWS.slime,{g:'#8a4fd0',w:'#e0c8ff'});
-SPR.bat=makeSprite(ROWS.bat,{p:'#8a5bb5',k:'#f0e040'});
-SPR.bat_ice=makeSprite(ROWS.bat,{p:'#5fb0d8',k:'#e8f8ff'});
-SPR.bat_void=makeSprite(ROWS.bat,{p:'#4a3a70',k:'#c060f0'});
-SPR.skel=makeSprite(ROWS.skel,{w:'#d8d8cc',k:'#301838'});
-SPR.skel_char=makeSprite(ROWS.skel,{w:'#6a5040',k:'#f06020'});
-SPR.eye=makeSprite(ROWS.eye,{p:'#7a3fa0',w:'#e8e0f0',r:'#d03030',k:'#180810'});
-SPR.imp=makeSprite(ROWS.imp,{k:'#2a1010',r:'#c04028',y:'#f0e040'});
-SPR.wraith=makeSprite(ROWS.wraith,{c:'#7a86c8',w:'#e8f0ff'});
-SPR.golem=makeSprite(ROWS.golem,{w:'#7a8ea0',k:'#202838'});
-SPR.boss=makeSprite(ROWS.boss,{k:'#241726',r:'#b03028',y:'#f0e040'});
-SPR.boss_bone=makeSprite(ROWS.boss,{k:'#2a2030',r:'#ddd8c8',y:'#e04040'});
-SPR.boss_ice=makeSprite(ROWS.boss,{k:'#16283a',r:'#7ac0e8',y:'#ffffff'});
-SPR.boss_void=makeSprite(ROWS.boss,{k:'#1a0f28',r:'#7a3fc0',y:'#f0e040'});
+const TIERPAL=[{"k": "#150f1c", "m": "#9aa4b8", "l": "#cdd6e6", "d": "#5f6878", "a": "#8a5a2a", "A": "#c08a45", "g": "#d03040", "w": "#f2e8d0"},{"k": "#150f1c", "m": "#7ac0e8", "l": "#c0eaff", "d": "#4a86ab", "a": "#3d6a86", "A": "#7fb6d8", "g": "#5fe0ff", "w": "#f2e8d0"},{"k": "#150f1c", "m": "#e07038", "l": "#ffb070", "d": "#8f3a10", "a": "#5a3018", "A": "#9a5a28", "g": "#ffd050", "w": "#f2e8d0"},{"k": "#150f1c", "m": "#8a5fd0", "l": "#c4a4f0", "d": "#4e2e88", "a": "#3a2a58", "A": "#6a5090", "g": "#c060f0", "w": "#f2e8d0"}];
+const POTPAL_HP={"k": "#150f1c", "g": "#c8b8a0", "G": "#8a7a62", "c": "#d8e8f0", "C": "#9ab4c4", "r": "#d03040", "R": "#8a1820", "L": "#ff8090", "w": "#ffffff"};
+const GOLDPAL={"k": "#150f1c", "g": "#e8b830", "l": "#ffe98a", "d": "#a87810", "w": "#fffbe0"};
+const GEMPAL={"k": "#150f1c", "g": "#d03040", "l": "#ff8090", "d": "#8a1820", "w": "#ffd8dc"};
+const POTPAL_MP=Object.assign({},POTPAL_HP,{r:'#3060d0',R:'#182c8a',L:'#80a0ff'});
+// 稀有度决定金属点缀与宝石颜色
+const RARACC=[{a:'#5a4a38',A:'#8a7050'},
+ {a:'#3a5a7a',A:'#6a9ac0'},
+ {a:'#8a6a1a',A:'#e0b040'},
+ {a:'#6a2c06',A:'#ffcf50',g:'#ff8020'},
+ {a:'#2a6a2a',A:'#60d060',g:'#40ff80'}];
+const ITEMSPR={},ITEMURL={};
+function rarPal(t,r){return Object.assign({},TIERPAL[clamp(t,0,3)],RARACC[clamp(r,0,4)]);}
+function itemSpr(it){
+ if(!it)return SPR.gold;
+ if(it.kind!=='eq')return SPR[it.icon]||SPR.gold;
+ const t=clamp(it.tier||0,0,3),r=clamp(it.rar||0,0,4);
+ const k=it.slot+'_'+t+'_'+r;
+ if(!ITEMSPR[k]){const rows=ROWS[it.slot+'_'+t];
+  ITEMSPR[k]=rows?makeSprite(rows,rarPal(t,r)):SPR.gold;}
+ return ITEMSPR[k];}
+function itemURL(it){
+ if(!it)return '';
+ if(it.kind!=='eq')return ICON[it.icon]||'';
+ const t=clamp(it.tier||0,0,3),r=clamp(it.rar||0,0,4);
+ const k=it.slot+'_'+t+'_'+r;
+ if(!ITEMURL[k])ITEMURL[k]=itemSpr(it).toDataURL();
+ return ITEMURL[k];}
+
+const PAL={
+ hero:{"k": "#150f1c", "s": "#e8b48a", "S": "#bd8760", "l": "#f6d0ab", "e": "#241826", "H": "#4d2f16", "h": "#7c5027", "i": "#a8763a", "r": "#a83a30", "R": "#6f2320", "t": "#d0574a", "b": "#5d3f21", "g": "#e8bc48", "m": "#98a2b6", "M": "#5f6878", "n": "#c8d2e4", "d": "#4a3018", "D": "#2c1a0d"},
+ wolf:{"k": "#150f1c", "m": "#8a93a6", "l": "#b6bfd0", "d": "#5b6474", "e": "#e8d44a", "n": "#2a3040"},
+ slime:{"k": "#150f1c", "m": "#4fae4f", "l": "#8ee08e", "d": "#2f7c33", "h": "#d6ffd6", "e": "#16301a"},
+ bat:{"k": "#150f1c", "m": "#8a5bb5", "l": "#b98ae0", "d": "#5a3580", "e": "#f0e040", "n": "#e8c0ff"},
+ skel:{"k": "#150f1c", "m": "#d8d8cc", "l": "#f4f4ea", "d": "#9a9a90", "e": "#2a1030", "r": "#7a3a2a"},
+ eye:{"k": "#150f1c", "m": "#7a3fa0", "l": "#a86fd0", "d": "#4e2470", "w": "#eae2f2", "W": "#ffffff", "r": "#d03030", "R": "#8a1818", "e": "#180810"},
+ imp:{"k": "#150f1c", "m": "#c04028", "l": "#e8724a", "d": "#7d2214", "e": "#f0e040", "h": "#3a2018", "n": "#f8d8b0"},
+ wraith:{"k": "#150f1c", "m": "#7a86c8", "l": "#b4c0f0", "d": "#4a5490", "e": "#eaf4ff", "h": "#2e3560"},
+ golem:{"k": "#150f1c", "m": "#7a8ea0", "l": "#a8bccc", "d": "#4c5c68", "e": "#7fe8ff", "h": "#3a4652"},
+ boss:{"k": "#150f1c", "m": "#b03028", "l": "#e0604a", "d": "#6e1610", "e": "#f0e040", "E": "#fff8a0", "h": "#2a1a1a", "n": "#f0e8d0", "g": "#c8a038"},
+ npc_merchant:{"k": "#150f1c", "m": "#2f7a4f", "l": "#4fa870", "d": "#1d5236", "s": "#e8b48a", "S": "#bd8760", "e": "#241826", "b": "#8a5a2a", "B": "#5d3a18", "g": "#e8bc48"},
+ npc_smith:{"k": "#150f1c", "m": "#3a2818", "l": "#5d4028", "d": "#241408", "s": "#d8a878", "S": "#a87848", "e": "#241826", "r": "#a83828", "R": "#6e2018", "g": "#98a2b6", "n": "#d0dae8"},
+ npc_quest:{"k": "#150f1c", "m": "#3a4a90", "l": "#5f74c0", "d": "#232e60", "s": "#e8b48a", "S": "#bd8760", "e": "#241826", "y": "#e8c040", "w": "#efe0b8", "g": "#a8802a"}};
+const V=(b,o)=>Object.assign({},b,o);
+SPR.hero=makeSprite(ROWS.hero,PAL.hero);
+SPR.wolf=makeSprite(ROWS.wolf,PAL.wolf);
+SPR.slime=makeSprite(ROWS.slime,PAL.slime);
+SPR.slime_ice=makeSprite(ROWS.slime,V(PAL.slime,{m:'#4f9ede',l:'#96d4ff',d:'#2d6b9e',h:'#e8f8ff',e:'#12283a'}));
+SPR.slime_lava=makeSprite(ROWS.slime,V(PAL.slime,{m:'#e06a20',l:'#ffa24a',d:'#9c3c08',h:'#ffe0a0',e:'#3a1204'}));
+SPR.slime_void=makeSprite(ROWS.slime,V(PAL.slime,{m:'#8a4fd0',l:'#b98ae8',d:'#5a2c94',h:'#e8d4ff',e:'#1e0f30'}));
+SPR.bat=makeSprite(ROWS.bat,PAL.bat);
+SPR.bat_ice=makeSprite(ROWS.bat,V(PAL.bat,{m:'#5fb0d8',l:'#9adcf4',d:'#3a7ba0',e:'#e8f8ff',n:'#ffffff'}));
+SPR.bat_void=makeSprite(ROWS.bat,V(PAL.bat,{m:'#4a3a70',l:'#7a63a8',d:'#2a1e44',e:'#c060f0',n:'#e0c0ff'}));
+SPR.skel=makeSprite(ROWS.skel,PAL.skel);
+SPR.skel_char=makeSprite(ROWS.skel,V(PAL.skel,{m:'#6a5040',l:'#97775c',d:'#45301f',e:'#f06020'}));
+SPR.eye=makeSprite(ROWS.eye,PAL.eye);
+SPR.imp=makeSprite(ROWS.imp,PAL.imp);
+SPR.wraith=makeSprite(ROWS.wraith,PAL.wraith);
+SPR.golem=makeSprite(ROWS.golem,PAL.golem);
+SPR.boss=makeSprite(ROWS.boss,PAL.boss);
+SPR.boss_bone=makeSprite(ROWS.boss,V(PAL.boss,{m:'#ddd8c8',l:'#f6f2e4',d:'#a09a88',e:'#e04040',E:'#ff8080',h:'#2a2030',n:'#ffffff'}));
+SPR.boss_ice=makeSprite(ROWS.boss,V(PAL.boss,{m:'#7ac0e8',l:'#b4e4ff',d:'#4a86ab',e:'#ffffff',E:'#ffffff',h:'#16283a',n:'#eaffff',g:'#a8d8f0'}));
+SPR.boss_void=makeSprite(ROWS.boss,V(PAL.boss,{m:'#7a3fc0',l:'#ab74e8',d:'#4e2288',e:'#f0e040',E:'#fff8a0',h:'#1a0f28',n:'#e8d4ff'}));
+SPR.npc_merchant=makeSprite(ROWS.npc_merchant,PAL.npc_merchant);
+SPR.npc_smith=makeSprite(ROWS.npc_smith,PAL.npc_smith);
+SPR.npc_quest=makeSprite(ROWS.npc_quest,PAL.npc_quest);
+
 SPR.chest=makeSprite(ROWS.chest,{b:'#7a4a22',g:'#e0a63c',k:'#241726'});
 SPR.chest_gold=makeSprite(ROWS.chest,{b:'#c9a227',g:'#fff0a0',k:'#5a4010'});
-SPR.hppot=makeSprite(ROWS.pot,{w:'#c8b8a0',c:'#d8e8f0',r:'#d03040'});
-SPR.mppot=makeSprite(ROWS.pot,{w:'#c8b8a0',c:'#d8e8f0',r:'#3060d0'});
-SPR.weapon=makeSprite(ROWS.sword,{w:'#c8d0e0',g:'#e0a63c'});
-SPR.offhand=makeSprite(ROWS.shield,{m:'#9aa4b8',g:'#e0a63c'});
-SPR.helm=makeSprite(ROWS.helm,{m:'#9aa4b8'});
-SPR.armor=makeSprite(ROWS.armor,{m:'#9aa4b8',g:'#e0a63c'});
-SPR.legs=makeSprite(ROWS.legs,{m:'#9aa4b8'});
-SPR.ring=makeSprite(ROWS.ring,{g:'#e0a63c',r:'#d03060'});
-SPR.amulet=makeSprite(ROWS.amulet,{g:'#e0a63c',c:'#60d0e0'});
-SPR.gold=makeSprite(ROWS.gold,{g:'#f2d060'});
-SPR.gem_ruby=makeSprite(ROWS.gem,{g:'#d03040',w:'#ffb0b8'});
-SPR.gem_sapphire=makeSprite(ROWS.gem,{g:'#3060d0',w:'#a0c0ff'});
-SPR.gem_topaz=makeSprite(ROWS.gem,{g:'#e0b020',w:'#fff0a0'});
-SPR.gem_emerald=makeSprite(ROWS.gem,{g:'#30b050',w:'#a0ffb8'});
 SPR.shrine=makeSprite(ROWS.shrine,{y:'#e8d070',w:'#fff8d0',b:'#5a4a68'});
-ROWS.npc_merchant=["................", "................", ".....gggggg.....", "....gssssssg....", "....gskssksg....", "....ggssssgg....", "...ggggggggg....", "..bbgggggggbb...", "..bbgggggggbb...", "..bbgggggggbb...", "...ggggggggg....", ".....gggggg.....", ".....gg..gg.....", ".....kk..kk.....", "................", "................"];
-ROWS.npc_smith=["................", "................", ".....hhhhhh.....", "....hssssssh....", "....hskssksh....", ".....ssssss.....", "...sddddddds....", "...sddddddds....", "...s.dddddd.s...", ".....dddddd.....", ".....dddddd.....", ".....dd..dd.....", ".....kk..kk.....", "................", "................", "................"];
-ROWS.npc_quest=["................", ".....yyyyyy.....", "....yyyyyyyy....", ".....ssssss.....", ".....skssks.....", ".....ssssss.....", "....wwwwwwww....", "...wwwwwwwwww...", "...wwyyyywwww...", "...wwwwwwwwww...", "...wwwwwwwwww...", "....wwwwwwww....", "....ww....ww....", "....kk....kk....", "................", "................"];
-SPR.npc_merchant=makeSprite(ROWS.npc_merchant,{g:'#2f7a4f',s:'#efc08f',k:'#241726',b:'#8a5a2a'});
-SPR.npc_smith=makeSprite(ROWS.npc_smith,{h:'#a83828',s:'#d8a878',k:'#1a1008',d:'#3a2818'});
-SPR.npc_quest=makeSprite(ROWS.npc_quest,{y:'#e8c040',s:'#efc08f',k:'#241726',w:'#3a4a90'});
 
 SPR.ic_fire=makeSprite(ROWS.ic_fire,{y:'#ffe878',o:'#ff9a28',r:'#c8380f',w:'#fff6c0'});
 SPR.ic_whirl=makeSprite(ROWS.ic_whirl,{c:'#cfe0f0'});
@@ -327,7 +426,6 @@ SPR.ic_scroll=makeSprite(ROWS.ic_scroll,{c:'#a8802a',w:'#efe0b8',k:'#6a5a3a'});
 SPR.ic_portal=makeSprite(ROWS.ic_portal,{p:'#8a5ce0',c:'#c8a0ff',w:'#f0e0ff'});
 SPR.ic_help=makeSprite(ROWS.ic_help,{y:'#f2d060'});
 SPR.ic_full=makeSprite(ROWS.ic_full,{w:'#d8d0e0'});
-SPR.ic_hppot=SPR.hppot;SPR.ic_mppot=SPR.mppot;
 SPR.dec_bone=makeSprite(ROWS.dec_bone,{w:'#8a8478'});
 SPR.dec_skull=makeSprite(ROWS.dec_skull,{w:'#8a8478',k:'#2a2028'});
 SPR.dec_shard=makeSprite(ROWS.dec_shard,{c:'#5f90b0',w:'#a8d8f0'});
@@ -340,40 +438,93 @@ SPR.prop_crate=makeSprite(ROWS.prop_crate,{b:'#8a5a2a',k:'#4a2e14'});
 SPR.prop_barrel=makeSprite(ROWS.prop_barrel,{b:'#7a4a22',k:'#4a2e14'});
 SPR.prop_anvil=makeSprite(ROWS.prop_anvil,{m:'#7a8090',k:'#3a3038'});
 SPR.prop_board=makeSprite(ROWS.prop_board,{b:'#8a5a2a',k:'#4a2e14',w:'#e8dcc0'});
+SPR.hppot=makeSprite(ROWS.potion,POTPAL_HP);
+SPR.mppot=makeSprite(ROWS.potion,POTPAL_MP);
+SPR.gold=makeSprite(ROWS.gold,GOLDPAL);
+SPR.gem_ruby=makeSprite(ROWS.gem,GEMPAL);
+SPR.gem_sapphire=makeSprite(ROWS.gem,Object.assign({},GEMPAL,{g:'#3060d0',l:'#7fa8ff',d:'#16307a',w:'#d0e0ff'}));
+SPR.gem_topaz=makeSprite(ROWS.gem,Object.assign({},GEMPAL,{g:'#e0b020',l:'#ffe680',d:'#8a6a08',w:'#fff4c0'}));
+SPR.gem_emerald=makeSprite(ROWS.gem,Object.assign({},GEMPAL,{g:'#30b050',l:'#80f0a0',d:'#0e6a2a',w:'#d0ffd8'}));
+SPR.ic_hppot=SPR.hppot;SPR.ic_mppot=SPR.mppot;
+SPR.ic_sword=makeSprite(ROWS.weapon_0,rarPal(0,2));
 const ICON={};for(const k in SPR)ICON[k]=SPR[k].toDataURL();
 // ============ 区域(生态) ============
-function makeFloorTile(seed,base,d1,d2,edge){const c=document.createElement('canvas');c.width=16;c.height=16;const g=c.getContext('2d');
- g.fillStyle=base;g.fillRect(0,0,16,16);let s=seed;const rr=()=>{s=(s*16807+7)%2147483647;return s/2147483647;};
- for(let i=0;i<14;i++){g.fillStyle=rr()<0.5?d1:d2;g.fillRect(Math.floor(rr()*16),Math.floor(rr()*16),2,2);}
- g.fillStyle=edge;g.fillRect(0,0,16,1);g.fillRect(0,0,1,16);return c;}
-function makeWallTile(face,shade,dark){const c=document.createElement('canvas');c.width=16;c.height=16;const g=c.getContext('2d');
- g.fillStyle=face;g.fillRect(0,0,16,16);g.fillStyle=shade;
- for(let y=0;y<16;y+=4){for(let x=((y/4)%2)*4;x<16;x+=8)g.fillRect(x,y,4,1);g.fillRect(0,y,16,1);}
- g.fillStyle=dark;g.fillRect(0,14,16,2);return c;}
-function makeTopTile(base,dot){const c=document.createElement('canvas');c.width=16;c.height=16;const g=c.getContext('2d');
- g.fillStyle=base;g.fillRect(0,0,16,16);g.fillStyle=dot;for(let i=0;i<6;i++)g.fillRect(ri(0,14),ri(0,14),2,2);return c;}
 const BDECOR=[['dec_bone','dec_skull'],['dec_shard','dec_ice'],['dec_crack','dec_ember'],['dec_crystal','dec_rune']];
+function makeFloorTile(seed,b){const c=document.createElement('canvas');c.width=32;c.height=32;
+ const g=c.getContext('2d');let sd=seed||1;
+ const rr=()=>{sd=(sd*16807+7)%2147483647;return sd/2147483647;};
+ g.fillStyle=b.gr;g.fillRect(0,0,32,32);                 // 砖缝底色
+ // 2x2 块石，每块单独做磨损与明暗边
+ const cells=[[1,1,14,14],[16,1,15,14],[1,16,14,15],[16,16,15,15]];
+ for(const[x,y,w,h]of cells){
+  g.fillStyle=b.f1;g.fillRect(x,y,w,h);
+  for(let i=0;i<14;i++){g.fillStyle=rr()<0.5?b.f0:b.f2;
+   g.fillRect(x+((rr()*w)|0),y+((rr()*h)|0),1+((rr()*2)|0),1);}
+  g.fillStyle=b.fl;g.fillRect(x,y,w,1);g.fillRect(x,y,1,h);        // 左上受光
+  g.fillStyle=b.fd;g.fillRect(x,y+h-1,w,1);g.fillRect(x+w-1,y,1,h);// 右下背光
+  if(rr()<0.45){g.fillStyle=b.fd;                                   // 随机裂纹
+   const cx=x+2+((rr()*(w-4))|0),cy=y+2+((rr()*(h-4))|0);
+   g.fillRect(cx,cy,1,2+((rr()*3)|0));g.fillRect(cx+1,cy+2,2,1);}}
+ return c;}
+function makeWallTile(b){const c=document.createElement('canvas');c.width=32;c.height=32;
+ const g=c.getContext('2d');let sd=7;
+ const rr=()=>{sd=(sd*16807+13)%2147483647;return sd/2147483647;};
+ g.fillStyle=b.mo;g.fillRect(0,0,32,32);                 // 灰浆
+ // 四层错缝砖
+ for(let row=0;row<4;row++){
+  const y=row*8,off=(row%2)?-8:0;
+  for(let x=off;x<32;x+=16){
+   const w=Math.min(15,32-x)-(x<0?-x:0),bx=Math.max(0,x);
+   if(w<=0)continue;
+   g.fillStyle=rr()<0.5?b.b0:b.b1;g.fillRect(bx,y,w,7);
+   for(let i=0;i<5;i++){g.fillStyle=rr()<0.5?b.bd:b.b1;
+    g.fillRect(bx+((rr()*w)|0),y+((rr()*7)|0),1,1);}
+   g.fillStyle=b.bl;g.fillRect(bx,y,w,1);                // 砖块上沿高光
+   g.fillStyle=b.bd;g.fillRect(bx,y+6,w,1);}}            // 下沿阴影
+ g.fillStyle=b.bd;g.fillRect(0,30,32,2);                 // 与地面交界的暗边
+ return c;}
+function makeTopTile(b){const c=document.createElement('canvas');c.width=32;c.height=32;
+ const g=c.getContext('2d');let sd=23;
+ const rr=()=>{sd=(sd*16807+3)%2147483647;return sd/2147483647;};
+ g.fillStyle=b.t0;g.fillRect(0,0,32,32);
+ for(let i=0;i<18;i++){g.fillStyle=b.t1;
+  g.fillRect((rr()*30)|0,(rr()*30)|0,1+((rr()*2)|0),1+((rr()*2)|0));}
+ return c;}
 const BIOMES=[
- {name:'腐朽地牢',fl:['#2a2233','#241d2d','#302739','#1e1826'],wall:['#4a3a58','#3a2c48','#241a2e'],top:['#160f1d','#1d1526'],
+ {name:'腐朽地牢',
+  fl:{gr:'#171220',f0:'#241d2d',f1:'#2c2436',f2:'#332a3e',fl:'#3d3349',fd:'#1b1525'},
+  wall:{mo:'#241a2e',b0:'#3a2c48',b1:'#443354',bl:'#57456a',bd:'#291e36'},
+  top:{t0:'#120c18',t1:'#1b1424'},
   fog:'rgba(5,3,10,0.93)',torch:['#f08030','#f2d060'],
-  pool:['slime','bat','skel'],dec:BDECOR[0],boss:'boss_skelking',bname:'骷髅王',set:'march'},
- {name:'霜寒冰窟',fl:['#26323d','#1f2a35','#2e3c48','#182028'],wall:['#3e5668','#2e4252','#18242e'],top:['#0d161d','#132029'],
+  dec:BDECOR[0],pool:['slime','bat','skel'],boss:'boss_skelking',bname:'骷髅王',set:'march'},
+ {name:'霜寒冰窟',
+  fl:{gr:'#101a22',f0:'#1f2a35',f1:'#27343f',f2:'#2f3f4c',fl:'#3f5464',fd:'#151f29'},
+  wall:{mo:'#18242e',b0:'#2e4252',b1:'#38505f',bl:'#4f6d80',bd:'#1e2f3b'},
+  top:{t0:'#0a1218',t1:'#101c24'},
   fog:'rgba(5,10,18,0.93)',torch:['#60c8f0','#d0f0ff'],
-  pool:['slime_ice','bat_ice','skel','golem'],dec:BDECOR[1],boss:'boss_frost',bname:'霜巨魔',set:'frost'},
- {name:'熔岩深坑',fl:['#33241f','#2a1c18','#3d2c22','#231512'],wall:['#5a3830','#442822','#2a1410'],top:['#1a0c08','#241410'],
+  dec:BDECOR[1],pool:['slime_ice','bat_ice','skel','golem'],boss:'boss_frost',bname:'霜巨魔',set:'frost'},
+ {name:'熔岩深坑',
+  fl:{gr:'#1a0e0a',f0:'#2a1c18',f1:'#34241e',f2:'#3e2c24',fl:'#503c30',fd:'#1e130f'},
+  wall:{mo:'#2a1410',b0:'#442822',b1:'#523128',bl:'#6c4236',bd:'#2f1913'},
+  top:{t0:'#140806',t1:'#1e100c'},
   fog:'rgba(16,4,2,0.92)',torch:['#ff8020','#ffd060'],
-  pool:['slime_lava','imp','skel_char','eye'],dec:BDECOR[2],boss:'boss_demon',bname:'熔岩魔王',set:'ember'},
- {name:'虚空深渊',fl:['#241f33','#1d182b','#2c2540','#15101f'],wall:['#463a68','#332a52','#1e1630'],top:['#0f0a1a','#160f26'],
+  dec:BDECOR[2],pool:['slime_lava','imp','skel_char','eye'],boss:'boss_demon',bname:'熔岩魔王',set:'ember'},
+ {name:'虚空深渊',
+  fl:{gr:'#120d1c',f0:'#1d182b',f1:'#252035',f2:'#2d2740',fl:'#3c3454',fd:'#150f27'},
+  wall:{mo:'#1e1630',b0:'#332a52',b1:'#3d3260',bl:'#51437a',bd:'#231b3d'},
+  top:{t0:'#0c0714',t1:'#140d20'},
   fog:'rgba(6,2,14,0.94)',torch:['#a060f0','#e0b0ff'],
-  pool:['slime_void','bat_void','wraith','eye'],dec:BDECOR[3],boss:'boss_void','bname':'虚空之主',set:'void'}];
+  dec:BDECOR[3],pool:['slime_void','bat_void','wraith','eye'],boss:'boss_void',bname:'虚空之主',set:'void'}];
 const FLOORS_PER_BIOME=5,MAX_DEPTH=BIOMES.length*FLOORS_PER_BIOME;
 let biome=BIOMES[0],FLOORS=[],WALLC=null,WALLTOP=null;
 function applyBiome(b){biome=b;
- FLOORS=[makeFloorTile(3,b.fl[0],b.fl[1],b.fl[2],b.fl[3]),makeFloorTile(11,b.fl[0],b.fl[1],b.fl[2],b.fl[3]),
-  makeFloorTile(29,b.fl[0],b.fl[1],b.fl[2],b.fl[3]),makeFloorTile(47,b.fl[0],b.fl[1],b.fl[2],b.fl[3])];
- WALLC=makeWallTile(b.wall[0],b.wall[1],b.wall[2]);WALLTOP=makeTopTile(b.top[0],b.top[1]);}
-const TOWN_BIOME={name:'城镇',fl:['#2e2a24','#26221d','#38322a','#1e1a15'],wall:['#5a4a38','#43372a','#2a2016'],top:['#181208','#221a10'],
- fog:'rgba(10,8,4,0.55)',torch:['#f0a040','#ffe090']};
+ FLOORS=[makeFloorTile(3,b.fl),makeFloorTile(11,b.fl),makeFloorTile(29,b.fl),makeFloorTile(47,b.fl)];
+ WALLC=makeWallTile(b.wall);WALLTOP=makeTopTile(b.top);}
+const TOWN_BIOME={name:'城镇',
+ fl:{gr:'#1a160f',f0:'#26221d',f1:'#2f2a22',f2:'#38322a',fl:'#48402f',fd:'#1d1912'},
+ wall:{mo:'#2a2016',b0:'#43372a',b1:'#4f4132',bl:'#68563f',bd:'#2d2318'},
+ top:{t0:'#141008',t1:'#1c160c'},
+ fog:'rgba(10,8,4,0.55)',torch:['#f0a040','#ffe090'],dec:BDECOR[0]};
 function biomeFor(d){return BIOMES[clamp(Math.floor((d-1)/FLOORS_PER_BIOME),0,BIOMES.length-1)];}
 // ============ 全局状态 ============
 const T=32,MW=44,MH=44;
@@ -399,7 +550,7 @@ function measure(){const vv=window.visualViewport;
  return{w:Math.max(200,w),h:Math.max(160,h)};}
 let map,explored,rooms,stairs,torches,depth=1,bossAlive=false,inTown=false;
 let enemies=[],drops=[],projs=[],parts=[],texts=[],chests=[],shrines=[],traps=[],npcs=[],props=[],decor=[],portal=null;
-let cam={x:0,y:0},mouse={x:0,y:0},time=0,floorTime=0,meteors=[];
+let cam={x:0,y:0},mouse={x:0,y:0},time=0,floorTime=0,meteors=[],hazards=[];
 let pendingTransition=null;
 const RARC=['#c8c8c8','#5b9bd5','#e8c840','#e07820','#40c040'];
 const RARN=['普通','魔法','稀有','传奇','套装'];
@@ -411,11 +562,18 @@ const player={px:0,py:0,dir:1,path:[],target:null,repath:0,atkCd:0,moving:false,
  lvl:1,xp:0,gold:0,pts:0,asc:0,maxDepth:1,
  base:{str:5,dex:5,vit:5,mag:5},
  hp:100,mp:30,inv:[],equip:{weapon:null,offhand:null,helm:null,armor:null,legs:null,ring:null,amulet:null},
- potions:{hp:3,mp:2},cds:{f:0,w:0,t:0,n:0,m:0},dead:false,
- buffs:[],skills:{f:true,w:true,t:true,n:false,m:false},
+ potions:{hp:3,mp:2},cds:{f:0,w:0,t:0,n:0,m:0,p:0},dead:false,
+ buffs:[],skills:{f:true,w:true,t:true,n:false,m:false},spellSlot:0,swing:0,
  stat:{kills:0,chests:0,bounties:0,deepest:1},milestones:{}};
-const pet={px:0,py:0,dir:1,atkCd:0};
+const pet={px:0,py:0,dir:1,atkCd:0,hp:1,maxhp:1,downT:0,moving:false};
 function xpNext(){return Math.floor(40*Math.pow(player.lvl,1.5));}
+// 宠物不再是无风险的永久输出：会被打倒，需要等它自己爬起来
+function petReset(){pet.maxhp=Math.floor(60+player.lvl*12+(D.maxhp||0)*0.18);pet.hp=pet.maxhp;pet.downT=0;}
+function hurtPet(raw){if(pet.downT>0)return;
+ pet.hp-=Math.max(1,Math.floor(raw*0.75));
+ ftext(pet.px,pet.py-24,'-'+Math.max(1,Math.floor(raw*0.75)),'#e08080');
+ if(pet.hp<=0){pet.hp=0;pet.downT=22;burst(pet.px,pet.py,'#8a93a6',16,140);
+  log('狼被打倒了，'+Math.round(pet.downT)+' 秒后归队','#e07820');sfx(200,0.3,'sawtooth',0.05);}}
 function resize(){
  const m=measure();const w=m.w,h=m.h;
  SW=w;SH=h;
@@ -430,6 +588,9 @@ function resize(){
   const lb=28+orb*2;
   const band=w-lb-12;
   const sk=Math.floor(clamp((band-6*7)/7,32,56));
+  const ab=Math.round(clamp(Math.min(w*0.095,h*0.21),56,84));
+  r.setProperty('--ab',ab+'px');
+  r.setProperty('--sb',Math.round(ab*0.84)+'px');
   r.setProperty('--orb',orb+'px');
   r.setProperty('--lb',lb+'px');
   r.setProperty('--sk',sk+'px');}
@@ -536,7 +697,7 @@ function genItem(d,forceRar){const slot=pick(SLOTS);
  if(rar>=2||Math.random()<0.18){const s=pick(SUFF);
   const v=Math.floor(rnd(s.v[0],s.v[1])*(1+rar*0.25));
   st[s.k]=(st[s.k]||0)+v;suffix=s.n;name+=' · '+s.n;}
- const it={kind:'eq',slot,name,rar,stats:st,up:0,icon:slot,sockets:[],set:null};
+ const it={kind:'eq',slot,name,rar,tier:bt,stats:st,up:0,icon:slot+'_'+bt,sockets:[],set:null};
  const nsoc=rar>=4?ri(1,3):rar>=3?ri(1,2):rar>=2?ri(0,2):rar>=1?ri(0,1):0;
  for(let i=0;i<nsoc;i++)it.sockets.push(null);
  if(rar===4){const sk=biomeFor(d).set;it.set=sk;it.name=SETS[sk].n+'·'+pick(BASEN[slot][bt]);
@@ -569,15 +730,15 @@ const ETYPES={
  slime_ice:{n:'冰霜史莱姆',spr:'slime_ice',hp:52,dmg:16,spd:50,xp:22,aggro:5,slow:true},
  slime_lava:{n:'熔岩史莱姆',spr:'slime_lava',hp:78,dmg:30,spd:52,xp:35,aggro:5,burn:true},
  slime_void:{n:'虚空胶质',spr:'slime_void',hp:105,dmg:46,spd:55,xp:54,aggro:6},
- bat:{n:'蝙蝠',spr:'bat',hp:14,dmg:7,spd:95,xp:11,aggro:6},
- bat_ice:{n:'霜翼蝠',spr:'bat_ice',hp:38,dmg:15,spd:110,xp:24,aggro:7},
- bat_void:{n:'虚空蝠',spr:'bat_void',hp:66,dmg:38,spd:125,xp:48,aggro:8},
+ bat:{n:'蝙蝠',spr:'bat',charge:true,fly:true,hp:14,dmg:7,spd:95,xp:11,aggro:6},
+ bat_ice:{n:'霜翼蝠',spr:'bat_ice',charge:true,fly:true,hp:38,dmg:15,spd:110,xp:24,aggro:7},
+ bat_void:{n:'虚空蝠',spr:'bat_void',charge:true,fly:true,hp:66,dmg:38,spd:125,xp:48,aggro:8},
  skel:{n:'骷髅兵',spr:'skel',hp:40,dmg:15,spd:65,xp:22,aggro:6},
- skel_char:{n:'焦骨战士',spr:'skel_char',hp:90,dmg:38,spd:72,xp:45,aggro:7},
+ skel_char:{n:'焦骨战士',spr:'skel_char',charge:true,hp:90,dmg:38,spd:72,xp:45,aggro:7},
  golem:{n:'冰石魔像',spr:'golem',hp:150,dmg:34,spd:38,xp:48,aggro:5,tough:true},
- imp:{n:'小恶魔',spr:'imp',hp:62,dmg:30,spd:105,xp:42,aggro:8},
- eye:{n:'魔眼',spr:'eye',hp:42,dmg:22,spd:55,xp:32,aggro:8,ranged:true},
- wraith:{n:'幽魂',spr:'wraith',hp:76,dmg:44,spd:80,xp:60,aggro:9,ranged:true},
+ imp:{n:'小恶魔',spr:'imp',charge:true,hp:62,dmg:30,spd:105,xp:42,aggro:8},
+ eye:{n:'魔眼',spr:'eye',fly:true,hp:42,dmg:22,spd:55,xp:32,aggro:8,ranged:true},
+ wraith:{n:'幽魂',spr:'wraith',charge:true,fly:true,hp:76,dmg:44,spd:80,xp:60,aggro:9,ranged:true},
  boss_skelking:{n:'骷髅王',spr:'boss_bone',hp:1000,dmg:30,spd:62,xp:900,aggro:11,boss:true,summon:'skel'},
  boss_frost:{n:'霜巨魔',spr:'boss_ice',hp:1250,dmg:55,spd:56,xp:1500,aggro:11,boss:true,slow:true,summon:'slime_ice'},
  boss_demon:{n:'熔岩魔王',spr:'boss',hp:1500,dmg:70,spd:66,xp:2200,aggro:12,boss:true,burn:true,ranged:true,summon:'imp'},
@@ -589,19 +750,36 @@ function hpMul(){return curve(1.18)*(1+(player.asc||0)*0.85);}
 function dmgMul(){return curve(0.65)*(1+(player.asc||0)*0.55);}
 function xpMul(){return curve(1.15)*(1+(player.asc||0)*0.6);}
 function diffMul(){return hpMul();}
+// 精英词缀：同一种怪挂不同词缀就是完全不同的打法
+const EAFFIX=[
+ {k:'frost',n:'冰霜光环',c:'#8ae0ff'},{k:'shield',n:'护盾',c:'#c0d8ff'},
+ {k:'blink',n:'瞬移',c:'#c080ff'},{k:'summon',n:'召唤',c:'#f0a040'},
+ {k:'explode',n:'死亡爆炸',c:'#ff7040'},{k:'vamp',n:'吸血',c:'#e04060'},
+ {k:'swift',n:'迅捷',c:'#8ae0a0'},{k:'burn',n:'灼烧',c:'#ff8020'}];
+function affixCount(){return 1+Math.min(3,player.asc||0);}   // 周目越高词缀越多
+function rollAffixes(e){
+ const pool=EAFFIX.slice().sort(()=>Math.random()-0.5).slice(0,affixCount());
+ e.affixes=pool.map(a=>a.k);e.affixN=pool.map(a=>a.n).join('·');
+ if(e.affixes.indexOf('swift')>=0)e.spd*=1.45;
+ if(e.affixes.indexOf('shield')>=0){e.shieldMax=Math.floor(e.maxhp*0.45);e.shield=e.shieldMax;e.shieldCd=0;}
+ e.blinkCd=rnd(4,7);e.sumCd2=rnd(6,9);}
 function spawnEnemy(type,tx,ty,elite){const t=ETYPES[type];
  const em=elite?2.3:1;
  const e={type,name:(elite?'精英 ':'')+t.n,spr:t.spr,px:(tx+0.5)*T,py:(ty+0.5)*T,dir:1,
   hp:Math.floor(t.hp*hpMul()*em),dmg:Math.floor(t.dmg*dmgMul()*(elite?1.4:1)),
-  spd:t.spd*(elite?1.12:1),xp:Math.floor(t.xp*xpMul()*(elite?2.6:1)),aggroR:t.aggro*T,aggro:false,atkCd:rnd(0,1),
+  spd:t.spd*(elite?1.12:1)*(hasMod('swift')?1.35:1),xp:Math.floor(t.xp*xpMul()*(elite?2.6:1)),aggroR:t.aggro*T,aggro:false,atkCd:rnd(0,1),
   ranged:!!t.ranged,boss:!!t.boss,elite:!!elite,slow:!!t.slow,burn:!!t.burn,tough:!!t.tough,
-  summon:t.summon,sumCd:6,flash:0,stun:0,scale:t.boss?3.2:elite?2.5:2};
- e.maxhp=e.hp;enemies.push(e);return e;}
+  flank:rnd(-0.85,0.85),canCharge:!!t.charge||!!elite,chargeT:0,chargeCd:rnd(3,7),dashT:0,windup:0,doAtk:false,
+  summon:t.summon,sumCd:6,flash:0,stun:0,moving:false,fly:!!t.fly,
+  scale:t.boss?1.7:elite?1.24:1};
+ e.maxhp=e.hp;
+ if(elite)rollAffixes(e);
+ enemies.push(e);return e;}
 // ============ 地图 ============
 function tile(x,y){return(x<0||y<0||x>=MW||y>=MH)?0:map[y][x];}
 function passPx(px,py){return tile(Math.floor(px/T),Math.floor(py/T))>0;}
 function blankMap(){map=[];explored=[];for(let y=0;y<MH;y++){map.push(new Array(MW).fill(0));explored.push(new Array(MW).fill(false));}}
-function clearEntities(){if(typeof joy!=='undefined')joyEnd();enemies=[];drops=[];projs=[];parts=[];texts=[];chests=[];torches=[];shrines=[];traps=[];npcs=[];props=[];decor=[];meteors=[];portal=null;player.slowT=0;}
+function clearEntities(){if(typeof joy!=='undefined')joyEnd();enemies=[];drops=[];projs=[];parts=[];texts=[];chests=[];torches=[];shrines=[];traps=[];npcs=[];props=[];decor=[];meteors=[];hazards=[];portal=null;player.slowT=0;player.burnT=0;}
 function reveal(r){const tx=Math.floor(player.px/T),ty=Math.floor(player.py/T);const R=r||7,R2=R*R;
  for(let dy=-R;dy<=R;dy++)for(let dx=-R;dx<=R;dx++)if(dx*dx+dy*dy<=R2){
   const x=tx+dx,y=ty+dy;if(x>=0&&y>=0&&x<MW&&y<MH)explored[y][x]=true;}}
@@ -617,14 +795,14 @@ function findPath(sx,sy,tx,ty){if(tile(tx,ty)===0){let best=null,bd=1e9;
  while(c!==sy*MW+sx){path.push({x:(c%MW+0.5)*T,y:(Math.floor(c/MW)+0.5)*T});c=prev[c];}
  return path.reverse();}
 // ---- 城镇 ----
-function genTown(){inTown=true;depth=0;bossAlive=false;
+function genTown(){inTown=true;depth=0;bossAlive=false;floorMod=null;
  applyBiome(TOWN_BIOME);blankMap();clearEntities();player.buffs=[];calc();renderBuffs();
  const x0=13,y0=15,w=19,h=13;
  for(let y=y0;y<y0+h;y++)for(let x=x0;x<x0+w;x++)map[y][x]=1;
  rooms=[{x:x0,y:y0,w,h,cx:x0+Math.floor(w/2),cy:y0+Math.floor(h/2),kind:'town'}];
  stairs={x:x0+w-3,y:y0+h-2};
  player.px=(x0+3.5)*T;player.py=(y0+h-3.5)*T;player.path=[];player.target=null;
- pet.px=player.px-T;pet.py=player.py;
+ pet.px=player.px-T;pet.py=player.py;petReset();
  npcs.push({id:'merchant',n:'杂货商人',spr:'npc_merchant',px:(x0+3.5)*T,py:(y0+2.5)*T,near:false});
  npcs.push({id:'smith',n:'铁匠',spr:'npc_smith',px:(x0+9.5)*T,py:(y0+2.5)*T,near:false});
  npcs.push({id:'quest',n:'公会执事',spr:'npc_quest',px:(x0+15.5)*T,py:(y0+2.5)*T,near:false});
@@ -644,6 +822,18 @@ function genTown(){inTown=true;depth=0;bossAlive=false;
  refreshShop();updateFloorLabel();renderQuests();}
 // ---- 地牢 ----
 const ROOMKINDS=['treasure','elite','shrine','trap'];
+// 二周目起，每层随机挂一条楼层词缀
+const FLOORMODS=[
+ {k:'swift',n:'疾行之地',d:'怪物移速 +35%'},
+ {k:'tough',n:'坚壁',d:'怪物护甲提升，受到伤害 -18%'},
+ {k:'elite',n:'精英横行',d:'精英出现率大幅提升'},
+ {k:'frail',n:'虚弱诅咒',d:'药水治疗效果 -40%'},
+ {k:'dark',n:'浓雾',d:'视野大幅缩小'},
+ {k:'volatile',n:'不稳定',d:'所有怪物死亡时爆炸'}];
+let floorMod=null;
+function rollFloorMod(){
+ floorMod=(player.asc||0)>0&&Math.random()<0.55?pick(FLOORMODS):null;}
+function hasMod(k){return !!floorMod&&floorMod.k===k;}
 function genFloor(){inTown=false;floorTime=0;
  applyBiome(biomeFor(depth));blankMap();clearEntities();player.buffs=[];calc();renderBuffs();
  rooms=[];
@@ -657,7 +847,7 @@ function genFloor(){inTown=false;floorTime=0;
  const last=rooms[rooms.length-1];last.kind='stairs';stairs={x:last.cx,y:last.cy};
  rooms[0].kind='entry';
  player.px=(rooms[0].cx+0.5)*T;player.py=(rooms[0].cy+0.5)*T;player.path=[];player.target=null;
- pet.px=player.px-T;pet.py=player.py;
+ pet.px=player.px-T;pet.py=player.py;petReset();
  // 特殊房间：中间房间里随机分配 1-3 个
  const mid=rooms.slice(1,rooms.length-1);
  const nSpec=clamp(ri(1,3),1,mid.length);
@@ -672,6 +862,7 @@ function genFloor(){inTown=false;floorTime=0;
   decor.push({x,y,spr:pick(dset),f:Math.random()<0.5?-1:1});}
  // 火把
  for(let y=1;y<MH-1;y++)for(let x=1;x<MW-1;x++)if(map[y][x]===0&&map[y+1][x]===1&&Math.random()<0.08)torches.push({x,y});
+ rollFloorMod();
  bossAlive=depth%FLOORS_PER_BIOME===0;
  const pool=biome.pool;
  for(let i=1;i<rooms.length;i++){const r=rooms[i];
@@ -692,8 +883,10 @@ function genFloor(){inTown=false;floorTime=0;
    chests.push({px:(r.cx+0.5)*T,py:(r.cy+0.5)*T,open:false,gold:true});
    const n=ri(1,2);for(let j=0;j<n;j++)spawnEnemy(pick(pool),clamp(r.cx+ri(-2,2),r.x,r.x+r.w-1),clamp(r.cy+ri(-2,2),r.y,r.y+r.h-1));
    continue;}
-  const n=ri(2,4);for(let j=0;j<n;j++){
-   spawnEnemy(pick(pool),clamp(r.cx+ri(-2,2),r.x,r.x+r.w-1),clamp(r.cy+ri(-2,2),r.y,r.y+r.h-1),Math.random()<0.06);}}
+  const n=ri(2,4);
+  const eliteRate=0.06+(player.asc||0)*0.05+(hasMod('elite')?0.3:0);
+  for(let j=0;j<n;j++){
+   spawnEnemy(pick(pool),clamp(r.cx+ri(-2,2),r.x,r.x+r.w-1),clamp(r.cy+ri(-2,2),r.y,r.y+r.h-1),Math.random()<eliteRate);}}
  for(let i=0;i<2;i++){const r=rooms[ri(1,rooms.length-1)];
   chests.push({px:(r.x+1.5)*T,py:(r.y+1.5)*T,open:false});}
  player.maxDepth=Math.max(player.maxDepth,depth);
@@ -703,7 +896,7 @@ function updateFloorLabel(){const el=document.getElementById('floorLabel');
  if(inTown){el.innerHTML='城镇<small>安全区 · 走到传送门下潜</small>';return;}
  const sub=bossAlive?'首领把守楼梯':(biome.name);
  el.innerHTML='第 '+depth+' 层 / '+MAX_DEPTH+(player.asc?' <span style="color:#e07820">周目'+(player.asc+1)+'</span>':'')
-  +'<small>'+sub+'</small>';}
+  +'<small>'+sub+(floorMod?' · <span style="color:#e04040">'+floorMod.n+'：'+floorMod.d+'</span>':'')+'</small>';}
 // ============ 任务 ============
 let bounties=[];
 const MILESTONES=[
@@ -711,20 +904,39 @@ const MILESTONES=[
  {id:'m2',n:'融化霜巨魔',d:'击败第 10 层的霜巨魔',rw:'生命上限 +80，药水携带上限提升'},
  {id:'m3',n:'扑灭熔岩魔王',d:'击败第 15 层的熔岩魔王',rw:'解锁技能【陨石术】+ 5 属性点'},
  {id:'m4',n:'终结虚空之主',d:'击败第 20 层的虚空之主',rw:'通关，开启更高难度周目'}];
+// 悬赏必须依据本层真实内容来定，否则会出现"打 9 只但全层只刷了 6 只"这种做不完的任务
 function rollBounties(){bounties=[];
- const kinds=['kill','chest','elite','speed','nopot'];
- const n=ri(1,2);const used={};
+ const counts={};
+ for(const e of enemies)if(!e.boss)counts[e.type]=(counts[e.type]||0)+1;
+ const killable=Object.keys(counts).filter(t=>counts[t]>=3);
+ const hasElite=enemies.some(e=>e.elite);
+ const kinds=[];
+ if(killable.length)kinds.push('kill');
+ if(chests.length>=2)kinds.push('chest');
+ if(hasElite)kinds.push('elite');
+ if(!bossAlive)kinds.push('speed');     // 首领层要先打首领，限时不公平
+ kinds.push('nopot');
+ const n=Math.min(ri(1,2),kinds.length);const used={};
  for(let i=0;i<n;i++){let k=pick(kinds);let guard=0;
-  while(used[k]&&guard++<10)k=pick(kinds);used[k]=true;
+  while(used[k]&&guard++<10)k=pick(kinds);
+  if(used[k])continue;
+  used[k]=true;
   const rw={gold:Math.floor((40+depth*22)*(1+player.asc*0.6)),xp:Math.floor((25+depth*14)*(1+player.asc*0.5))};
-  if(k==='kill'){const t=pick(biome.pool);const g=ri(5,9);
+  if(k==='kill'){const t=pick(killable);
+   const g=clamp(ri(4,8),3,counts[t]);      // 上限就是本层实际刷出的数量
    bounties.push({k,t,goal:g,prog:0,rw,d:'击杀 '+g+' 只 '+ETYPES[t].n});}
-  else if(k==='chest'){const g=ri(2,3);
+  else if(k==='chest'){const g=clamp(ri(2,3),2,chests.length);
    bounties.push({k,goal:g,prog:0,rw,d:'打开 '+g+' 个宝箱'});}
-  else if(k==='elite'){bounties.push({k,goal:1,prog:0,rw,d:'击败 1 只精英怪'});}
-  else if(k==='speed'){const g=ri(70,110);
+  else if(k==='elite'){const ne=enemies.filter(e=>e.elite).length;
+   const g=clamp(ri(1,2),1,ne);
+   bounties.push({k,goal:g,prog:0,rw,d:'击败 '+g+' 只精英怪'});}
+  else if(k==='speed'){
+   // 按到楼梯的实际路程估时，再给出宽裕但不白送的时限
+   const path=findPath(Math.floor(player.px/T),Math.floor(player.py/T),stairs.x,stairs.y);
+   const est=path.length*T*0.8/Math.max(60,D.spd||150);
+   const g=Math.round(clamp(est*2.6+16,30,110));
    bounties.push({k,goal:g,prog:0,rw,d:g+' 秒内抵达楼梯'});}
-  else{bounties.push({k,goal:1,prog:0,rw,d:'不使用药水通过本层'});}}
+  else bounties.push({k,goal:1,prog:0,rw,d:'不使用药水通过本层'});}
  renderQuests();}
 function bountyProg(k,t,amt){let ch=false;
  for(const b of bounties){if(b.done||b.failed)continue;
@@ -741,7 +953,7 @@ function completeBounty(b){if(b.done)return;b.done=true;player.stat.bounties++;
 function completeMilestone(id){if(player.milestones[id])return;player.milestones[id]=true;
  const m=MILESTONES.find(x=>x.id===id);
  if(id==='m1'){player.skills.n=true;player.pts+=5;}
- if(id==='m2'){player.base.vit+=10;player.potions.hp+=3;player.potions.mp+=2;}
+ if(id==='m2'){player.base.vit+=10;}   // 携带上限由 potCap() 处理
  if(id==='m3'){player.skills.m=true;player.pts+=5;}
  log('里程碑达成：'+m.n+' — '+m.rw,'#f2d060');sfx(660,0.6,'triangle',0.07);
  calc();renderQuests();renderChr();}
@@ -758,6 +970,11 @@ function critMul(){return 1+D.critd/100;}
 function dmgEnemy(e,amount,isCrit,src){
  if(e.frozen>0&&player.setActive&&player.setActive.frost>=4)amount=Math.floor(amount*1.6);
  if(e.tough)amount=Math.floor(amount*0.85);
+ if(hasMod('tough'))amount=Math.floor(amount*0.82);
+ if(e.shield>0){   // 护盾必须先破
+  const ab=Math.min(e.shield,amount);e.shield-=ab;amount-=ab;e.shieldCd=4;
+  ftext(e.px,e.py-34,'护盾 -'+Math.floor(ab),'#c0d8ff');burst(e.px,e.py,'#c0d8ff',5);
+  if(amount<=0){e.flash=0.12;e.aggro=true;return;}}
  e.hp-=amount;e.flash=0.12;e.aggro=true;
  ftext(e.px,e.py-24,(isCrit?'暴击! ':'')+amount,isCrit?'#f2d060':'#fff');
  burst(e.px,e.py,'#e04040',5);sfx(isCrit?300:200,0.08,'square',0.04);
@@ -767,6 +984,10 @@ function dmgEnemy(e,amount,isCrit,src){
   burst(e.px,e.py,'#8ae0ff',6);}
  if(e.hp<=0)killEnemy(e);}
 function killEnemy(e){const i=enemies.indexOf(e);if(i<0)return;enemies.splice(i,1);
+ if(hasMod('volatile'))
+  hazards.push({px:e.px,py:e.py,r:T*1.9,t:0.9,dmg:Math.floor(e.dmg*1.4),c:'#ffa040'});
+ if(e.affixes&&e.affixes.indexOf('explode')>=0)
+  hazards.push({px:e.px,py:e.py,r:T*2.6,t:1.0,dmg:Math.floor(e.dmg*2.2),c:'#ff7040'});
  burst(e.px,e.py,e.elite?'#f2d060':'#e04040',e.boss?26:14,140);sfx(120,0.25,'sawtooth',0.05);
  player.xp+=e.xp;player.stat.kills++;
  ftext(e.px,e.py-34,'+'+e.xp+' 经验','#5b9bd5');
@@ -807,10 +1028,16 @@ function defReduce(){const K=40+depth*14+(player.asc||0)*90;
  return Math.min(0.72,D.def/(D.def+K));}
 function hurtPlayer(raw,e){if(player.dead)return;const d=Math.max(1,Math.floor(raw*(1-defReduce())));
  player.hp-=d;ftext(player.px,player.py-30,'-'+d,'#e04040');sfx(140,0.12,'square',0.05);
+ cancelTownCast('伤害');
  if(e&&D.thorns>0){dmgEnemy(e,Math.floor(D.thorns),false,'dot');}
- if(player.hp<=0){player.hp=0;player.dead=true;
+ if(player.hp<=0){player.hp=0;player.dead=true;townCast=-1;
   const lost=Math.floor(player.gold*0.12);player.gold-=lost;
-  document.getElementById('deathMsg').textContent='损失了 '+lost+' 金币，装备与等级保留。';
+  // 进度退回本区域起点，死亡不再是零成本
+  const back=inTown?1:Math.floor((depth-1)/FLOORS_PER_BIOME)*FLOORS_PER_BIOME+1;
+  const lostFloors=Math.max(0,player.maxDepth-back);
+  player.maxDepth=Math.max(1,back);
+  document.getElementById('deathMsg').innerHTML='损失 '+lost+' 金币'+
+   (lostFloors>0?'，进度退回第 '+player.maxDepth+' 层（本区域起点）':'')+'<br>装备与等级保留。';
   document.getElementById('death').style.display='block';}}
 function playerAttack(e){player.atkCd=0.55;player.dir=e.px<player.px?-1:1;
  const crit=Math.random()*100<D.crit;
@@ -857,11 +1084,49 @@ function castMeteor(){if(!player.skills.m){log('陨石术尚未解锁（击败�
  const tgt=(player.target&&enemies.includes(player.target))?player.target:nearestEnemy();
  const tx=tgt?tgt.px:player.px+player.dir*T*4,ty=tgt?tgt.py:player.py;
  meteors.push({px:tx,py:ty,t:0.9});sfx(180,0.6,'sawtooth',0.06);}
+// ---- 法术表与法术槽 ----
+const SKILLS=[
+ {k:'1',id:'f',n:'火球术',ic:'ic_fire',mp:8,d:'向锁定的敌人发射爆裂火球',lock:()=>false,cast:()=>castFire()},
+ {k:'2',id:'w',n:'旋风斩',ic:'ic_whirl',mp:12,d:'原地横扫周身敌人',lock:()=>player.lvl<3,lockN:'3 级解锁',cast:()=>castWhirl()},
+ {k:'3',id:'t',n:'雷暴',ic:'ic_thunder',mp:25,d:'大范围落雷并眩晕',lock:()=>player.lvl<5,lockN:'5 级解锁',cast:()=>castThunder()},
+ {k:'4',id:'n',n:'冰霜新星',ic:'ic_nova',mp:20,d:'冻结周围敌人',lock:()=>!player.skills.n,lockN:'击败骷髅王解锁',cast:()=>castNova()},
+ {k:'5',id:'m',n:'陨石术',ic:'ic_meteor',mp:40,d:'砸下陨石造成巨额伤害',lock:()=>!player.skills.m,lockN:'击败熔岩魔王解锁',cast:()=>castMeteor()}];
+function curSpell(){return SKILLS[clamp(player.spellSlot||0,0,SKILLS.length-1)];}
+function castSlot(){const sp=curSpell();
+ if(sp.lock()){log(sp.n+'尚未解锁（'+(sp.lockN||'')+'）','#e04040');return;}
+ sp.cast();}
+window.setSpellSlot=i=>{const sp=SKILLS[i];
+ if(sp.lock()){log(sp.n+'尚未解锁（'+(sp.lockN||'')+'）','#e04040');return;}
+ player.spellSlot=i;closePanels();renderHud();save();
+ log('法术槽已切换为 '+sp.n,'#8ae0ff');sfx(620,0.12,'triangle',0.04);};
+function renderSpellPick(){const el=document.getElementById('spellList');
+ el.innerHTML=SKILLS.map((sp,i)=>{const lk=sp.lock();
+  return '<div class="row'+(i===(player.spellSlot||0)?' on':'')+(lk?' lk':'')+'" onclick="setSpellSlot('+i+')">'
+   +'<img src="'+ICON[sp.ic]+'"><div class="nm"><b style="color:#f2d060">'+sp.n+'</b>'
+   +(lk?' <span style="color:#e06060">'+(sp.lockN||'未解锁')+'</span>':'')
+   +'<br><span style="color:#887a99">'+sp.d+'</span></div>'
+   +'<div class="pr">'+sp.mp+' 蓝</div></div>';}).join('');}
+// ---- 普通攻击（点按触发，按住连击）----
+let atkHeld=false;
+function doAttack(){if(player.dead||player.atkCd>0)return;
+ const e=nearestEnemy(T*1.5);
+ if(e){playerAttack(e);}
+ else{player.atkCd=0.42;player.swing=0.2;sfx(170,0.06,'square',0.022);}}
+// 药水不再能连喝：生命与法力共用一条冷却，携带量也有上限
+const POT_CD=6;
+function potCd(){return POT_CD+(player.asc||0)*2;}
+function potCap(){return 5+(player.milestones&&player.milestones.m2?3:0);}
+function addPot(k){
+ if(player.potions[k]>=potCap()){log((k==='hp'?'生命':'法力')+'药水已达携带上限','#e07820');return false;}
+ player.potions[k]++;return true;}
 function usePot(k){
- if(k==='hp'&&player.potions.hp>0&&player.hp<D.maxhp){player.potions.hp--;bountyFail('nopot');
-  player.hp=Math.min(D.maxhp,player.hp+Math.floor(D.maxhp*0.45));ftext(player.px,player.py-30,'+HP','#40e060');sfx(500,0.2,'triangle',0.05);}
- if(k==='mp'&&player.potions.mp>0&&player.mp<D.maxmp){player.potions.mp--;bountyFail('nopot');
-  player.mp=Math.min(D.maxmp,player.mp+Math.floor(D.maxmp*0.6));ftext(player.px,player.py-30,'+MP','#5b9bd5');sfx(550,0.2,'triangle',0.05);}}
+ if(player.cds.p>0){ftext(player.px,player.py-30,'药水冷却中','#e07820');return;}
+ let used=false;
+ if(k==='hp'&&player.potions.hp>0&&player.hp<D.maxhp){player.potions.hp--;bountyFail('nopot');used=true;
+  player.hp=Math.min(D.maxhp,player.hp+Math.floor(D.maxhp*(hasMod('frail')?0.27:0.45)));ftext(player.px,player.py-30,'+HP','#40e060');sfx(500,0.2,'triangle',0.05);}
+ if(k==='mp'&&player.potions.mp>0&&player.mp<D.maxmp){player.potions.mp--;bountyFail('nopot');used=true;
+  player.mp=Math.min(D.maxmp,player.mp+Math.floor(D.maxmp*0.6));ftext(player.px,player.py-30,'+MP','#5b9bd5');sfx(550,0.2,'triangle',0.05);}
+ if(used)player.cds.p=potCd();}
 // ============ 神龛 ============
 const BLESS=[{n:'力量祝福',s:{atk:30},c:'#e08040'},{n:'守护祝福',s:{def:18},c:'#8ac0e0'},
  {n:'疾风祝福',s:{ms:22},c:'#8ae0a0'},{n:'贪婪祝福',s:{gf:60,mf:35},c:'#f2d060'},
@@ -879,9 +1144,91 @@ function renderBuffs(){const el=document.getElementById('buffBar');
  el.innerHTML=player.buffs.map(b=>'<div style="color:'+(b.bad?'#e08080':'#8ae0a0')+'">'+b.n+'</div>').join('');}
 // ============ 移动/更新 ============
 function moveEntity(o,dx,dy){if(passPx(o.px+dx,o.py))o.px+=dx;if(passPx(o.px,o.py+dy))o.py+=dy;}
-function chase(e,dt){const a=Math.atan2(player.py-e.py,player.px-e.px);
+function chase(e,dt){
+ const dx=player.px-e.px,dy=player.py-e.py;
+ const d=Math.hypot(dx,dy)||1;
+ let a=Math.atan2(dy,dx);
+ // 侧向偏置让一群怪从不同角度围上来，而不是排成一列挤在同一点
+ if(e.flank){const w=clamp((d-T*1.1)/(T*5),0,1);a+=e.flank*w;}
+ e.moving=true;
  moveEntity(e,Math.cos(a)*e.spd*dt,Math.sin(a)*e.spd*dt);}
-function goTown(){if(inTown)return;
+// 起手预警后的冲锋
+// 首领三阶段 + 地面重击 + 超时狂暴
+function enrageAt(){return Math.max(45,90-(player.asc||0)*12);}
+function tickBoss(e,d,dt){
+ e.fightT=(e.fightT||0)+dt;
+ // 血量阶段：越打越凶
+ const frac=e.hp/e.maxhp;
+ const want=frac<=0.33?2:frac<=0.66?1:0;
+ if(want>(e.phase||0)){e.phase=want;
+  e.spd*=1.12;e.atkSpd=(e.atkSpd||1)*0.78;
+  log(e.name+'进入第 '+(want+1)+' 阶段！','#e07820');sfx(300,0.5,'sawtooth',0.07);
+  burst(e.px,e.py,'#ff6040',26,200);
+  for(let j=0;j<2+want;j++)   // 阶段转换爆发召唤
+   if(e.summon&&enemies.length<28)spawnEnemy(e.summon,Math.floor(e.px/T)+ri(-3,3),Math.floor(e.py/T)+ri(-3,3));}
+ // 狂暴：拖太久就打不过了
+ if(!e.enraged&&e.fightT>enrageAt()){e.enraged=true;
+  e.dmg=Math.floor(e.dmg*2);e.spd*=1.5;e.atkSpd=(e.atkSpd||1)*0.6;
+  log(e.name+'狂暴了！速战速决！','#e04040');sfx(160,0.7,'sawtooth',0.08);}
+ // 地面重击：带预警圈，必须走开
+ e.slamCd=(e.slamCd===undefined?rnd(4,7):e.slamCd)-dt;
+ if(e.slamCd<=0&&d<T*11){
+  e.slamCd=Math.max(2.6,(6-(e.phase||0)*1.1)*(e.enraged?0.6:1));
+  const n=Math.min(2,1+(e.phase||0));      // 最多同时两个圈，避免无解叠伤
+  for(let j=0;j<n;j++){
+   const ox=j===0?0:rnd(-T*3,T*3),oy=j===0?0:rnd(-T*3,T*3);
+   hazards.push({px:player.px+ox,py:player.py+oy,r:j===0?T*2.6:T*2.1,t:1.5,
+    dmg:Math.floor(e.dmg*0.9),c:'#ff7040'});}
+  sfx(200,0.2,'square',0.05);}
+ // 召唤保持原有节奏
+ if(e.summon){e.sumCd-=dt;
+  if(e.sumCd<=0&&enemies.length<26){e.sumCd=9;
+   for(let j=0;j<2;j++)spawnEnemy(e.summon,Math.floor(e.px/T)+ri(-2,2),Math.floor(e.py/T)+ri(-2,2));
+   burst(e.px,e.py,'#a060f0',16,140);log(e.name+'召唤了随从！','#e07820');}}}
+function tickAffix(e,d,dt){
+ for(const a of e.affixes){
+  if(a==='frost'){if(d<T*3.2)player.slowT=Math.max(player.slowT||0,0.5);}
+  else if(a==='blink'){e.blinkCd-=dt;
+   if(e.blinkCd<=0&&d>T*3&&d<T*10){e.blinkCd=rnd(5,8);
+    const an=Math.atan2(player.py-e.py,player.px-e.px);
+    const nx=player.px-Math.cos(an)*T*1.2,ny=player.py-Math.sin(an)*T*1.2;
+    if(passPx(nx,ny)){burst(e.px,e.py,'#c080ff',12,120);e.px=nx;e.py=ny;
+     burst(e.px,e.py,'#c080ff',12,120);sfx(420,0.15,'triangle',0.04);}}}
+  else if(a==='summon'){e.sumCd2-=dt;
+   if(e.sumCd2<=0&&enemies.length<28&&d<T*9){e.sumCd2=rnd(9,13);
+    const t=pick(biome.pool);
+    for(let j=0;j<2;j++)spawnEnemy(t,Math.floor(e.px/T)+ri(-2,2),Math.floor(e.py/T)+ri(-2,2));
+    burst(e.px,e.py,'#f0a040',14,130);}}}
+ if(e.shieldMax){e.shieldCd-=dt;
+  if(e.shieldCd<=0&&e.shield<e.shieldMax)e.shield=Math.min(e.shieldMax,e.shield+e.shieldMax*0.25*dt);}}
+function tryCharge(e,d,dt){
+ if(!e.canCharge)return false;
+ if(e.chargeT>0){                    // 预警中：站定并闪烁
+  e.chargeT-=dt;
+  if(e.chargeT<=0){e.dashT=0.42;
+   const a=Math.atan2(player.py-e.py,player.px-e.px);
+   e.dashX=Math.cos(a);e.dashY=Math.sin(a);sfx(240,0.12,'sawtooth',0.04);}
+  return true;}
+ if(e.dashT>0){                       // 冲刺中
+  e.dashT-=dt;e.moving=true;
+  moveEntity(e,e.dashX*e.spd*3.1*dt,e.dashY*e.spd*3.1*dt);
+  if(dist(e,player)<T*0.9&&e.atkCd<=0){e.atkCd=1.1;
+   hurtPlayer(e.dmg*1.5,e);burst(player.px,player.py,'#e04040',8);e.dashT=0;}
+  return true;}
+ e.chargeCd-=dt;
+ if(e.chargeCd<=0&&d>T*2.2&&d<T*6.5){e.chargeCd=rnd(5,8);e.chargeT=0.55;return true;}
+ return false;}
+// 回城不再是即时逃生：需要站定吟唱，移动或受伤都会打断
+const TOWN_CAST=4;
+let townCast=-1;
+function goTown(){
+ if(inTown){log('已经在城镇了','#e07820');return;}
+ if(player.dead)return;
+ if(townCast>=0){townCast=-1;log('已取消回城','#887a99');return;}
+ townCast=TOWN_CAST;log('正在吟唱回城…移动或受伤会打断','#8ae0ff');}
+function cancelTownCast(why){if(townCast<0)return;townCast=-1;
+ log('回城被'+why+'打断','#e04040');sfx(180,0.15,'square',0.04);}
+function doGoTown(){townCast=-1;
  log('传送回城镇','#8ae0ff');sfx(520,0.35,'triangle',0.05);
  closePanels();genTown();save();}
 function descend(){
@@ -901,6 +1248,14 @@ function update(dt){time+=dt;if(!inTown)floorTime+=dt;
  player.mp=Math.min(D.maxmp,player.mp+dt*(1+D.mag*0.08));
  if(!player.dead)player.hp=Math.min(D.maxhp,player.hp+dt*(inTown?12:0.6));
  if(player.slowT>0)player.slowT-=dt;
+ if(player.burnT>0&&!player.dead){player.burnT-=dt;
+  player.burnTick=(player.burnTick||0)+dt;
+  if(player.burnTick>=0.5){player.burnTick=0;
+   hurtPlayer(player.burnD||4);burst(player.px,player.py,'#ff8020',4);}}
+ if(townCast>=0){
+  if(player.dead||inTown)townCast=-1;
+  else if(player.moving||(joy.active&&joy.mag>JOY_DEAD))cancelTownCast('移动');
+  else{townCast-=dt;if(townCast<=0){doGoTown();return;}}}
  if(player.dead)return;
  holdTick(dt);
  // 悬赏计时
@@ -914,8 +1269,8 @@ function update(dt){time+=dt;if(!inTown)floorTime+=dt;
   moveEntity(player,joy.nx*sp,joy.ny*sp);
   if(Math.abs(joy.nx)>0.2)player.dir=joy.nx<0?-1:1;
   player.moving=true;reveal();}
- // 没有锁定目标时，攻击范围内自动普攻
- if(!player.target&&player.atkCd<=0){const e=nearestEnemy(T*1.05);if(e)playerAttack(e);}
+ if(atkHeld)doAttack();   // 按住普攻键时按冷却自动连击
+ if(player.swing>0)player.swing-=dt;
  if(player.target){const e=player.target;
   if(!enemies.includes(e))player.target=null;
   else{const d=dist(player,e);
@@ -931,8 +1286,8 @@ function update(dt){time+=dt;if(!inTown)floorTime+=dt;
  for(let i=drops.length-1;i>=0;i--){const dr=drops[i];
   if(Math.hypot(dr.px-player.px,dr.py-player.py)<26){const it=dr.item;
    if(it.kind==='gold'){player.gold+=it.amt;ftext(dr.px,dr.py-16,'+'+it.amt,'#f2d060');sfx(800,0.08,'triangle',0.04);}
-   else if(it.kind==='hppot'){player.potions.hp++;sfx(650,0.1,'triangle',0.04);}
-   else if(it.kind==='mppot'){player.potions.mp++;sfx(650,0.1,'triangle',0.04);}
+   else if(it.kind==='hppot'){if(!addPot('hp'))continue;sfx(650,0.1,'triangle',0.04);}
+   else if(it.kind==='mppot'){if(!addPot('mp'))continue;sfx(650,0.1,'triangle',0.04);}
    else{if(!invAdd(it))continue;
     log('拾取: '+it.name,RARC[it.rar!==undefined?it.rar:2]);sfx(700,0.1,'triangle',0.04);renderInv();}
    drops.splice(i,1);}}
@@ -955,7 +1310,7 @@ function update(dt){time+=dt;if(!inTown)floorTime+=dt;
  for(const t of traps){t.ph+=dt;
   const on=(t.ph%2.4)>1.4;t.on=on;
   if(on&&!t.hit&&Math.floor(player.px/T)===t.x&&Math.floor(player.py/T)===t.y){
-   t.hit=true;hurtPlayer(8+depth*3.5);burst(player.px,player.py,'#c8d0e0',8);}
+   t.hit=true;hurtPlayer(Math.max(14,D.maxhp*0.11)+depth*1.5);burst(player.px,player.py,'#c8d0e0',8);}
   if(!on)t.hit=false;}
  // NPC
  for(const n of npcs){const near=Math.hypot(n.px-player.px,n.py-player.py)<48;
@@ -966,6 +1321,11 @@ function update(dt){time+=dt;if(!inTown)floorTime+=dt;
  if(!inTown&&Math.hypot((stairs.x+0.5)*T-player.px,(stairs.y+0.5)*T-player.py)<24){
   if(bossAlive)log('楼梯被首领封印着！','#e04040');
   else{descend();return;}}
+ // 敌方地面危险区：先出预警圈，到时再结算
+ for(let i=hazards.length-1;i>=0;i--){const hz=hazards[i];hz.t-=dt;
+  if(hz.t<=0){burst(hz.px,hz.py,hz.c||'#ff7040',20,180);sfx(110,0.35,'sawtooth',0.06);
+   if(Math.hypot(player.px-hz.px,player.py-hz.py)<hz.r)hurtPlayer(hz.dmg);
+   hazards.splice(i,1);}}
  // 陨石
  for(let i=meteors.length-1;i>=0;i--){const m=meteors[i];m.t-=dt;
   if(m.t<=0){burst(m.px,m.py,'#ff8020',34,260);sfx(90,0.5,'sawtooth',0.07);
@@ -973,36 +1333,74 @@ function update(dt){time+=dt;if(!inTown)floorTime+=dt;
     dmgEnemy(e,Math.floor(60+D.mag*5.5+D.fire*3),true);
    meteors.splice(i,1);}}
  // 敌人AI
- for(const e of enemies){e.flash=Math.max(0,e.flash-dt);e.atkCd=Math.max(0,e.atkCd-dt);
+ for(const e of enemies){e.flash=Math.max(0,e.flash-dt);e.atkCd=Math.max(0,e.atkCd-dt);e.moving=false;
   if(e.frozen>0)e.frozen-=dt;
   if(e.stun>0){e.stun-=dt;continue;}
   const d=dist(e,player);if(d>T*14)continue;
   if(!e.aggro&&d<e.aggroR)e.aggro=true;
   if(!e.aggro)continue;
   e.dir=player.px<e.px?-1:1;
-  if(e.boss&&e.summon){e.sumCd-=dt;
-   if(e.sumCd<=0&&enemies.length<26){e.sumCd=9;
-    for(let j=0;j<2;j++)spawnEnemy(e.summon,Math.floor(e.px/T)+ri(-2,2),Math.floor(e.py/T)+ri(-2,2));
-    burst(e.px,e.py,'#a060f0',16,140);log(e.name+'召唤了随从！','#e07820');}}
-  if(e.ranged){if(d>T*3.4)chase(e,dt);
-   else if(e.atkCd<=0){e.atkCd=e.boss?1.1:1.9;const a=Math.atan2(player.py-e.py,player.px-e.px);
-    projs.push({px:e.px,py:e.py-6,vx:Math.cos(a)*(e.boss?230:180),vy:Math.sin(a)*(e.boss?230:180),
+  if(e.boss)tickBoss(e,d,dt);
+  if(e.affixes&&e.affixes.length)tickAffix(e,d,dt);
+  if(tryCharge(e,d,dt))continue;
+  // 首领和精英出手前有起手动作，站着不动是要吃满的
+  if(e.windup>0){e.windup-=dt;e.moving=false;
+   if(e.windup>0)continue;
+   e.doAtk=true;}
+  const telegraph=(e.boss||e.elite)&&!e.doAtk;
+  if(e.ranged){
+   if(d>T*3.4)chase(e,dt);
+   else if(!e.boss&&d<T*1.9){   // 杂兵退到射击距离；首领要站住，否则会拉锯成僵局
+    const ra=Math.atan2(player.py-e.py,player.px-e.px);e.moving=true;
+    moveEntity(e,-Math.cos(ra)*e.spd*0.85*dt,-Math.sin(ra)*e.spd*0.85*dt);}
+   if(e.atkCd<=0){
+    if(telegraph){e.windup=0.45;e.atkCd=(e.boss?1.1:1.9)*(e.atkSpd||1)+0.45;continue;}
+    e.doAtk=false;e.atkCd=(e.boss?1.1:1.9)*(e.atkSpd||1);
+    const sp=e.boss?230:180;
+    // 预判：按玩家当前速度算提前量，越深越准
+    const lead=clamp(0.35+depth*0.03+(player.asc||0)*0.15,0,0.95);
+    const tt=d/sp;
+    const tx=player.px+(player.vx||0)*tt*lead, ty=player.py+(player.vy||0)*tt*lead;
+    const a=Math.atan2(ty-e.py,tx-e.px);
+    projs.push({px:e.px,py:e.py-6,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,
      dmg:e.dmg,from:'e',life:3,c:e.burn?'#f08030':'#b040e0',r:e.boss?6:4,src:e});sfx(300,0.12,'sawtooth',0.03);}}
-  else{if(d>T*0.8)chase(e,dt);
-   else if(e.atkCd<=0){e.atkCd=1.1;hurtPlayer(e.dmg*rnd(0.9,1.1),e);burst(player.px,player.py,'#e04040',5);
-    if(e.slow)player.slowT=1.2;}}}
+  else{
+   const pdz=pet.downT>0?1e9:Math.hypot(pet.px-e.px,pet.py-e.py);
+   if(pdz<d*0.7&&pdz<T*0.9&&e.atkCd<=0){   // 狼挡在前面就先打狼
+    e.atkCd=1.1*(e.atkSpd||1);hurtPet(e.dmg*rnd(0.9,1.1));
+    burst(pet.px,pet.py,'#e04040',5);continue;}
+   if(d>T*0.8)chase(e,dt);
+   else if(e.atkCd<=0){
+    if(telegraph){e.windup=0.45;e.atkCd=1.1*(e.atkSpd||1)+0.45;continue;}
+    e.doAtk=false;e.atkCd=1.1*(e.atkSpd||1);const raw=e.dmg*rnd(0.9,1.1);
+    hurtPlayer(raw,e);burst(player.px,player.py,'#e04040',5);
+    if(e.slow)player.slowT=1.2;
+    if(e.affixes){
+     if(e.affixes.indexOf('vamp')>=0&&e.hp<e.maxhp){
+      e.hp=Math.min(e.maxhp,e.hp+raw*0.6);ftext(e.px,e.py-30,'+'+Math.floor(raw*0.6),'#e04060');}
+     if(e.affixes.indexOf('burn')>=0){player.burnT=Math.max(player.burnT||0,3.5);
+      player.burnD=Math.max(player.burnD||0,e.dmg*0.22);}}}}}
  // 宠物
+ // 记录本帧位移，远程怪据此预判提前量
+ player.vx=(player.px-player.lx0||0)/Math.max(0.001,dt);
+ player.vy=(player.py-player.ly0||0)/Math.max(0.001,dt);
+ player.lx0=player.px;player.ly0=player.py;
  const pd=Math.hypot(pet.px-player.px,pet.py-player.py);
- pet.atkCd=Math.max(0,pet.atkCd-dt);
+ pet.atkCd=Math.max(0,pet.atkCd-dt);pet.moving=false;
+ if(pet.downT>0){pet.downT-=dt;
+  if(pet.downT<=0){petReset();pet.px=player.px;pet.py=player.py;
+   burst(pet.px,pet.py,'#8ae0a0',14,120);log('狼归队了','#40e060');}}
+ if(pet.downT<=0){
  let ptar=null,ptd=1e9;
  for(const e of enemies)if(e.aggro){const d=Math.hypot(e.px-pet.px,e.py-pet.py);
   if(d<ptd&&Math.hypot(e.px-player.px,e.py-player.py)<T*6){ptd=d;ptar=e;}}
- if(ptar&&pd<T*8){if(ptd>T*0.8){const a=Math.atan2(ptar.py-pet.py,ptar.px-pet.px);
+ if(ptar&&pd<T*8){if(ptd>T*0.8){const a=Math.atan2(ptar.py-pet.py,ptar.px-pet.px);pet.moving=true;
    moveEntity(pet,Math.cos(a)*170*dt,Math.sin(a)*170*dt);pet.dir=Math.cos(a)<0?-1:1;}
   else if(pet.atkCd<=0){pet.atkCd=0.9;dmgEnemy(ptar,Math.max(1,Math.floor(D.atk*0.5*rnd(0.8,1.1))),false);}}
- else if(pd>T*2.2){const a=Math.atan2(player.py-pet.py,player.px-pet.px);
+ else if(pd>T*2.2){const a=Math.atan2(player.py-pet.py,player.px-pet.px);pet.moving=true;
   moveEntity(pet,Math.cos(a)*200*dt,Math.sin(a)*200*dt);pet.dir=Math.cos(a)<0?-1:1;}
  if(pd>T*12){pet.px=player.px;pet.py=player.py;}
+ }
  // 投射物
  for(let i=projs.length-1;i>=0;i--){const p=projs[i];p.life-=dt;
   p.px+=p.vx*dt;p.py+=p.vy*dt;
@@ -1020,10 +1418,25 @@ function update(dt){time+=dt;if(!inTown)floorTime+=dt;
  for(let i=texts.length-1;i>=0;i--){const t=texts[i];t.life-=dt;t.py-=30*dt;if(t.life<=0)texts.splice(i,1);}
  if(msgs.length&&time-msgs[0].ts>6){msgs.shift();logEl.innerHTML=msgs.map(m=>'<div style="color:'+m.c+'">'+m.t+'</div>').join('');}}
 // ============ 渲染 ============
-function drawSprite(spr,px,py,dir,bob,scale){const s=scale||2;const w=16*s;
+const FOOT=10;   // 落脚点相对实体中心的下移量
+// mult 以 32px 为基准，16x16 的老图会自动放大到同等屏幕尺寸
+function drawSprite(spr,px,py,dir,bob,mult){
+ const m=mult===undefined?1:mult;
+ const s=(32/spr.width)*m;
+ const w=spr.width*s,h=spr.height*s;
+ const base=(spr.meta?spr.meta.bottom:spr.height)*s;
  ctx.save();ctx.translate(px-cam.x,py-cam.y+(bob||0));
  if(dir<0)ctx.scale(-1,1);
- ctx.drawImage(spr,-w/2,-w+8*Math.min(s,2),w,w);ctx.restore();}
+ ctx.drawImage(spr,-w/2,-base+FOOT,w,h);ctx.restore();}
+// 像素硬边椭圆影：逐行填 2px 高的横条，不做渐变
+function drawShadow(px,py,w,a){
+ ctx.save();ctx.globalAlpha=a===undefined?0.34:a;ctx.fillStyle='#000';
+ const cx=px-cam.x,cy=py-cam.y+FOOT-1,rx=w*0.42,ry=Math.max(2,w*0.16);
+ for(let y=-ry;y<ry;y+=2){const t=(y+1)/ry;
+  const dx=rx*Math.sqrt(Math.max(0,1-t*t));
+  if(dx<1)continue;
+  ctx.fillRect(Math.round(cx-dx),Math.round(cy+y),Math.round(dx*2),2);}
+ ctx.restore();}
 function render(){ctx.fillStyle='#08060b';ctx.fillRect(0,0,VW,VH);
  cam.x=clamp(player.px-VW/2,0,MW*T-VW);
  cam.y=clamp(player.py-VH/2,0,MH*T-VH);
@@ -1060,37 +1473,87 @@ function render(){ctx.fillStyle='#08060b';ctx.fillRect(0,0,VW,VH);
   ctx.fillStyle=biome.torch[1];ctx.fillRect(sx+14,sy+12+f,4,5);}
  // 神龛
  for(const s of shrines){const bob=Math.sin(time*2)*2;
-  drawSprite(SPR.shrine,s.px,s.py,1,bob,2.2);
+  drawShadow(s.px,s.py,30,0.3);drawSprite(SPR.shrine,s.px,s.py,1,bob,1.1);
   if(!s.used){ctx.globalAlpha=0.35+Math.sin(time*4)*0.2;ctx.fillStyle='#f2d060';
    ctx.beginPath();ctx.arc(s.px-cam.x,s.py-cam.y-16,16,0,6.28);ctx.fill();ctx.globalAlpha=1;}}
- for(const pr of props)drawSprite(SPR[pr.spr],pr.px,pr.py,1,0,2.1);
- for(const c of chests)if(!c.open)drawSprite(c.gold?SPR.chest_gold:SPR.chest,c.px,c.py,1,0);
- for(const n of npcs){drawSprite(SPR[n.spr],n.px,n.py,1,Math.sin(time*3+n.px)*1.5);
+ for(const pr of props){drawShadow(pr.px,pr.py,30,0.3);drawSprite(SPR[pr.spr],pr.px,pr.py,1,0,1.05);}
+ for(const c of chests)if(!c.open){drawShadow(c.px,c.py,28,0.32);
+  drawSprite(c.gold?SPR.chest_gold:SPR.chest,c.px,c.py,1,0);}
+ for(const n of npcs){drawShadow(n.px,n.py,28,0.34);drawSprite(SPR[n.spr],n.px,n.py,1,0);
   ctx.font='bold 11px monospace';ctx.textAlign='center';
   ctx.fillStyle='#000';ctx.fillText(n.n,n.px-cam.x+1,n.py-cam.y-38+1);
   ctx.fillStyle='#f2d060';ctx.fillText(n.n,n.px-cam.x,n.py-cam.y-38);ctx.textAlign='left';}
  for(const d of drops){const bob=Math.sin(time*4+d.px)*2;
-  drawSprite(SPR[d.item.icon],d.px,d.py,1,bob,1.6);
-  if(d.item.kind==='eq'&&d.item.rar>0){ctx.fillStyle=RARC[d.item.rar];
-   ctx.globalAlpha=0.5+Math.sin(time*5)*0.3;ctx.fillRect(d.px-cam.x-2,d.py-cam.y-26+bob,4,4);ctx.globalAlpha=1;}}
+  drawShadow(d.px,d.py,16,0.26);
+  if(d.item.kind==='eq'&&d.item.rar>=2){   // 稀有以上在地面就带一圈脉动光晕
+   ctx.globalAlpha=(d.item.rar>=3?0.5:0.32)+Math.sin(time*4+d.px)*0.16;
+   ctx.strokeStyle=RARC[d.item.rar];ctx.lineWidth=2;
+   ctx.beginPath();ctx.ellipse(d.px-cam.x,d.py-cam.y+FOOT-2,13,5,0,0,6.28);ctx.stroke();
+   ctx.globalAlpha=1;}
+  drawSprite(itemSpr(d.item),d.px,d.py,1,bob,0.8);}
  const ents=[...enemies.map(e=>({y:e.py,f:()=>{
-   const bob=e.stun>0?0:Math.sin(time*8+e.px)*1.5;
-   if(e.elite){ctx.globalAlpha=0.3+Math.sin(time*4)*0.12;ctx.fillStyle='#f2d060';
-    ctx.beginPath();ctx.arc(e.px-cam.x,e.py-cam.y-12,22,0,6.28);ctx.fill();ctx.globalAlpha=1;}
+   // 站着不动就不该上下飘；飞行怪常驻悬空并配更小更淡的影子
+   const sw=32*e.scale;
+   let bob=0;
+   if(e.fly)bob=-9+Math.sin(time*3.4+e.px)*2.2;
+   else if(e.stun<=0&&e.moving)bob=Math.sin(time*11+e.px)*1.2;
+   drawShadow(e.px,e.py,e.fly?sw*0.7:sw,e.fly?0.2:0.36);
+   if(e.elite){   // 脚下脉动光环，别用大填充圆盖住地面
+    ctx.globalAlpha=0.55+Math.sin(time*4)*0.25;ctx.strokeStyle='#f2d060';ctx.lineWidth=2;
+    ctx.beginPath();ctx.ellipse(e.px-cam.x,e.py-cam.y+FOOT-1,sw*0.5,sw*0.2,0,0,6.28);ctx.stroke();
+    ctx.globalAlpha=1;}
    drawSprite(SPR[e.spr],e.px,e.py,e.dir,bob,e.scale);
    if(e.frozen>0){ctx.globalAlpha=0.4;ctx.fillStyle='#8ae0ff';
     const s=e.boss?30:18;ctx.fillRect(e.px-cam.x-s/2,e.py-cam.y-s,s,s);ctx.globalAlpha=1;}
    if(e.flash>0){ctx.globalAlpha=0.6;ctx.fillStyle='#fff';
     const s=e.boss?26:16;ctx.fillRect(e.px-cam.x-s/2,e.py-cam.y-s,s,s);ctx.globalAlpha=1;}
+   if(e.windup>0){   // 出手起手：怪物泛白 + 头顶感叹号
+    ctx.globalAlpha=0.45+Math.sin(time*26)*0.25;ctx.fillStyle='#fff8c0';
+    const ws=e.boss?30:20;ctx.fillRect(e.px-cam.x-ws/2,e.py-cam.y-ws,ws,ws);ctx.globalAlpha=1;
+    ctx.fillStyle='#ffd040';ctx.font='bold 14px monospace';ctx.textAlign='center';
+    ctx.fillText('!',e.px-cam.x,e.py-cam.y-(e.boss?46:32));ctx.textAlign='left';}
+   if(e.chargeT>0){   // 冲锋预警：脚下红圈 + 头顶感叹号
+    ctx.globalAlpha=0.5+Math.sin(time*22)*0.35;ctx.strokeStyle='#ff5030';ctx.lineWidth=2;
+    ctx.beginPath();ctx.ellipse(e.px-cam.x,e.py-cam.y+FOOT-1,sw*0.55,sw*0.22,0,0,6.28);ctx.stroke();
+    ctx.fillStyle='#ff6040';ctx.font='bold 14px monospace';ctx.textAlign='center';
+    ctx.fillText('!',e.px-cam.x,e.py-cam.y-(e.boss?46:32));ctx.textAlign='left';ctx.globalAlpha=1;}
    if(e.stun>0){ctx.fillStyle='#f0e040';ctx.fillText('*',e.px-cam.x-3,e.py-cam.y-(e.boss?44:30));}
+   if(e.boss&&e.enraged){ctx.globalAlpha=0.3+Math.sin(time*10)*0.15;ctx.fillStyle='#ff3020';
+    ctx.beginPath();ctx.arc(e.px-cam.x,e.py-cam.y-16,30,0,6.28);ctx.fill();ctx.globalAlpha=1;}
+   if(e.boss&&(e.phase||0)>0){ctx.font='bold 10px monospace';ctx.textAlign='center';
+    const tag=e.enraged?'狂暴':'第 '+((e.phase||0)+1)+' 阶段';
+    ctx.fillStyle='#000';ctx.fillText(tag,e.px-cam.x+1,e.py-cam.y-62+1);
+    ctx.fillStyle=e.enraged?'#ff5040':'#e07820';ctx.fillText(tag,e.px-cam.x,e.py-cam.y-62);
+    ctx.textAlign='left';}
+   if(e.elite&&e.affixN){ctx.font='bold 10px monospace';ctx.textAlign='center';
+    ctx.fillStyle='#000';ctx.fillText(e.affixN,e.px-cam.x+1,e.py-cam.y-40+1);
+    ctx.fillStyle='#f2d060';ctx.fillText(e.affixN,e.px-cam.x,e.py-cam.y-40);ctx.textAlign='left';}
+   if(e.shield>0){const w=e.boss?46:32;const sx=e.px-cam.x-w/2,sy=e.py-cam.y-(e.boss?60:40);
+    ctx.fillStyle='#0a0710';ctx.fillRect(sx,sy,w,3);
+    ctx.fillStyle='#c0d8ff';ctx.fillRect(sx+1,sy+1,(w-2)*e.shield/e.shieldMax,1);}
    if(e.hp<e.maxhp){const w=e.boss?46:e.elite?32:26;const sx=e.px-cam.x-w/2,sy=e.py-cam.y-(e.boss?54:e.elite?34:26);
     ctx.fillStyle='#0a0710';ctx.fillRect(sx,sy,w,4);
     ctx.fillStyle=e.boss?'#e07820':e.elite?'#f2d060':'#e04040';ctx.fillRect(sx+1,sy+1,(w-2)*Math.max(0,e.hp)/e.maxhp,2);}}})),
-  {y:pet.py,f:()=>drawSprite(SPR.wolf,pet.px,pet.py,pet.dir,Math.sin(time*10)*1.5,1.8)},
-  {y:player.py,f:()=>{drawSprite(SPR.hero,player.px,player.py,player.dir,player.moving?Math.sin(time*12)*2:0);
-   if(player.atkCd>0.4){ctx.strokeStyle='#c8d0e0';ctx.lineWidth=2;ctx.beginPath();
+  {y:pet.py,f:()=>{if(pet.downT>0)return;
+   drawShadow(pet.px,pet.py,28,0.32);
+   drawSprite(SPR.wolf,pet.px,pet.py,pet.dir,pet.moving?Math.sin(time*12)*1.2:0,0.9);
+   if(pet.hp<pet.maxhp){const sx=pet.px-cam.x-11,sy=pet.py-cam.y-22;
+    ctx.fillStyle='#0a0710';ctx.fillRect(sx,sy,22,3);
+    ctx.fillStyle='#8ae0a0';ctx.fillRect(sx+1,sy+1,20*Math.max(0,pet.hp)/pet.maxhp,1);}}},
+  {y:player.py,f:()=>{drawShadow(player.px,player.py,30,0.38);
+   drawSprite(SPR.hero,player.px,player.py,player.dir,player.moving?Math.sin(time*12)*1.6:0);
+   if(player.atkCd>0.4||player.swing>0){ctx.strokeStyle='#c8d0e0';ctx.lineWidth=2;ctx.beginPath();
     ctx.arc(player.px-cam.x+player.dir*14,player.py-cam.y-10,10,-1,1);ctx.stroke();}}}];
  ents.sort((a,b)=>a.y-b.y);for(const e of ents)e.f();
+ // 敌方危险区预警圈
+ for(const hz of hazards){const sx=hz.px-cam.x,sy=hz.py-cam.y;
+  const pr=1-clamp(hz.t/1.2,0,1);
+  ctx.globalAlpha=0.35+Math.sin(time*16)*0.12;
+  ctx.strokeStyle=hz.c||'#ff7040';ctx.lineWidth=2;
+  ctx.beginPath();ctx.ellipse(sx,sy+FOOT-2,hz.r,hz.r*0.45,0,0,6.28);ctx.stroke();
+  ctx.globalAlpha=0.18;ctx.fillStyle=hz.c||'#ff7040';
+  ctx.beginPath();ctx.ellipse(sx,sy+FOOT-2,hz.r*pr,hz.r*0.45*pr,0,0,6.28);ctx.fill();
+  ctx.globalAlpha=1;}
  // 陨石预警
  for(const m of meteors){const sx=m.px-cam.x,sy=m.py-cam.y;
   ctx.strokeStyle='#ff8020';ctx.lineWidth=2;ctx.globalAlpha=0.5+Math.sin(time*18)*0.3;
@@ -1107,10 +1570,22 @@ function render(){ctx.fillStyle='#08060b';ctx.fillRect(0,0,VW,VH);
   ctx.fillText(t.t,t.px-cam.x+1,t.py-cam.y+1);ctx.fillStyle=t.c;ctx.fillText(t.t,t.px-cam.x,t.py-cam.y);}
  ctx.globalAlpha=1;ctx.textAlign='left';
  const lx=player.px-cam.x,ly=player.py-cam.y-8;
- const R=T*((inTown?11:IS_MOBILE?6.4:5.6)+Math.sin(time*7)*0.15);
+ // 越往深处视野越窄
+ const bi=clamp(Math.floor((depth-1)/FLOORS_PER_BIOME),0,3);
+ const baseR=inTown?11:((IS_MOBILE?6.4:5.6)-bi*0.42-(player.asc||0)*0.25)*(hasMod('dark')?0.62:1);
+ const R=T*(Math.max(3.2,baseR)+Math.sin(time*7)*0.15);
  const g=ctx.createRadialGradient(lx,ly,R*0.35,lx,ly,R);
  g.addColorStop(0,'rgba(255,180,80,0)');g.addColorStop(0.55,'rgba(10,5,15,0.2)');g.addColorStop(1,biome.fog);
  ctx.fillStyle=g;ctx.fillRect(0,0,VW,VH);
+ if(townCast>=0){   // 回城吟唱进度条
+  ctx.save();ctx.setTransform(DPR,0,0,DPR,0,0);
+  const bw=200,bh=14,bx=(SW-bw)/2,by=SH*0.34;
+  ctx.globalAlpha=0.85;ctx.fillStyle='#0a0710';ctx.fillRect(bx-2,by-2,bw+4,bh+4);
+  ctx.fillStyle='#3a2c48';ctx.fillRect(bx,by,bw,bh);
+  ctx.fillStyle='#8ae0ff';ctx.fillRect(bx,by,bw*(1-townCast/TOWN_CAST),bh);
+  ctx.fillStyle='#e8e0f0';ctx.font='bold 11px monospace';ctx.textAlign='center';
+  ctx.fillText('回城吟唱中 '+townCast.toFixed(1)+'s',SW/2,by-6);
+  ctx.textAlign='left';ctx.globalAlpha=1;ctx.restore();}
  if(joy.active)drawJoystick();
  renderMini();renderHud();}
 function renderMini(){mctx.fillStyle='#0a0710';mctx.fillRect(0,0,110,110);
@@ -1137,11 +1612,24 @@ function renderHud(){
  document.getElementById('hpCnt').textContent=player.potions.hp;
  document.getElementById('mpCnt').textContent=player.potions.mp;
  const sks=document.querySelectorAll('#skills .sk');
+ for(let i=5;i<7;i++){const cd=sks[i]&&sks[i].querySelector('.cd');   // 两瓶药水共用冷却
+  if(!cd)continue;
+  if(player.cds.p>0){cd.style.display='block';cd.textContent=player.cds.p.toFixed(1);}
+  else cd.style.display='none';}
  const cds=[player.cds.f,player.cds.w,player.cds.t,player.cds.n,player.cds.m];
  const locks=[false,player.lvl<3,player.lvl<5,!player.skills.n,!player.skills.m];
  for(let i=0;i<5;i++){const cd=sks[i].querySelector('.cd');
   sks[i].classList.toggle('lock',locks[i]);
-  if(cds[i]>0){cd.style.display='block';cd.textContent=cds[i].toFixed(1);}else cd.style.display='none';}}
+  if(cds[i]>0){cd.style.display='block';cd.textContent=cds[i].toFixed(1);}else cd.style.display='none';}
+ if(IS_MOBILE){
+  const ab=document.getElementById('atkBtn'),acd=ab.querySelector('.cd');
+  if(player.atkCd>0.12){acd.style.display='flex';acd.textContent='';}else acd.style.display='none';
+  const sp=curSpell(),sb=document.getElementById('spellBtn');
+  const img=sb.querySelector('img.ico');
+  if(img&&img.dataset.cur!==sp.ic){img.src=ICON[sp.ic];img.dataset.cur=sp.ic;}
+  const lk=sp.lock();sb.classList.toggle('lock',lk||player.mp<sp.mp);
+  const scd=sb.querySelector('.cd'),left=player.cds[sp.id]||0;
+  if(left>0){scd.style.display='flex';scd.textContent=left.toFixed(1);}else scd.style.display='none';}}
 // ============ 提示框 ============
 const tip=document.getElementById('tip');
 function statLines(it){const s=itemStats(it);
@@ -1188,7 +1676,7 @@ function hideTip(){tip.style.display='none';}
 // ============ 通用槽位 ============
 function slotDiv(it,onclick,lbl,sel){const d=document.createElement('div');
  d.className='slot'+(it&&it.kind==='eq'?' r'+it.rar:'')+(sel?' sel':'');
- if(it){const img=document.createElement('img');img.src=ICON[it.icon];d.appendChild(img);
+ if(it){const img=document.createElement('img');img.src=itemURL(it);d.appendChild(img);
   d.addEventListener('mousemove',ev=>showTip(ev,it));d.addEventListener('mouseleave',hideTip);
   if(it.up){const u=document.createElement('span');u.className='up';u.textContent='+'+it.up;d.appendChild(u);}
   if(it.sockets&&it.sockets.length){const s=document.createElement('span');s.className='soc';
@@ -1215,13 +1703,51 @@ function equipItem(it){if(it.kind!=='eq'){log('宝石需要到铁匠处镶嵌','
  sfx(600,0.1,'triangle',0.04);calc();renderAll();}
 function unequip(s){const it=player.equip[s];if(!it)return;
  if(player.inv.length>=INV_CAP){log('背包已满！','#e04040');return;}
- player.inv.push(it);player.equip[s]=null;calc();renderAll();}
+ player.inv.push(it);player.equip[s]=null;invSel=null;calc();renderAll();}
+// 选中态：点一下只是查看，装备/卸下由详情里的按钮决定
+let invSel=null;
+function invTarget(){if(!invSel)return null;
+ return invSel.from==='eq'?player.equip[invSel.slot]:player.inv[invSel.i];}
+window.invPick=(from,key)=>{const cur=invTarget();
+ const same=invSel&&(from==='eq'?invSel.slot===key&&invSel.from==='eq':invSel.i===key&&invSel.from==='inv');
+ invSel=same?null:(from==='eq'?{from,slot:key}:{from,i:key});
+ hideTip();renderInv();};
+window.invEquip=()=>{const it=invTarget();
+ if(!it||invSel.from!=='inv')return;
+ if(it.kind!=='eq'){log('宝石需要到铁匠处镶嵌','#e07820');return;}
+ equipItem(it);invSel={from:'eq',slot:it.slot};renderInv();};
+window.invUnequip=()=>{const it=invTarget();
+ if(!it||invSel.from!=='eq')return;
+ unequip(invSel.slot);invSel=null;renderInv();};
+window.invClose=()=>{invSel=null;hideTip();renderInv();};
 function renderInv(){const eq=document.getElementById('eqRow');eq.innerHTML='';
- for(const s of SLOTS)eq.appendChild(slotDiv(player.equip[s],()=>unequip(s),SLOTAB[s]));
+ for(const s of SLOTS)eq.appendChild(slotDiv(player.equip[s],()=>invPick('eq',s),SLOTAB[s],
+  invSel&&invSel.from==='eq'&&invSel.slot===s));
  document.getElementById('invCnt').textContent='('+player.inv.length+'/'+INV_CAP+')';
  const grid=document.getElementById('grid');grid.innerHTML='';
  for(let i=0;i<INV_CAP;i++){const it=player.inv[i];
-  grid.appendChild(slotDiv(it,()=>{if(it)equipItem(it);}));}}
+  grid.appendChild(slotDiv(it,it?()=>invPick('inv',i):null,'',
+   invSel&&invSel.from==='inv'&&invSel.i===i));}
+ renderInvDetail();}
+function renderInvDetail(){const d=document.getElementById('invDetail');if(!d)return;
+ const it=invTarget();
+ if(!it){d.innerHTML='<span style="color:#887a99">点击装备栏或背包里的物品查看属性，再决定装备或卸下。</span>';return;}
+ if(it.kind==='gem'){const G=GEMS[it.gem];
+  d.innerHTML='<b style="color:'+G.c+'">'+it.name+'</b> <span style="color:#887a99">宝石</span><br>'
+   +'<span style="color:#8ae0a0">+'+G.v[it.tier-1]+' '+STATN[G.stat]+'</span>'
+   +'<br><span style="color:#887a99">到城镇找铁匠可镶嵌到装备插槽上</span>'
+   +'<div class="act"><button onclick="invClose()">关闭</button></div>';return;}
+ const equipped=invSel.from==='eq';
+ const dl=equipped?'':deltaLines(it);
+ d.innerHTML='<b style="color:'+RARC[it.rar]+'">'+itemTitle(it)+'</b> '
+  +'<span style="color:#887a99">'+RARN[it.rar]+' · '+SLOTN[it.slot]+'</span><br>'
+  +statLines(it)
+  +(it.sockets&&it.sockets.length?'<br><span style="color:#8ae0ff">插槽 '+it.sockets.map(g=>g?GEMS[g.gem].n:'空').join(' / ')+'</span>':'')
+  +(it.set?'<br><span style="color:#40c040">【'+SETS[it.set].n+'】套装 ('+((player.setCount&&player.setCount[it.set])||0)+' 件)</span>':'')
+  +(dl?'<br><span style="color:#887a99">— 对比已装备 —</span><br>'+dl:'')
+  +'<div class="act">'
+  +(equipped?'<button onclick="invUnequip()">卸下</button>':'<button onclick="invEquip()">装备</button>')
+  +'<button onclick="invClose()">关闭</button></div>';}
 // ============ 角色 ============
 function renderChr(){const b=document.getElementById('chrBody');calc();
  const row=(n,k)=>'<tr><td>'+n+'</td><td style="color:#f2d060">'+player.base[k]+'</td><td>'+
@@ -1235,6 +1761,7 @@ function renderChr(){const b=document.getElementById('chrBody');calc();
   '<tr><td>攻击 / 防御</td><td colspan=2>'+D.atk+' / '+D.def+' <span style="color:#887a99">(减伤 '+Math.round(defReduce()*100)+'%)</span></td></tr>'+
   '<tr><td>暴击 / 暴伤</td><td colspan=2>'+D.crit.toFixed(0)+'% / '+D.critd.toFixed(0)+'%</td></tr>'+
   '<tr><td>生命 / 法力</td><td colspan=2>'+D.maxhp+' / '+D.maxmp+'</td></tr>'+
+  '<tr><td>药水</td><td colspan=2>'+player.potions.hp+'/'+potCap()+' 红　'+player.potions.mp+'/'+potCap()+' 蓝　冷却 '+potCd()+'s</td></tr>'+
   (D.ls?'<tr><td>吸血</td><td colspan=2>'+D.ls.toFixed(0)+'%</td></tr>':'')+
   (D.frz?'<tr><td>冰冻几率</td><td colspan=2>'+D.frz.toFixed(0)+'%</td></tr>':'')+
   (D.thorns?'<tr><td>反伤</td><td colspan=2>'+D.thorns.toFixed(0)+'</td></tr>':'')+
@@ -1254,6 +1781,7 @@ function refreshShop(){shopStock=[];const d=Math.max(1,player.maxDepth);
  if(Math.random()<0.5)shopStock.push(genGem(d));}
 function potPrice(k){return Math.floor((k==='hp'?28:34)*(1+player.maxDepth*0.22));}
 function buyPot(k){const p=potPrice(k);if(player.gold<p){log('金币不足','#e04040');return;}
+ if(player.potions[k]>=potCap()){log('已达携带上限 '+potCap(),'#e07820');return;}
  player.gold-=p;player.potions[k]++;sfx(660,0.1,'triangle',0.04);renderShop();}
 window.buyPot=buyPot;
 window.buyItem=i=>{const it=shopStock[i];if(!it)return;const p=Math.floor(itemValue(it)*1.6);
@@ -1261,7 +1789,7 @@ window.buyItem=i=>{const it=shopStock[i];if(!it)return;const p=Math.floor(itemVa
  if(player.inv.length>=INV_CAP){log('背包已满','#e04040');return;}
  player.gold-=p;shopStock.splice(i,1);player.inv.push(it);
  log('购入 '+it.name,RARC[it.rar||0]);sfx(700,0.12,'triangle',0.05);renderAll();};
-window.sellItem=i=>{const it=player.inv[i];if(!it)return;const p=Math.floor(itemValue(it)*0.42);
+window.sellItem=i=>{const it=player.inv[i];if(!it)return;invSel=null;const p=Math.floor(itemValue(it)*0.42);
  player.gold+=p;player.inv.splice(i,1);log('卖出 '+it.name+' (+'+p+'金)','#f2d060');
  sfx(760,0.1,'triangle',0.04);renderAll();};
 window.shopSetTab=t=>{shopTab=t;renderShop();};
@@ -1270,12 +1798,12 @@ function renderShop(){const b=document.getElementById('shopBody');
   '<div class="tabs"><div class="tb'+(shopTab==='buy'?' on':'')+'" onclick="shopSetTab(\'buy\')">购买</div>'+
   '<div class="tb'+(shopTab==='sell'?' on':'')+'" onclick="shopSetTab(\'sell\')">出售</div></div>';
  if(shopTab==='buy'){h+='<div class="scroll">';
-  h+='<div class="row"><img src="'+ICON.hppot+'"><div class="nm">生命药水<br><span style="color:#887a99">持有 '+player.potions.hp+'</span></div>'+
+  h+='<div class="row"><img src="'+ICON.hppot+'"><div class="nm">生命药水<br><span style="color:#887a99">持有 '+player.potions.hp+' / '+potCap()+'</span></div>'+
    '<div class="pr">'+potPrice('hp')+' 金</div><button onclick="buyPot(\'hp\')">买</button></div>';
-  h+='<div class="row"><img src="'+ICON.mppot+'"><div class="nm">法力药水<br><span style="color:#887a99">持有 '+player.potions.mp+'</span></div>'+
+  h+='<div class="row"><img src="'+ICON.mppot+'"><div class="nm">法力药水<br><span style="color:#887a99">持有 '+player.potions.mp+' / '+potCap()+'</span></div>'+
    '<div class="pr">'+potPrice('mp')+' 金</div><button onclick="buyPot(\'mp\')">买</button></div>';
   shopStock.forEach((it,i)=>{const p=Math.floor(itemValue(it)*1.6);const c=it.kind==='gem'?'#8ae0ff':RARC[it.rar];
-   h+='<div class="row" style="border-left:3px solid '+c+'"><img src="'+ICON[it.icon]+'"><div class="nm"><span style="color:'+c+'">'+itemTitle(it)+'</span>'+
+   h+='<div class="row" style="border-left:3px solid '+c+'"><img src="'+itemURL(it)+'"><div class="nm"><span style="color:'+c+'">'+itemTitle(it)+'</span>'+
     (isUpgrade(it)?' <span style="color:#40e060">▲</span>':'')+
     '<br><span style="color:#887a99">'+(it.kind==='gem'?'宝石':RARN[it.rar]+' · '+SLOTN[it.slot])+'</span></div>'+
     '<div class="pr">'+p+' 金</div><button onclick="buyItem('+i+')"'+(player.gold<p?' disabled':'')+'>买</button></div>';});
@@ -1283,7 +1811,7 @@ function renderShop(){const b=document.getElementById('shopBody');
  else{h+='<div class="scroll">';
   if(!player.inv.length)h+='<div style="color:#887a99;padding:8px">背包是空的</div>';
   player.inv.forEach((it,i)=>{const p=Math.floor(itemValue(it)*0.42);const c=it.kind==='gem'?'#8ae0ff':RARC[it.rar];
-   h+='<div class="row" style="border-left:3px solid '+c+'"><img src="'+ICON[it.icon]+'"><div class="nm"><span style="color:'+c+'">'+itemTitle(it)+'</span>'+
+   h+='<div class="row" style="border-left:3px solid '+c+'"><img src="'+itemURL(it)+'"><div class="nm"><span style="color:'+c+'">'+itemTitle(it)+'</span>'+
     (isUpgrade(it)?' <span style="color:#40e060">▲ 可升级</span>':'')+
     '<br><span style="color:#887a99">'+(it.kind==='gem'?'宝石':RARN[it.rar]+' · '+SLOTN[it.slot])+'</span></div>'+
     '<div class="pr">'+p+' 金</div><button onclick="sellItem('+i+')">卖</button></div>';});
@@ -1306,7 +1834,7 @@ window.doSalvage=()=>{const it=smithTarget();if(!it)return;
  let extra='';
  if(it.kind==='eq'&&Math.random()<0.3+it.rar*0.12){const gem=genGem(Math.max(1,player.maxDepth));
   if(player.inv.length<INV_CAP+1){player.inv.push(gem);extra='，得到 '+gem.name;}}
- player.inv.splice(player.inv.indexOf(it),1);smithSel=null;
+ player.inv.splice(player.inv.indexOf(it),1);smithSel=null;invSel=null;
  log('分解 '+it.name+' (+'+g+'金'+extra+')','#f2d060');sfx(240,0.2,'sawtooth',0.05);
  calc();renderAll();};
 window.doSocket=i=>{const it=smithTarget();if(!it||it.kind!=='eq')return;
@@ -1382,11 +1910,12 @@ function updateNpcTip(){const el=document.getElementById('npcTip');
  el.onclick=()=>openNPC(n);}
 // ============ 面板控制 ============
 const panels={i:'inv',c:'chr',j:'quest',h:'help'};
-const ALLPANELS=['inv','chr','shop','smith','quest','help'];
+const ALLPANELS=['inv','chr','shop','smith','quest','help','spellPick'];
 function anyPanelOpen(){return ALLPANELS.some(p=>document.getElementById(p).style.display==='block');}
 function closePanels(){for(const p of ALLPANELS)document.getElementById(p).style.display='none';hideTip();}
 function renderPanel(id){if(id==='inv')renderInv();if(id==='chr')renderChr();
- if(id==='shop')renderShop();if(id==='smith')renderSmith();if(id==='quest')renderQuestPanel();}
+ if(id==='shop')renderShop();if(id==='smith')renderSmith();if(id==='quest')renderQuestPanel();
+ if(id==='spellPick')renderSpellPick();}
 function renderAll(){for(const p of ALLPANELS)if(document.getElementById(p).style.display==='block')renderPanel(p);
  renderQuests();renderBuffs();}
 function togglePanel(id,force){const el=document.getElementById(id);
@@ -1402,10 +1931,15 @@ const SAVEKEY='ptl_save_v2';
 function save(){try{localStorage.setItem(SAVEKEY,JSON.stringify({
  v:2,depth,inTown,lvl:player.lvl,xp:player.xp,gold:player.gold,pts:player.pts,asc:player.asc,
  maxDepth:player.maxDepth,base:player.base,inv:player.inv,equip:player.equip,potions:player.potions,
- skills:player.skills,stat:player.stat,milestones:player.milestones}));}catch(e){}}
+ skills:player.skills,spellSlot:player.spellSlot,stat:player.stat,milestones:player.milestones}));}catch(e){}}
 function migrate(it){if(!it||it.kind!=='eq')return it;
  if(it.up===undefined)it.up=0;if(!it.sockets)it.sockets=[];if(it.set===undefined)it.set=null;
- if(!SLOTN[it.slot])it.slot='weapon';if(!ICON[it.icon])it.icon=it.slot;return it;}
+ if(!SLOTN[it.slot])it.slot='weapon';
+ if(it.rar===undefined)it.rar=0;
+ // 老存档没有档次字段，旧图标名也已失效，按部位+档次重建
+ if(it.tier===undefined||!ROWS[it.slot+'_'+it.tier])it.tier=0;
+ it.icon=it.slot+'_'+it.tier;
+ return it;}
 function load(){try{const s=JSON.parse(localStorage.getItem(SAVEKEY));if(!s)return false;
  player.lvl=s.lvl||1;player.xp=s.xp||0;player.gold=s.gold||0;player.pts=s.pts||0;
  player.asc=s.asc||0;player.maxDepth=s.maxDepth||1;
@@ -1413,9 +1947,11 @@ function load(){try{const s=JSON.parse(localStorage.getItem(SAVEKEY));if(!s)retu
  player.inv=(s.inv||[]).map(migrate);
  for(const k of SLOTS)player.equip[k]=migrate((s.equip||{})[k]||null);
  player.potions=s.potions||player.potions;
+ player.potions.hp=Math.min(player.potions.hp,20);player.potions.mp=Math.min(player.potions.mp,20);
  player.skills=Object.assign({f:true,w:true,t:true,n:false,m:false},s.skills||{});
  player.stat=Object.assign({kills:0,chests:0,bounties:0,deepest:1},s.stat||{});
  player.milestones=s.milestones||{};
+ player.spellSlot=s.spellSlot||0;
  depth=s.depth||1;inTown=s.inTown!==false;
  return true;}catch(e){return false;}}
 window.resetSave=()=>{try{localStorage.removeItem(SAVEKEY);localStorage.removeItem('ptl_save');}catch(e){}location.reload();};
@@ -1454,8 +1990,8 @@ function drawJoystick(){if(!joy.active)return;
  ctx.beginPath();ctx.arc(joy.x,joy.y,20,0,6.28);ctx.stroke();
  ctx.globalAlpha=1;ctx.restore();}
 // ============ 输入 ============
-function commandAt(cx,cy,isTouch){if(player.dead)return;
- if(IS_MOBILE&&anyPanelOpen()){closePanels();hold.on=false;return;}
+// 仅桌面端使用：移动端已改为摇杆走位 + 右侧攻击键
+function commandAt(cx,cy,isTouch){if(player.dead||IS_MOBILE)return;
  const w=toWorld(cx,cy);const wx=w.x,wy=w.y;
  const pad=isTouch?14:0;
  let hit=null,hd=1e9;
@@ -1485,24 +2021,17 @@ cv.addEventListener('touchstart',e=>{e.preventDefault();unlockAudio();
  for(const t of e.changedTouches){
   const id=t.identifier===undefined?0:t.identifier;
   if(!joy.active&&joyZone(t.clientX,t.clientY)){joyStart(id,t.clientX,t.clientY);continue;}
-  if(holdTouchId===null){holdTouchId=id;
-   mouse.x=t.clientX;mouse.y=t.clientY;
-   hold.on=true;hold.touch=true;hold.x=t.clientX;hold.y=t.clientY;hold.cd=0.25;
-   commandAt(t.clientX,t.clientY,true);}}
+  if(holdTouchId===null){holdTouchId=id;mouse.x=t.clientX;mouse.y=t.clientY;}}
  hideTip();},{passive:false});
 cv.addEventListener('touchmove',e=>{e.preventDefault();
  for(const t of e.changedTouches){
   const id=t.identifier===undefined?0:t.identifier;
   if(joy.active&&id===joy.id){joyMove(t.clientX,t.clientY);continue;}
-  if(id===holdTouchId){mouse.x=t.clientX;mouse.y=t.clientY;
-   if(hold.on){hold.x=t.clientX;hold.y=t.clientY;}}}},{passive:false});
+  if(id===holdTouchId){mouse.x=t.clientX;mouse.y=t.clientY;}}},{passive:false});
 const endTouch=e=>{if(e.cancelable)e.preventDefault();
  for(const t of e.changedTouches){
   const id=t.identifier===undefined?0:t.identifier;
-  if(joy.active&&id===joy.id){
-   // 左半屏轻点（没怎么拖动）仍然当作点击寻路，保留原来的操作习惯
-   if(joy.moved<12&&Date.now()-joy.t0<260)commandAt(t.clientX,t.clientY,true);
-   joyEnd();continue;}
+  if(joy.active&&id===joy.id){joyEnd();continue;}
   if(id===holdTouchId){holdTouchId=null;hold.on=false;}}};
 cv.addEventListener('touchend',endTouch,{passive:false});
 cv.addEventListener('touchcancel',endTouch,{passive:false});
@@ -1534,6 +2063,28 @@ function bindTap(el,fn){
 document.querySelectorAll('[data-ic]').forEach(el=>{const img=el.querySelector('img.ico');
  if(img&&ICON[el.dataset.ic])img.src=ICON[el.dataset.ic];});
 document.querySelectorAll('#skills .sk').forEach(el=>bindTap(el,()=>doSkill(el.dataset.k)));
+// 普攻键：按下即打，按住连击
+(function(){const el=document.getElementById('atkBtn');
+ const down=e=>{e.preventDefault();e.stopPropagation();unlockAudio();atkHeld=true;doAttack();};
+ const up=e=>{if(e&&e.cancelable)e.preventDefault();atkHeld=false;};
+ el.addEventListener('touchstart',down,{passive:false});
+ el.addEventListener('touchend',up,{passive:false});
+ el.addEventListener('touchcancel',up,{passive:false});
+ el.addEventListener('mousedown',down);
+ window.addEventListener('mouseup',up);})();
+// 法术键：轻点释放，长按 380ms 弹出选择器
+(function(){const el=document.getElementById('spellBtn');
+ let t0=0,long=false,tm=0,touched=false,tc=0;
+ const start=()=>{t0=Date.now();long=false;clearTimeout(tm);
+  tm=setTimeout(()=>{long=true;togglePanel('spellPick',true);sfx(520,0.1,'triangle',0.04);},380);};
+ const end=()=>{clearTimeout(tm);if(!long&&Date.now()-t0<380)castSlot();};
+ el.addEventListener('touchstart',e=>{e.preventDefault();e.stopPropagation();unlockAudio();
+  touched=true;clearTimeout(tc);tc=setTimeout(()=>{touched=false;},700);start();},{passive:false});
+ el.addEventListener('touchend',e=>{e.preventDefault();e.stopPropagation();end();},{passive:false});
+ el.addEventListener('touchcancel',()=>{clearTimeout(tm);},{passive:false});
+ el.addEventListener('mousedown',e=>{if(touched)return;start();});
+ el.addEventListener('mouseup',e=>{if(touched)return;end();});
+ el.addEventListener('mouseleave',()=>clearTimeout(tm));})();
 document.querySelectorAll('#sysBtns .sb').forEach(el=>{
  if(el.id==='fsBtn')bindTap(el,toggleFullscreen);
  else if(el.id==='townBtn')bindTap(el,goTown);
