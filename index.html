@@ -9,9 +9,14 @@
 <meta name="theme-color" content="#08060b">
 <title>像素火炬之光</title>
 <style>
+:root{--vh:1vh;--vw:1vw;--hud:86px;--orb:64px;--sk:48px;--lb:170px;--mini:110px}
+@supports (height:1dvh){:root{--vh:1dvh}}
 *{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
-html,body{width:100%;height:100%;overscroll-behavior:none;touch-action:none}
-body{background:#08060b;overflow:hidden;font-family:"Courier New",monospace;color:#ddd;position:fixed;inset:0}
+html,body{overscroll-behavior:none;touch-action:none}
+html{width:100%;height:100%}
+/* 尺寸一律取自 JS 实测的可见视口，移动端浏览器的 100vh / innerHeight 会算进被地址栏遮挡的部分 */
+body{background:#08060b;overflow:hidden;font-family:"Courier New",monospace;color:#ddd;
+ position:fixed;left:0;top:0;width:calc(var(--vw)*100);height:calc(var(--vh)*100)}
 #cv{position:absolute;inset:0;image-rendering:pixelated;cursor:crosshair;touch-action:none}
 .panel{position:absolute;background:#141019;border:3px solid #3a2c48;box-shadow:0 0 0 3px #0a0710,0 8px 30px #000;padding:12px;display:none;z-index:10}
 #hud{position:absolute;left:0;right:0;bottom:0;height:86px;pointer-events:none;z-index:5}
@@ -22,8 +27,8 @@ body{background:#08060b;overflow:hidden;font-family:"Courier New",monospace;colo
 .orb .txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;text-shadow:1px 1px 0 #000;z-index:2}
 #xpBar{position:absolute;left:170px;right:170px;bottom:66px;height:8px;background:#0a0710;border:2px solid #3a2c48}
 #xpFill{height:100%;width:0;background:linear-gradient(90deg,#c9a227,#f2d060)}
-#skills{position:absolute;left:50%;transform:translateX(-50%);bottom:10px;display:flex;gap:6px;pointer-events:auto}
-.sk{width:48px;height:48px;background:#141019;border:2px solid #3a2c48;position:relative;cursor:pointer;
+#skills{position:absolute;left:50%;transform:translateX(-50%);bottom:10px;display:flex;gap:6px;pointer-events:none}
+.sk{width:48px;height:48px;background:#141019;border:2px solid #3a2c48;position:relative;cursor:pointer;pointer-events:auto;
  display:flex;align-items:center;justify-content:center;text-align:center}
 .ico{image-rendering:pixelated;display:block}
 .sk .ico{width:34px;height:34px}
@@ -70,7 +75,7 @@ button,.btn{background:#3a2c48;color:#f2d060;border:1px solid #5b4a6e;cursor:poi
 button:active,.btn:active{background:#5b4a6e}
 button:disabled{opacity:.4;cursor:default}
 .act{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
-#death{position:absolute;inset:0;background:rgba(20,0,0,.75);display:none;z-index:20;text-align:center;padding-top:26vh}
+#death{position:absolute;inset:0;background:rgba(20,0,0,.75);display:none;z-index:20;text-align:center;padding-top:calc(var(--vh)*26)}
 #death h1{color:#e04040;font-size:42px;text-shadow:3px 3px 0 #000}
 #death button{margin-top:24px;font-size:18px;padding:10px 30px;border-width:2px}
 #help{left:50%;top:50%;transform:translate(-50%,-50%);width:440px;font-size:13px;line-height:1.9}
@@ -108,45 +113,51 @@ button:disabled{opacity:.4;cursor:default}
 body.mobile #hint{display:none}
 body.mobile #sysBtns{display:flex}
 body.mobile .pclose{display:block}
-body.mobile #quests{left:calc(62px + env(safe-area-inset-left));top:calc(60px + env(safe-area-inset-top));font-size:12px;max-width:44vw}
-body.mobile #hud{height:104px;padding-bottom:env(safe-area-inset-bottom)}
-body.mobile .orb{width:68px;height:68px;bottom:calc(12px + env(safe-area-inset-bottom))}
+body.mobile #quests{left:calc(62px + env(safe-area-inset-left));top:calc(60px + env(safe-area-inset-top));font-size:12px;max-width:calc(var(--vw)*44)}
+body.mobile #hud{height:var(--hud);padding-bottom:env(safe-area-inset-bottom)}
+body.mobile .orb{width:var(--orb);height:var(--orb);bottom:calc(12px + env(safe-area-inset-bottom))}
 body.mobile #hpOrb{left:calc(12px + env(safe-area-inset-left))}
-body.mobile #mpOrb{left:calc(86px + env(safe-area-inset-left))}
+body.mobile #mpOrb{left:calc(20px + var(--orb) + env(safe-area-inset-left))}
 body.mobile .orb .txt{font-size:12px}
-body.mobile #xpBar{left:170px;right:170px;bottom:calc(74px + env(safe-area-inset-bottom));height:10px}
-body.mobile #skills{gap:7px;bottom:calc(12px + env(safe-area-inset-bottom))}
-body.mobile .sk{width:56px;height:56px}
-body.mobile .sk .ico{width:40px;height:40px}
+body.mobile #xpBar{left:calc(var(--lb) + 6px);right:14px;bottom:calc(78px + env(safe-area-inset-bottom));height:9px}
+/* 技能栏占据球体右侧的剩余带宽后居中，窄屏也不会压到球上 */
+body.mobile #skills{left:var(--lb);right:12px;transform:none;justify-content:center;
+ gap:7px;bottom:calc(12px + env(safe-area-inset-bottom))}
+body.mobile .sk{width:var(--sk);height:var(--sk)}
+body.mobile .sk .ico{width:calc(var(--sk)*0.68);height:calc(var(--sk)*0.68)}
 body.mobile #sysBtns .sb .ico{width:28px;height:28px}
-body.mobile .sk .cd{font-size:16px;line-height:52px}
+body.mobile .sk .cd{font-size:16px;line-height:var(--sk)}
 body.mobile .sk .cnt{font-size:13px}
 body.mobile .sk:active{border-color:#f2d060}
-body.mobile #goldHud{right:calc(14px + env(safe-area-inset-right));bottom:56px;font-size:15px}
+/* 金币移到小地图下方，避免和技能栏抢底部空间 */
+body.mobile #goldHud{right:calc(10px + env(safe-area-inset-right));bottom:auto;
+ top:calc(var(--mini) + 20px + env(safe-area-inset-top));font-size:14px}
 body.mobile #mini{top:calc(10px + env(safe-area-inset-top));right:calc(10px + env(safe-area-inset-right))}
 body.mobile #floorLabel{top:calc(12px + env(safe-area-inset-top));font-size:16px}
 body.mobile #buffBar{top:calc(52px + env(safe-area-inset-top))}
 body.mobile #log{left:calc(12px + env(safe-area-inset-left));bottom:116px;font-size:12px}
-body.mobile .panel{position:fixed;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
- padding:14px;padding-top:16px;overscroll-behavior:contain;touch-action:pan-y}
+body.mobile .panel{position:fixed;overflow-y:auto;-webkit-overflow-scrolling:touch;
+ padding:14px;padding-top:16px;overscroll-behavior:contain;touch-action:pan-y;
+ max-height:calc(var(--vh)*100 - var(--hud) - 26px)}
+/* 面板整体上移，避免盖住底部技能栏和血蓝球 */
 body.mobile #inv,body.mobile #chr,body.mobile #help,body.mobile #shop,body.mobile #smith,body.mobile #quest{
- left:50%;top:50%;right:auto;bottom:auto;transform:translate(-50%,-50%)}
-body.mobile #inv{width:min(94vw,352px)}
-body.mobile #chr{width:min(94vw,330px)}
-body.mobile #shop,body.mobile #smith{width:min(94vw,420px)}
-body.mobile #quest{width:min(94vw,410px)}
-body.mobile #help{width:min(94vw,440px);font-size:14px}
-body.mobile .scroll{max-height:38vh}
-body.mobile #tip{position:fixed;font-size:13px;max-width:62vw}
-body.mobile #death{padding-top:14vh}
+ left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);
+ top:calc((var(--vh)*100 - var(--hud))/2 + 6px)}
+body.mobile #inv{width:min(calc(var(--vw)*94),352px)}
+body.mobile #chr{width:min(calc(var(--vw)*94),330px)}
+body.mobile #shop,body.mobile #smith{width:min(calc(var(--vw)*94),420px)}
+body.mobile #quest{width:min(calc(var(--vw)*94),410px)}
+body.mobile #help{width:min(calc(var(--vw)*94),440px);font-size:14px}
+body.mobile .scroll{max-height:calc(var(--vh)*34)}
+body.mobile #tip{position:fixed;font-size:13px;max-width:calc(var(--vw)*62)}
+body.mobile #death{padding-top:calc(var(--vh)*13)}
 body.mobile #death h1{font-size:32px}
 body.mobile #death button{padding:12px 24px;font-size:16px;margin-top:16px}
 body.mobile button,body.mobile .btn{padding:6px 12px;font-size:13px}
-@media (max-height:400px){
- body.mobile #log{display:none}
- body.mobile .panel{max-height:94vh}
- body.mobile .scroll{max-height:32vh}
-}
+body.short #log{display:none}
+body.short.mobile .scroll{max-height:calc(var(--vh)*30)}
+body.short.mobile .panel{padding:10px;padding-top:14px}
+body.short.mobile h4{margin:8px 0 4px}
 </style>
 </head>
 <body>
@@ -189,7 +200,7 @@ body.mobile button,body.mobile .btn{padding:6px 12px;font-size:13px}
 <div id="quest" class="panel"><div class="pclose">&#10005;</div><h3>任务 (J)</h3><div id="questBody"></div></div>
 <div id="help" class="panel"><div class="pclose">&#10005;</div><h3>像素火炬之光</h3>
 <span id="helpDesk">左键点击：移动 / 攻击怪物<br>1-5 技能 · Q/E 药水 · T 回城<br>I 背包 · C 角色 · J 任务 · H 帮助<br></span>
-<span id="helpMob" style="display:none">点击地面移动，按住可持续跟随；点怪物追击并自动攻击<br>底部按钮释放技能与药水，技能自动锁定最近敌人<br>左上角：背包 / 角色 / 任务 / 回城 / 帮助 / 全屏<br></span>
+<span id="helpMob" style="display:none">左半屏按住拖动 = 虚拟摇杆走位，靠近敌人自动普攻<br>左半屏轻点或点右半屏 = 老的点击寻路，点怪物追击<br>两种操作可以同时用，摇杆优先<br>底部按钮释放技能与药水，技能自动锁定最近敌人<br>左上角：背包 / 角色 / 任务 / 回城 / 帮助 / 全屏<br></span>
 共 4 个区域 20 层，每 5 层有区域首领。<br>
 地牢里有宝藏室、精英巢穴、神龛与陷阱，小地图上会标出。<br>
 城镇里可以找商人买卖、找铁匠强化与镶嵌宝石、接任务。<br>
@@ -377,6 +388,15 @@ if(IS_MOBILE){document.body.classList.add('mobile');
  document.getElementById('helpDesk').style.display='none';
  document.getElementById('helpMob').style.display='inline';}
 let VW=window.innerWidth,VH=window.innerHeight,ZOOM=1,DPR=1;
+// 可见视口实测：visualViewport 排除了地址栏/工具栏占位，innerHeight 不排除
+let SW=window.innerWidth,SH=window.innerHeight;
+function measure(){const vv=window.visualViewport;
+ let w=window.innerWidth,h=window.innerHeight;
+ if(vv&&vv.width>0&&vv.height>0){w=Math.round(vv.width);h=Math.round(vv.height);}
+ if(document.documentElement){
+  w=Math.min(w,document.documentElement.clientWidth||w);
+  h=Math.min(h,document.documentElement.clientHeight||h);}
+ return{w:Math.max(200,w),h:Math.max(160,h)};}
 let map,explored,rooms,stairs,torches,depth=1,bossAlive=false,inTown=false;
 let enemies=[],drops=[],projs=[],parts=[],texts=[],chests=[],shrines=[],traps=[],npcs=[],props=[],decor=[],portal=null;
 let cam={x:0,y:0},mouse={x:0,y:0},time=0,floorTime=0,meteors=[];
@@ -397,7 +417,23 @@ const player={px:0,py:0,dir:1,path:[],target:null,repath:0,atkCd:0,moving:false,
 const pet={px:0,py:0,dir:1,atkCd:0};
 function xpNext(){return Math.floor(40*Math.pow(player.lvl,1.5));}
 function resize(){
- const w=window.innerWidth,h=window.innerHeight;
+ const m=measure();const w=m.w,h=m.h;
+ SW=w;SH=h;
+ const r=document.documentElement.style;
+ r.setProperty('--vw',(w/100)+'px');
+ r.setProperty('--vh',(h/100)+'px');
+ const HUDH=IS_MOBILE?104:86;
+ r.setProperty('--hud',HUDH+'px');
+ if(IS_MOBILE){
+  // 球体随屏幕收缩，技能键再吃掉剩余带宽，保证 7 个键与球体互不重叠
+  const orb=Math.round(clamp(Math.min(w*0.085,h*0.19),42,68));
+  const lb=28+orb*2;
+  const band=w-lb-12;
+  const sk=Math.floor(clamp((band-6*7)/7,32,56));
+  r.setProperty('--orb',orb+'px');
+  r.setProperty('--lb',lb+'px');
+  r.setProperty('--sk',sk+'px');}
+ document.body.classList.toggle('short',h<420);
  DPR=Math.min(window.devicePixelRatio||1,2);
  ZOOM=IS_MOBILE?clamp(h/300,1,2.4):1;
  cv.width=Math.round(w*DPR);cv.height=Math.round(h*DPR);
@@ -405,13 +441,19 @@ function resize(){
  VW=w/ZOOM;VH=h/ZOOM;
  ctx.setTransform(DPR*ZOOM,0,0,DPR*ZOOM,0,0);
  ctx.imageSmoothingEnabled=false;
- const ms=IS_MOBILE?Math.round(clamp(h*0.24,90,140)):110;
+ const ms=IS_MOBILE?Math.round(clamp(h*0.24,84,140)):110;
  miniCv.style.width=ms+'px';miniCv.style.height=ms+'px';
+ r.setProperty('--mini',ms+'px');
  checkOrient();}
 function checkOrient(){if(!IS_MOBILE)return;
- document.getElementById('rotate').style.display=window.innerHeight>window.innerWidth?'flex':'none';}
-window.addEventListener('resize',()=>setTimeout(resize,60));
-window.addEventListener('orientationchange',()=>setTimeout(resize,220));
+ document.getElementById('rotate').style.display=SH>SW?'flex':'none';}
+const scheduleResize=()=>{resize();setTimeout(resize,120);setTimeout(resize,400);};
+window.addEventListener('resize',scheduleResize);
+window.addEventListener('orientationchange',()=>{setTimeout(scheduleResize,120);setTimeout(resize,700);});
+if(window.visualViewport){window.visualViewport.addEventListener('resize',scheduleResize);
+ window.visualViewport.addEventListener('scroll',scheduleResize);}
+document.addEventListener('fullscreenchange',scheduleResize);
+document.addEventListener('webkitfullscreenchange',scheduleResize);
 function toWorld(cx,cy){return{x:cx/ZOOM+cam.x,y:cy/ZOOM+cam.y};}
 // ============ 属性 ============
 const STATN={atk:'攻击',def:'防御',hp:'生命',mp:'法力',str:'力量',dex:'敏捷',vit:'体力',mag:'魔力',
@@ -559,7 +601,7 @@ function spawnEnemy(type,tx,ty,elite){const t=ETYPES[type];
 function tile(x,y){return(x<0||y<0||x>=MW||y>=MH)?0:map[y][x];}
 function passPx(px,py){return tile(Math.floor(px/T),Math.floor(py/T))>0;}
 function blankMap(){map=[];explored=[];for(let y=0;y<MH;y++){map.push(new Array(MW).fill(0));explored.push(new Array(MW).fill(false));}}
-function clearEntities(){enemies=[];drops=[];projs=[];parts=[];texts=[];chests=[];torches=[];shrines=[];traps=[];npcs=[];props=[];decor=[];meteors=[];portal=null;player.slowT=0;}
+function clearEntities(){if(typeof joy!=='undefined')joyEnd();enemies=[];drops=[];projs=[];parts=[];texts=[];chests=[];torches=[];shrines=[];traps=[];npcs=[];props=[];decor=[];meteors=[];portal=null;player.slowT=0;}
 function reveal(r){const tx=Math.floor(player.px/T),ty=Math.floor(player.py/T);const R=r||7,R2=R*R;
  for(let dy=-R;dy<=R;dy++)for(let dx=-R;dx<=R;dx++)if(dx*dx+dy*dy<=R2){
   const x=tx+dx,y=ty+dy;if(x>=0&&y>=0&&x<MW&&y<MH)explored[y][x]=true;}}
@@ -781,6 +823,7 @@ function nearestEnemy(range){let best=null,bd=range||T*13;
 function aimAngle(){
  const tgt=(player.target&&enemies.includes(player.target))?player.target:nearestEnemy();
  if(tgt)return Math.atan2(tgt.py-player.py,tgt.px-player.px);
+ if(joy.active&&joy.mag>JOY_DEAD)return Math.atan2(joy.ny,joy.nx);
  if(!IS_MOBILE){const m=worldMouse();
   if(Math.hypot(m.px-player.px,m.py-player.py)>4)return Math.atan2(m.py-player.py,m.px-player.px);}
  return player.dir<0?Math.PI:0;}
@@ -864,6 +907,15 @@ function update(dt){time+=dt;if(!inTown)floorTime+=dt;
  for(const b of bounties)if(b.k==='speed'&&!b.done&&!b.failed&&floorTime>b.goal){b.failed=true;renderQuests();}
  if(!inTown&&Math.floor(floorTime*2)!==Math.floor((floorTime-dt)*2)&&bounties.some(b=>b.k==='speed'&&!b.done&&!b.failed))renderQuests();
  player.moving=false;
+ // 摇杆移动优先于点击寻路
+ if(joy.active&&joy.mag>JOY_DEAD){
+  player.target=null;player.path=[];
+  const sp=D.spd*dt*joy.mag*(player.slowT>0?0.62:1);
+  moveEntity(player,joy.nx*sp,joy.ny*sp);
+  if(Math.abs(joy.nx)>0.2)player.dir=joy.nx<0?-1:1;
+  player.moving=true;reveal();}
+ // 没有锁定目标时，攻击范围内自动普攻
+ if(!player.target&&player.atkCd<=0){const e=nearestEnemy(T*1.05);if(e)playerAttack(e);}
  if(player.target){const e=player.target;
   if(!enemies.includes(e))player.target=null;
   else{const d=dist(player,e);
@@ -1059,6 +1111,7 @@ function render(){ctx.fillStyle='#08060b';ctx.fillRect(0,0,VW,VH);
  const g=ctx.createRadialGradient(lx,ly,R*0.35,lx,ly,R);
  g.addColorStop(0,'rgba(255,180,80,0)');g.addColorStop(0.55,'rgba(10,5,15,0.2)');g.addColorStop(1,biome.fog);
  ctx.fillStyle=g;ctx.fillRect(0,0,VW,VH);
+ if(joy.active)drawJoystick();
  renderMini();renderHud();}
 function renderMini(){mctx.fillStyle='#0a0710';mctx.fillRect(0,0,110,110);
  const s=110/MW;
@@ -1129,8 +1182,8 @@ function tipHTML(it){
  return h;}
 function showTip(ev,it){tip.style.display='block';tip.innerHTML=tipHTML(it);
  const w=tip.offsetWidth||250,h=tip.offsetHeight||120;
- tip.style.left=Math.max(6,Math.min(window.innerWidth-w-6,ev.clientX+14))+'px';
- tip.style.top=Math.max(6,Math.min(window.innerHeight-h-6,ev.clientY+(IS_TOUCH?-h-16:10)))+'px';}
+ tip.style.left=Math.max(6,Math.min(SW-w-6,ev.clientX+14))+'px';
+ tip.style.top=Math.max(6,Math.min(SH-h-6,ev.clientY+(IS_TOUCH?-h-16:10)))+'px';}
 function hideTip(){tip.style.display='none';}
 // ============ 通用槽位 ============
 function slotDiv(it,onclick,lbl,sel){const d=document.createElement('div');
@@ -1370,6 +1423,36 @@ window.revive=()=>{player.dead=false;calc();player.hp=D.maxhp;player.mp=D.maxmp;
  document.getElementById('death').style.display='none';
  genTown();};
 window.goTown=goTown;
+// ============ 虚拟摇杆 ============
+const JOY_R=52,JOY_DEAD=0.18;
+const joy={active:false,id:null,ox:0,oy:0,x:0,y:0,nx:0,ny:0,mag:0,t0:0,moved:0};
+function joyZone(cx,cy){return cx<SW*0.5;}   // 左半屏为摇杆区
+function joyStart(id,cx,cy){joy.active=true;joy.id=id;joy.ox=cx;joy.oy=cy;joy.x=cx;joy.y=cy;
+ joy.nx=0;joy.ny=0;joy.mag=0;joy.t0=Date.now();joy.moved=0;}
+function joyMove(cx,cy){
+ const dx=cx-joy.ox,dy=cy-joy.oy;const d=Math.hypot(dx,dy);
+ joy.moved=Math.max(joy.moved,d);
+ if(d<0.001){joy.nx=0;joy.ny=0;joy.mag=0;joy.x=joy.ox;joy.y=joy.oy;return;}
+ joy.nx=dx/d;joy.ny=dy/d;
+ joy.mag=Math.min(1,d/JOY_R);
+ const k=Math.min(d,JOY_R);
+ joy.x=joy.ox+joy.nx*k;joy.y=joy.oy+joy.ny*k;
+ // 摇杆拉到边缘后跟手：底座跟随手指，避免手指越拖越远失去控制
+ if(d>JOY_R){joy.ox=cx-joy.nx*JOY_R;joy.oy=cy-joy.ny*JOY_R;}}
+function joyEnd(){joy.active=false;joy.id=null;joy.mag=0;joy.nx=0;joy.ny=0;}
+function drawJoystick(){if(!joy.active)return;
+ ctx.save();ctx.setTransform(DPR,0,0,DPR,0,0);   // 摇杆按屏幕像素绘制，不随地图缩放
+ ctx.globalAlpha=0.28;ctx.fillStyle='#0a0710';
+ ctx.beginPath();ctx.arc(joy.ox,joy.oy,JOY_R,0,6.28);ctx.fill();
+ ctx.globalAlpha=0.55;ctx.strokeStyle='#8a7aa8';ctx.lineWidth=2;
+ ctx.beginPath();ctx.arc(joy.ox,joy.oy,JOY_R,0,6.28);ctx.stroke();
+ ctx.globalAlpha=0.22;ctx.strokeStyle='#5b4a6e';
+ ctx.beginPath();ctx.arc(joy.ox,joy.oy,JOY_R*JOY_DEAD,0,6.28);ctx.stroke();
+ ctx.globalAlpha=0.8;ctx.fillStyle=joy.mag>JOY_DEAD?'#c9a227':'#5b4a6e';
+ ctx.beginPath();ctx.arc(joy.x,joy.y,20,0,6.28);ctx.fill();
+ ctx.globalAlpha=0.9;ctx.strokeStyle='#f2d060';ctx.lineWidth=2;
+ ctx.beginPath();ctx.arc(joy.x,joy.y,20,0,6.28);ctx.stroke();
+ ctx.globalAlpha=1;ctx.restore();}
 // ============ 输入 ============
 function commandAt(cx,cy,isTouch){if(player.dead)return;
  if(IS_MOBILE&&anyPanelOpen()){closePanels();hold.on=false;return;}
@@ -1395,14 +1478,32 @@ cv.addEventListener('mousedown',e=>{if(e.button!==0)return;
  commandAt(e.clientX,e.clientY,false);});
 window.addEventListener('mouseup',()=>{hold.on=false;});
 cv.addEventListener('contextmenu',e=>e.preventDefault());
+let holdTouchId=null;
 cv.addEventListener('touchstart',e=>{e.preventDefault();unlockAudio();
- const t=e.changedTouches[0];mouse.x=t.clientX;mouse.y=t.clientY;
- hold.on=true;hold.touch=true;hold.x=t.clientX;hold.y=t.clientY;hold.cd=0.25;
- commandAt(t.clientX,t.clientY,true);hideTip();},{passive:false});
+ if(player.dead)return;
+ if(IS_MOBILE&&anyPanelOpen()){closePanels();hold.on=false;joyEnd();return;}
+ for(const t of e.changedTouches){
+  const id=t.identifier===undefined?0:t.identifier;
+  if(!joy.active&&joyZone(t.clientX,t.clientY)){joyStart(id,t.clientX,t.clientY);continue;}
+  if(holdTouchId===null){holdTouchId=id;
+   mouse.x=t.clientX;mouse.y=t.clientY;
+   hold.on=true;hold.touch=true;hold.x=t.clientX;hold.y=t.clientY;hold.cd=0.25;
+   commandAt(t.clientX,t.clientY,true);}}
+ hideTip();},{passive:false});
 cv.addEventListener('touchmove',e=>{e.preventDefault();
- const t=e.changedTouches[0];mouse.x=t.clientX;mouse.y=t.clientY;
- if(hold.on){hold.x=t.clientX;hold.y=t.clientY;}},{passive:false});
-const endTouch=e=>{if(e.cancelable)e.preventDefault();hold.on=false;};
+ for(const t of e.changedTouches){
+  const id=t.identifier===undefined?0:t.identifier;
+  if(joy.active&&id===joy.id){joyMove(t.clientX,t.clientY);continue;}
+  if(id===holdTouchId){mouse.x=t.clientX;mouse.y=t.clientY;
+   if(hold.on){hold.x=t.clientX;hold.y=t.clientY;}}}},{passive:false});
+const endTouch=e=>{if(e.cancelable)e.preventDefault();
+ for(const t of e.changedTouches){
+  const id=t.identifier===undefined?0:t.identifier;
+  if(joy.active&&id===joy.id){
+   // 左半屏轻点（没怎么拖动）仍然当作点击寻路，保留原来的操作习惯
+   if(joy.moved<12&&Date.now()-joy.t0<260)commandAt(t.clientX,t.clientY,true);
+   joyEnd();continue;}
+  if(id===holdTouchId){holdTouchId=null;hold.on=false;}}};
 cv.addEventListener('touchend',endTouch,{passive:false});
 cv.addEventListener('touchcancel',endTouch,{passive:false});
 function unlockAudio(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();
@@ -1457,9 +1558,11 @@ let paused=false;
 document.addEventListener('visibilitychange',()=>{
  if(document.hidden){paused=true;save();}else{paused=false;last=performance.now();}});
 window.addEventListener('pagehide',save);
+let vpTick=0;
 let last=performance.now();
 function loop(now){let dt=Math.min(0.05,(now-last)/1000);last=now;
  if(paused)dt=0;
+ if((vpTick=(vpTick+1)%15)===0){const m=measure();if(m.w!==SW||m.h!==SH)resize();}
  update(dt);
  if(pendingTransition){const f=pendingTransition;pendingTransition=null;f();}
  render();requestAnimationFrame(loop);}
