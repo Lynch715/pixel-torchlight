@@ -25,7 +25,8 @@ body{background:#08060b;overflow:hidden;font-family:"Courier New",monospace;colo
 #hpOrb{left:14px}#hpOrb .fill{background:linear-gradient(#e04040,#7a1515)}
 #mpOrb{left:88px}#mpOrb .fill{background:linear-gradient(#4070e0,#15257a)}
 .orb .txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;text-shadow:1px 1px 0 #000;z-index:2}
-#xpBar{position:absolute;left:170px;right:170px;bottom:66px;height:8px;background:#0a0710;border:2px solid #3a2c48}
+#xpBar{position:absolute;left:0;right:0;bottom:0;height:7px;background:#0a0710;
+ border:0;border-top:2px solid #3a2c48;z-index:6}
 #xpFill{height:100%;width:0;background:linear-gradient(90deg,#c9a227,#f2d060)}
 #skills{position:absolute;left:50%;transform:translateX(-50%);bottom:10px;display:flex;gap:6px;pointer-events:none}
 .sk{width:48px;height:48px;background:#141019;border:2px solid #3a2c48;position:relative;cursor:pointer;pointer-events:auto;
@@ -72,6 +73,13 @@ h4:first-of-type{margin-top:4px}
 .r2{border-color:#e8c840;box-shadow:inset 0 0 7px #e8c84044,0 0 4px #e8c84033}
 .r3{border-color:#e07820;box-shadow:inset 0 0 8px #e0782055,0 0 7px #e0782066}
 .r4{border-color:#40c040;box-shadow:inset 0 0 8px #40c04055,0 0 7px #40c04066}
+/* 操作区吸底：面板再长，装备/卸下/出售这些按钮也永远可见 */
+#invDetail,#smithDetail{position:sticky;bottom:0;z-index:3;
+ background:#141019;border-top:2px solid #3a2c48;
+ margin-top:10px;padding:8px 0 2px;box-shadow:0 -8px 10px -4px #141019}
+#invDetail .act,#smithDetail .act{margin-top:8px}
+/* 桌面端窗口太矮时同样要能滚 */
+.panel{max-height:calc(var(--vh)*100 - 120px);overflow-y:auto;overscroll-behavior:contain}
 #tip{position:absolute;background:#0d0912;border:2px solid #5b4a6e;box-shadow:0 0 0 2px #0a0710,0 4px 16px #000;
  padding:9px 10px;font-size:12px;z-index:99;display:none;pointer-events:none;max-width:250px;line-height:1.55}
 #chr table{font-size:13px;width:100%;line-height:1.75}
@@ -144,8 +152,7 @@ body.mobile .orb{width:var(--orb);height:var(--orb);bottom:calc(12px + env(safe-
 body.mobile #hpOrb{left:calc(12px + env(safe-area-inset-left))}
 body.mobile #mpOrb{left:calc(20px + var(--orb) + env(safe-area-inset-left))}
 body.mobile .orb .txt{font-size:12px}
-body.mobile #xpBar{left:calc(var(--lb) + 6px);right:calc(var(--ab) + var(--sb) + 76px);
- bottom:calc(78px + env(safe-area-inset-bottom));height:9px}
+body.mobile #xpBar{left:0;right:0;bottom:env(safe-area-inset-bottom);height:8px}
 /* 移动端底部只留两瓶药水，五个法术改由右侧法术槽承载 */
 body.mobile .sk[data-k="1"],body.mobile .sk[data-k="2"],body.mobile .sk[data-k="3"],
 body.mobile .sk[data-k="4"],body.mobile .sk[data-k="5"]{display:none}
@@ -171,7 +178,7 @@ body.mobile .panel{position:fixed;overflow-y:auto;-webkit-overflow-scrolling:tou
 body.mobile #inv,body.mobile #chr,body.mobile #help,body.mobile #shop,body.mobile #smith,body.mobile #quest{
  left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);
  top:calc((var(--vh)*100 - var(--hud))/2 + 6px)}
-body.mobile #inv{width:min(calc(var(--vw)*94),360px)}
+body.mobile #inv{width:min(calc(var(--vw)*94),380px)}
 body.mobile #chr{width:min(calc(var(--vw)*94),330px)}
 body.mobile #shop,body.mobile #smith{width:min(calc(var(--vw)*94),420px)}
 body.mobile #quest{width:min(calc(var(--vw)*94),410px)}
@@ -1720,6 +1727,11 @@ window.invUnequip=()=>{const it=invTarget();
  if(!it||invSel.from!=='eq')return;
  unequip(invSel.slot);invSel=null;renderInv();};
 window.invClose=()=>{invSel=null;hideTip();renderInv();};
+window.invSell=()=>{const it=invTarget();
+ if(!it||invSel.from!=='inv')return;
+ if(!inTown){log('只能在城镇出售','#e07820');return;}
+ const i=player.inv.indexOf(it);if(i<0)return;
+ sellItem(i);invSel=null;renderInv();};
 function renderInv(){const eq=document.getElementById('eqRow');eq.innerHTML='';
  for(const s of SLOTS)eq.appendChild(slotDiv(player.equip[s],()=>invPick('eq',s),SLOTAB[s],
   invSel&&invSel.from==='eq'&&invSel.slot===s));
@@ -1731,12 +1743,14 @@ function renderInv(){const eq=document.getElementById('eqRow');eq.innerHTML='';
  renderInvDetail();}
 function renderInvDetail(){const d=document.getElementById('invDetail');if(!d)return;
  const it=invTarget();
- if(!it){d.innerHTML='<span style="color:#887a99">点击装备栏或背包里的物品查看属性，再决定装备或卸下。</span>';return;}
+ if(!it){d.innerHTML='<span style="color:#887a99">点击装备栏或背包里的物品，这里会出现装备 / 卸下 / 出售按钮。</span>';return;}
  if(it.kind==='gem'){const G=GEMS[it.gem];
   d.innerHTML='<b style="color:'+G.c+'">'+it.name+'</b> <span style="color:#887a99">宝石</span><br>'
    +'<span style="color:#8ae0a0">+'+G.v[it.tier-1]+' '+STATN[G.stat]+'</span>'
    +'<br><span style="color:#887a99">到城镇找铁匠可镶嵌到装备插槽上</span>'
-   +'<div class="act"><button onclick="invClose()">关闭</button></div>';return;}
+   +'<div class="act">'
+   +(invSel.from==='inv'&&inTown?'<button onclick="invSell()">出售 '+Math.floor(itemValue(it)*0.42)+'金</button>':'')
+   +'<button onclick="invClose()">关闭</button></div>';return;}
  const equipped=invSel.from==='eq';
  const dl=equipped?'':deltaLines(it);
  d.innerHTML='<b style="color:'+RARC[it.rar]+'">'+itemTitle(it)+'</b> '
@@ -1747,6 +1761,7 @@ function renderInvDetail(){const d=document.getElementById('invDetail');if(!d)re
   +(dl?'<br><span style="color:#887a99">— 对比已装备 —</span><br>'+dl:'')
   +'<div class="act">'
   +(equipped?'<button onclick="invUnequip()">卸下</button>':'<button onclick="invEquip()">装备</button>')
+  +(!equipped&&inTown?'<button onclick="invSell()">出售 '+Math.floor(itemValue(it)*0.42)+'金</button>':'')
   +'<button onclick="invClose()">关闭</button></div>';}
 // ============ 角色 ============
 function renderChr(){const b=document.getElementById('chrBody');calc();
@@ -1843,6 +1858,10 @@ window.doSocket=i=>{const it=smithTarget();if(!it||it.kind!=='eq')return;
  it.sockets[idx]=gem;player.inv.splice(i,1);
  log(gem.name+' 已镶嵌到 '+it.name,'#8ae0ff');sfx(700,0.18,'triangle',0.05);
  calc();renderAll();};
+window.smithSell=()=>{const it=smithTarget();
+ if(!it||smithSel.from!=='inv')return;
+ const i=player.inv.indexOf(it);if(i<0)return;
+ sellItem(i);smithSel=null;renderAll();};
 window.clearSockets=()=>{const it=smithTarget();if(!it||it.kind!=='eq')return;
  const gems=it.sockets.filter(g=>g);if(!gems.length)return;
  const c=Math.floor(80*gems.length*(1+player.maxDepth*0.15));
@@ -1872,7 +1891,9 @@ function renderSmith(){const b=document.getElementById('smith');if(!b)return;
  const det=document.getElementById('smithDetail');
  if(!it){det.innerHTML='<span style="color:#887a99">点击上方装备或背包中的物品进行强化 / 镶嵌 / 分解。<br>选中装备后，点击背包里的宝石即可镶嵌。</span>';return;}
  if(it.kind==='gem'){det.innerHTML='<b style="color:#8ae0ff">'+it.name+'</b><br><span style="color:#887a99">先选中一件装备，再点击宝石即可镶嵌。</span>'+
-   '<div class="act"><button onclick="doSalvage()">分解 (+'+Math.floor(itemValue(it)*0.3)+'金)</button></div>';return;}
+   '<div class="act"><button onclick="doSalvage()">分解 (+'+Math.floor(itemValue(it)*0.3)+'金)</button>'
+   +(smithSel.from==='inv'?'<button onclick="smithSell()">出售 (+'+Math.floor(itemValue(it)*0.42)+'金)</button>':'')
+   +'</div>';return;}
  const socn=it.sockets.length,used=it.sockets.filter(g=>g).length;
  det.innerHTML='<b style="color:'+RARC[it.rar]+'">'+itemTitle(it)+'</b> <span style="color:#887a99">'+RARN[it.rar]+' · '+SLOTN[it.slot]+'</span><br>'
   +statLines(it)+(deltaLines(it)?'<br><span style="color:#887a99">— 对比已装备 —</span><br>'+deltaLines(it):'')
@@ -1881,6 +1902,7 @@ function renderSmith(){const b=document.getElementById('smith');if(!b)return;
   +'<button onclick="doUpgrade()"'+(it.up>=10?' disabled':'')+'>强化 +'+((it.up||0)+1)+' ('+upCost(it)+'金)</button>'
   +(used?'<button onclick="clearSockets()">取出宝石</button>':'')
   +'<button onclick="doSalvage()">分解 (+'+Math.floor(itemValue(it)*0.3)+'金)</button>'
+  +(smithSel.from==='inv'?'<button onclick="smithSell()">出售 (+'+Math.floor(itemValue(it)*0.42)+'金)</button>':'')
   +'</div>';}
 // ============ 任务面板 ============
 function renderQuestPanel(){const b=document.getElementById('questBody');
