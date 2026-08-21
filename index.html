@@ -64,6 +64,7 @@ h4:first-of-type{margin-top:4px}
 .slot .lbl{position:absolute;bottom:-1px;right:1px;font-size:9px;color:#665577}
 .slot .up{position:absolute;top:-1px;left:1px;font-size:10px;color:#f2d060;text-shadow:1px 1px 0 #000}
 .slot .soc{position:absolute;bottom:1px;left:1px;font-size:8px;color:#8ae0ff;text-shadow:1px 1px 0 #000}
+.slot .cnt2{position:absolute;bottom:0;right:2px;font-size:11px;color:#fff;text-shadow:1px 1px 0 #000;font-weight:bold}
 .slot.sel{border-color:#f2d060;box-shadow:0 0 0 2px #f2d06066}
 .slot.up1{box-shadow:inset 0 0 0 1px #40e06099}
 .slot .better{position:absolute;top:-3px;right:1px;font-size:10px;color:#40e060;text-shadow:1px 1px 0 #000;line-height:1}
@@ -235,9 +236,10 @@ body.short.mobile h4{margin:8px 0 4px}
 </div>
 <div id="inv" class="panel"><div class="pclose">&#10005;</div><h3>背包 (I)</h3>
   <h4>装备</h4><div id="eqRow"></div><h4>物品 <span id="invCnt"></span></h4><div id="grid"></div>
-  <h4>详情</h4><div id="invDetail" style="min-height:44px;font-size:12px;line-height:1.6"></div></div>
+  <h4>杂货</h4><div id="goodsRow"></div>
+  <div id="invDetail" style="font-size:12px;line-height:1.6"></div></div>
 <div id="chr" class="panel"><div class="pclose">&#10005;</div><h3>角色 (C)</h3><div id="chrBody"></div></div>
-<div id="shop" class="panel"><div class="pclose">&#10005;</div><h3>杂货商人</h3><div id="shopBody"></div></div>
+<div id="shop" class="panel"><div class="pclose">&#10005;</div><h3>杂货铺</h3><div id="shopBody"></div></div>
 <div id="smith" class="panel"><div class="pclose">&#10005;</div><h3>铁匠铺</h3><div id="smithBody"></div></div>
 <div id="quest" class="panel"><div class="pclose">&#10005;</div><h3>任务 (J)</h3><div id="questBody"></div></div>
 <div id="help" class="panel"><div class="pclose">&#10005;</div><h3>像素火炬之光</h3>
@@ -245,7 +247,7 @@ body.short.mobile h4{margin:8px 0 4px}
 <span id="helpMob" style="display:none">左半屏按住拖动 = 虚拟摇杆走位<br>右下大键 = 普通攻击（按住可连击），旁边小键 = 法术<br>长按法术键可切换要用的法术<br>底部两瓶为生命/法力药水<br>底部按钮释放技能与药水，技能自动锁定最近敌人<br>左上角：背包 / 角色 / 任务 / 回城 / 帮助 / 全屏<br></span>
 共 4 个区域 20 层，每 5 层有区域首领。<br>
 地牢里有宝藏室、精英巢穴、神龛与陷阱，小地图上会标出。<br>
-城镇里可以找商人买卖、找铁匠强化与镶嵌宝石、接任务。<br>
+城镇里：杂货铺卖药水与各类杂货，铁匠铺卖装备并负责强化镶嵌，两边都能收购你的东西。<br>杂货在背包下方点一下就能用。<br>
 每层随机刷新悬赏任务，完成后自动结算。<br>
 <span style="color:#e08080">生命与法力药水共用冷却，且有携带上限。<br>
 回城需要站定吟唱，移动或受伤会打断。<br>
@@ -350,6 +352,14 @@ ROWS.amulet_3=["................................", "............................
 ROWS.potion=["................................", "................................", "............kkkkkkkkk...........", "............kgggggggk...........", "............kgggggggk...........", "............kgggggggk...........", "...........kkgggggggkk..........", "...........kGGGGGGGGGk..........", "...........kGGGGGGGGGk..........", "...........kGGGGGGGGGk..........", ".........kkkwcccccccCkk.........", "........kkwwcccccccccwkk........", "........kwccccccccccccwk........", ".......kkwccrrrrrrrrccCkk.......", "......kkwccwwwwrrrrrrccwkk......", "......kwccrwwwwrrrrrrrccwk......", "......kwccrwwwwrrrrrrrccCk......", "......kwcrrwwwwrrrrrrrrcCk......", "......kwcrrwwwwrrrrrrrrcCk......", "......kwcrrwwwwrrrrrrrrcCk......", "......kwcrrrrrrrrrrrrrrcCk......", "......kwcrrrrrrrrrrrrrrcCk......", "......kwcrrrrrrrrrrrrrrcCk......", "......kwcrrrrrrrrrrrrrrcCk......", "......kwcrrrrrrrrrrrrrrcCk......", "......kkwcrrrrrrrrrrrrcCkk......", ".......kkwrrrrrrrrrrrrCkk.......", "........kwcrrrrrrrrrrcCk........", "........kkwCrrrrrrrrCCkk........", ".........kkkwCCCCCCCkkk.........", "...........kkkkkkkkkk...........", "................................"];
 ROWS.gold=["................................", "................................", "................................", "................................", "................................", "................................", "................................", "................................", "................................", "...........kkkkkkkkkk...........", ".........kkkllllllllkkk.........", "........kkllggggggggllkk........", "........klgggggggggggglk........", "........klgggwwwwwwgggdk........", "........klgggwwwwwwgggdk........", "........klgggwwwwwwgggdk........", "........klgggwwwwwwgggdk........", "........klggggggggggggdk........", "........kklwwwwggggggdkk........", ".....kkkkklwwwwggggggdkkkkk.....", "....kkllllggggggggggggllllkk....", "...kklgggggggggggggggggggglkk...", "...klgggggggggggggggggggggglk...", "...klggggggggggggggggggggggdk...", "...klggggggggggggggggggggggdk...", "...klggggggggggddggggggggggdk...", "...kklggggggggdkklggggggggdkk...", "....kkldddddddkkkkldddddddkk....", ".....kkkkkkkkkk..kkkkkkkkkk.....", "................................", "................................", "................................"];
 ROWS.gem=["................................", "................................", "...............kkk..............", "..............kkwkk.............", ".............kkllwkk............", "............kklglgwkk...........", "...........kklgglggwkk..........", ".........kkklggglgggwkkk........", "........kkllgggglggggwwkk.......", ".......kklgggggglggggggwkk......", "......kklggggggglgggggggwkk.....", ".....kklgggggggglggggggggwkk....", "....kklggggggggglgggggggggwkk...", "....kldddddddddddddddddddddwk...", "....kklggggggggglgggggggggdkk...", ".....kklgggggggglggggggggdkk....", "......kklggggggglgggggggdkk.....", ".......klggggggglgggggggdk......", ".......kklgggggglggggggdkk......", "........kklggggglgggggdkk.......", ".........klggggglgggggdk........", ".........kklgggglggggdkk........", "..........kklggglgggdkk.........", "...........klggglgggdk..........", "...........kklgglggdkk..........", "............kklglgdkk...........", ".............klglgdk............", ".............kklldkk............", "..............kklkk.............", "...............klk..............", "...............kkk..............", "................................"];
+ROWS.good_portal=["................................", "................................", "................................", "...kkkkkk..............kkkkkk...", "...kAAAAk..............kAAAAk...", "...kAAAAkk.............kAAAAkk..", "...kAAAAAk.............kAAAAAk..", "...kAAAAhkkkkkkkkkkkkkkkAAAAhk..", "...kAaaaaWWWWWWWWWWWWWWWaaaahk..", "...kAaaaawwwwwwwwwwwwwwwaaaahk..", "...kAaaaawwwwwwwwwwwwwwwaaaahk..", "...kAaaaadddddddddddddddaaaahk..", "...kAaaaawwwbbbbbbbbwwwwaaaahk..", "...kAaaaawwbbbwwwwbbbwwwaaaahk..", "...kAaaaawwbbwwwwwwbbwwwaaaahk..", "...kAaaaawwbbwwbbwwbbwwwaaaahk..", "...kAaaaawwbbwwbbwwbbwwwaaaahk..", "...kAaaaawwbbwwwwwwbbwwwaaaahk..", "...kAaaaawwbbbwwwwbbbwwwaaaahk..", "...kAaaaawwwbbbbbbbbwwwwaaaahk..", "...kAaaaawwwwbbbbbbwwwwwaaaahk..", "...kAaaaadddddddddddddddaaaahk..", "...kAaaaawwwwwwwwwwwwwwwaaaahk..", "...kAaaaawwwwwwwwwwwwwwwaaaahk..", "...kAAAAadddddddddddddddAAAAhk..", "...kAAAAhkkkkkkkkkkkkkkkAAAAhk..", "...kAAAAhk.............kAAAAhk..", "...kAAAAkk.............kAAAAkk..", "...kkkkkk..............kkkkkk...", "................................", "................................", "................................"];
+ROWS.good_purify=["................................", "................................", "............kkkkkkkkk...........", "............kgggggggk...........", "............kgggggggk...........", "............kgggggggk...........", "...........kkgggggggkk..........", "...........kGGGGGGGGGk..........", "...........kGGGGGGGGGk..........", "...........kGGGGGGGGGk..........", ".........kkkWcccccccGkk.........", "........kkWWcccccccccWkk........", ".......kkWccppppppppccWkk.......", "......kkWcWWWWpppppppccWkk......", "......kWccWWWWppppppppccWk......", ".....kkWcpWWWWpwwwpppppcCkk.....", ".....kWcppWWWWpwwwppppppcWk.....", ".....kWcpppppppwwwppppppcCk.....", ".....kWcpppppppwwwppppppcCk.....", ".....kWcpppwwwwwwwwwwwppcCk.....", ".....kWcpppwwwwwwwwwwwppcCk.....", ".....kWcpppwwwwwwwwwwwppcCk.....", ".....kWcpppppppwwwppppppcCk.....", ".....kWcpppppppwwwppppppcCk.....", ".....kkWcppppppwwwpppppcCkk.....", "......kWccpppppwwwppppccCk......", "......kkWccppppppppppccCkk......", ".......kkWccppppppppccCkk.......", "........kkWCccccccccCCkk........", ".........kkkWCCCCCCCkkk.........", "...........kkkkkkkkkk...........", "................................"];
+ROWS.good_str=["................................", "................................", "............kkkkkkkkk...........", "............kgggggggk...........", "............kgggggggk...........", "............kgggggggk...........", "............kgggggggk...........", "...........kkgggggggkk..........", "...........kGGGGGGGGGk..........", "...........kGGGGGGGGGk..........", "...........kGGGGcGGGGk..........", "...........kGGGGcGGGGk..........", "...........kkkkWcCkkkk..........", ".............kkWcCkk............", ".............kWcccWk............", "............kkWcccCkk...........", "............kWcccccWk...........", ".........kkkkWccpccCkk..........", ".........kWWWWccpcccWkk.........", ".........kWWWWcpppcccWk.........", ".........kWWWWpppppccCkk........", ".........kWWWWpppppcccWk........", "........kkWccpppppppccCkk.......", "........kWccpppppppppccWk.......", ".....kkkkWccpppppppppccCkkkk....", ".....kWWWccpppppppppppccWWWk....", ".....kWccpppppppppppppppccCk....", ".....kWccpppppppppppppppccCk....", ".....kWccpppppppppppppppccCk....", ".....kWCCCCCCCCCCCCCCCCCCCCk....", ".....kkkkkkkkkkkkkkkkkkkkkkk....", "................................"];
+ROWS.good_def=["................................", "................................", "............kkkkkkkkk...........", "............kgggggggk...........", "............kgggggggk...........", "............kgggggggk...........", "............kgggggggk...........", "...........kkgggggggkk..........", "...........kGGGGGGGGGk..........", "...........kGGGGGGGGGk..........", "...........kGGGGcGGGGk..........", "...........kGGGGcGGGGk..........", "...........kkkkWcCkkkk..........", ".............kkWcCkk............", ".............kWcccWk............", "............kkWcccCkk...........", "............kWcccccWk...........", ".........kkkkWccpccCkk..........", ".........kWWWWccpcccWkk.........", ".........kWWWWcpppcccWk.........", ".........kWWWWpppppccCkk........", ".........kWWWWpppppcccWk........", "........kkWccpppppppccCkk.......", "........kWccpppppppppccWk.......", ".....kkkkWccpppppppppccCkkkk....", ".....kWWWccpppppppppppccWWWk....", ".....kWccpppppppppppppppccCk....", ".....kWccpppppppppppppppccCk....", ".....kWccpppppppppppppppccCk....", ".....kWCCCCCCCCCCCCCCCCCCCCk....", ".....kkkkkkkkkkkkkkkkkkkkkkk....", "................................"];
+ROWS.good_luck=["................................", "................................", "............kkkkkkkkk...........", "............kgggggggk...........", "............kgggggggk...........", "............kgggggggk...........", "............kgggggggk...........", "...........kkgggggggkk..........", "...........kGGGGGGGGGk..........", "...........kGGGGGGGGGk..........", "...........kGGGGcGGGGk..........", "...........kGGGGcGGGGk..........", "...........kkkkWcCkkkk..........", ".............kkWcCkk............", ".............kWcccWk............", "............kkWcccCkk...........", "............kWcccccWk...........", ".........kkkkWccpccCkk..........", ".........kWWWWccpcccWkk.........", ".........kWWWWcpppcccWk.........", ".........kWWWWpppppccCkk........", ".........kWWWWpppppcccWk........", "........kkWccpppppppccCkk.......", "........kWccpppppppppccWk.......", ".....kkkkWccpppppppppccCkkkk....", ".....kWWWccpppppppppppccWWWk....", ".....kWccpppppppppppppppccCk....", ".....kWccpppppppppppppppccCk....", ".....kWccpppppppppppppppccCk....", ".....kWCCCCCCCCCCCCCCCCCCCCk....", ".....kkkkkkkkkkkkkkkkkkkkkkk....", "................................"];
+ROWS.good_torch=["...............kkk..............", "...............kok..............", "..............kkokk.............", "..............korok.............", "............kkkorRkk............", "...........kkoorrrokk...........", "..........kkorrrrrrokk..........", ".........kkorrrrrrrrokk.........", ".........korrrrrrrrrrok.........", ".........korrrrrrrrrrRk.........", ".........koroooooooorRk.........", ".........korooyyyyoorRk.........", ".........korooyyyyoorRk.........", ".........korooyyyyoorRk.........", ".........korooyyyyoorRk.........", ".........korooyyyyoorRk.........", ".........kkoroyyyyorRkk.........", "..........kkoooooooRkk..........", "...........kkorrrrRkk...........", "............kkHhhhDk............", ".............kHHHHHk............", ".............kHhhhDk............", ".............kHhhhDk............", ".............kHhhhDk............", ".............kHhhhDk............", ".............kHHHHHk............", ".............kHhhhDk............", ".............kHhhhDk............", ".............kHhhhDk............", ".............kHhhhDk............", ".............kHDDDDk............", ".............kkkkkkk............"];
+ROWS.good_ankh=["................................", "...................kkkk.........", "...................kWWk.........", "...................kWWk.........", ".................kkkkSkk........", ".................kFFSfFkk.......", "..............kkkkFfSffFk.......", ".............kkFFFfSfffDk.......", ".............kFffffSfffDk.......", "...........kkkFfffSffffDk.......", "...........kFFffffSffffDk.......", "...........kFffffSfffffDk.......", ".........kkkFffffSfffffDk.......", ".........kFFffffSffffffDk.......", ".........kFfffffSfffffDkk.......", "........kkFffffSffffffDk........", ".......kkFfffffSfffffDkk........", ".......kFfffffSffffffDk.........", ".......kkFffffSfffffDkk.........", ".......kFffffSfffffDkk..........", ".......kFffffSffffDkk...........", ".......kkFffSffffDDk............", ".......kFfffSfffDkkk............", ".......kkFfSfffDkk..............", "........kkFSfDDkk...............", ".........kSDDkkk................", "........kkSkkk..................", "........kSkk....................", ".......kkSk.....................", ".......kSkk.....................", ".......kSk......................", ".......kkk......................"];
+ROWS.good_bag=["................................", "................................", "................................", "................................", "...........kkkkkkkkkkk..........", "...........kLLLLLLLLLk..........", "...........kLBBBBBBBDk..........", ".........kkkLBBBBBBBDkkk........", ".........kLLBBBBBBBBBLLk........", ".........kLBBBBBBBBBBBDk........", "........kkLBBBBBBBBBBBDk........", ".......kkLBBBBBBBBBBBBDkk.......", "......kkLbBBBBBBBBBBBBBLkk......", ".....kkLbbbbbbbbbbbbbbbbLkkk....", ".....kyyyyyyyyyyyyyyyyyyyyyk....", "....kkLbbbbppppppppppbbbbDkk....", "....kLbbbbppppPPPPppppbbbbLk....", "....kLbbbbpppPPPPPPpppbbbbDk....", "....kLbbbbpppPPWWPPpppbbbbDk....", "....kLbbbbpppPPWWPPpppbbbbDkk...", "....kLbbbbpppPPPPPPpppbbbbbLk...", "....kLbbbbppppPPPPppppbbbbbDk...", "....kLbbbbbppppppppppbbbbbbDk...", "....kLbbbbbbppppppppbbbbbbbDk...", "....kLbbbbbbbbbbbbbbbbbbbbbDk...", "....kLbbbbbbbbbbbbbbbbbbbbbDk...", "....kLbbbbbbbbbbbbbbbbbbbbbDk...", "....kLbbbbbbbbbbbbbbbbbbbbbDk...", "....kLbbbbbbbbbbbbbbbbbbbbbDk...", "....kLDDDDDDDDDDDDDDDDDDDDDDk...", "....kkkkkkkkkkkkkkkkkkkkkkkkk...", "................................"];
 const SPR={};
 const TIERPAL=[{"k": "#150f1c", "m": "#9aa4b8", "l": "#cdd6e6", "d": "#5f6878", "a": "#8a5a2a", "A": "#c08a45", "g": "#d03040", "w": "#f2e8d0"},{"k": "#150f1c", "m": "#7ac0e8", "l": "#c0eaff", "d": "#4a86ab", "a": "#3d6a86", "A": "#7fb6d8", "g": "#5fe0ff", "w": "#f2e8d0"},{"k": "#150f1c", "m": "#e07038", "l": "#ffb070", "d": "#8f3a10", "a": "#5a3018", "A": "#9a5a28", "g": "#ffd050", "w": "#f2e8d0"},{"k": "#150f1c", "m": "#8a5fd0", "l": "#c4a4f0", "d": "#4e2e88", "a": "#3a2a58", "A": "#6a5090", "g": "#c060f0", "w": "#f2e8d0"}];
 const POTPAL_HP={"k": "#150f1c", "g": "#c8b8a0", "G": "#8a7a62", "c": "#d8e8f0", "C": "#9ab4c4", "r": "#d03040", "R": "#8a1820", "L": "#ff8090", "w": "#ffffff"};
@@ -454,6 +464,14 @@ SPR.gem_topaz=makeSprite(ROWS.gem,Object.assign({},GEMPAL,{g:'#e0b020',l:'#ffe68
 SPR.gem_emerald=makeSprite(ROWS.gem,Object.assign({},GEMPAL,{g:'#30b050',l:'#80f0a0',d:'#0e6a2a',w:'#d0ffd8'}));
 SPR.ic_hppot=SPR.hppot;SPR.ic_mppot=SPR.mppot;
 SPR.ic_sword=makeSprite(ROWS.weapon_0,rarPal(0,2));
+SPR.good_portal=makeSprite(ROWS.good_portal,{"k": "#150f1c", "w": "#efe0b8", "W": "#fff8e0", "d": "#a89060", "a": "#8a5a2a", "A": "#c08a45", "h": "#5a3a18", "b": "#4f9ede"});
+SPR.good_purify=makeSprite(ROWS.good_purify,{"k": "#150f1c", "g": "#c8b8a0", "G": "#8a7a62", "c": "#d8e8f0", "C": "#9ab4c4", "W": "#ffffff", "p": "#7fe0c0", "P": "#b8ffe8", "D": "#2f8a70", "w": "#ffffff"});
+SPR.good_str=makeSprite(ROWS.good_str,{"k": "#150f1c", "g": "#c8b8a0", "G": "#8a7a62", "c": "#d8e8f0", "C": "#9ab4c4", "W": "#ffffff", "p": "#e05038", "P": "#ff9070", "D": "#8a1c10"});
+SPR.good_def=makeSprite(ROWS.good_def,{"k": "#150f1c", "g": "#c8b8a0", "G": "#8a7a62", "c": "#d8e8f0", "C": "#9ab4c4", "W": "#ffffff", "p": "#5b9bd5", "P": "#a0d0ff", "D": "#1d4f88"});
+SPR.good_luck=makeSprite(ROWS.good_luck,{"k": "#150f1c", "g": "#c8b8a0", "G": "#8a7a62", "c": "#d8e8f0", "C": "#9ab4c4", "W": "#ffffff", "p": "#e8c040", "P": "#fff0a0", "D": "#8a6a08"});
+SPR.good_torch=makeSprite(ROWS.good_torch,{"k": "#150f1c", "h": "#7a4a22", "H": "#a86a34", "D": "#4a2a10", "r": "#d04010", "o": "#ff9020", "y": "#ffe870", "R": "#8a2408"});
+SPR.good_ankh=makeSprite(ROWS.good_ankh,{"k": "#150f1c", "f": "#e8c040", "F": "#fff0a0", "D": "#8a6a08", "S": "#fff8d0", "W": "#ffffff"});
+SPR.good_bag=makeSprite(ROWS.good_bag,{"k": "#150f1c", "b": "#6a3f8a", "B": "#4a2a60", "L": "#9a6fc0", "D": "#331a48", "p": "#c090f0", "P": "#e8d0ff", "W": "#ffffff", "y": "#e8c040"});
 const ICON={};for(const k in SPR)ICON[k]=SPR[k].toDataURL();
 // ============ 区域(生态) ============
 const BDECOR=[['dec_bone','dec_skull'],['dec_shard','dec_ice'],['dec_crack','dec_ember'],['dec_crystal','dec_rune']];
@@ -564,13 +582,14 @@ const RARN=['普通','魔法','稀有','传奇','套装'];
 const SLOTS=['weapon','offhand','helm','armor','legs','ring','amulet'];
 const SLOTN={weapon:'武器',offhand:'副手',helm:'头盔',armor:'胸甲',legs:'护腿',ring:'戒指',amulet:'项链'};
 const SLOTAB={weapon:'武',offhand:'副',helm:'头',armor:'甲',legs:'腿',ring:'戒',amulet:'链'};
-const INV_CAP=30;
+function invCap(){return 30+(player.bagUp||0)*6;}
 const player={px:0,py:0,dir:1,path:[],target:null,repath:0,atkCd:0,moving:false,
  lvl:1,xp:0,gold:0,pts:0,asc:0,maxDepth:1,
  base:{str:5,dex:5,vit:5,mag:5},
  hp:100,mp:30,inv:[],equip:{weapon:null,offhand:null,helm:null,armor:null,legs:null,ring:null,amulet:null},
  potions:{hp:3,mp:2},cds:{f:0,w:0,t:0,n:0,m:0,p:0},dead:false,
  buffs:[],skills:{f:true,w:true,t:true,n:false,m:false},spellSlot:0,swing:0,
+ goods:{},bagUp:0,torchT:0,
  stat:{kills:0,chests:0,bounties:0,deepest:1},milestones:{}};
 const pet={px:0,py:0,dir:1,atkCd:0,hp:1,maxhp:1,downT:0,moving:false};
 function xpNext(){return Math.floor(40*Math.pow(player.lvl,1.5));}
@@ -657,6 +676,53 @@ function calc(){const b={...player.base};const t={};
   gf:g('gf'),mf:g('mf'),fire:g('fire'),cdr:Math.min(60,g('cdr')),
   str:b.str,dex:b.dex,vit:b.vit,mag:b.mag};
  player.hp=Math.min(player.hp,D.maxhp);player.mp=Math.min(player.mp,D.maxmp);}
+// ============ 杂货 ============
+const GOODS={
+ portal:{n:'回城卷轴',ic:'good_portal',d:'立刻返回城镇，不用站着吟唱',cap:5,
+  price:d=>Math.floor(70+d*14)},
+ purify:{n:'净化药剂',ic:'good_purify',d:'解除灼烧，并驱散神龛诅咒',cap:5,
+  price:d=>Math.floor(50+d*10)},
+ str:{n:'力量药剂',ic:'good_str',d:'攻击提升，持续到离开本层',cap:3,
+  price:d=>Math.floor(90+d*18)},
+ def:{n:'守护药剂',ic:'good_def',d:'防御提升，持续到离开本层',cap:3,
+  price:d=>Math.floor(90+d*18)},
+ luck:{n:'幸运药剂',ic:'good_luck',d:'金币与掉落提升，持续到离开本层',cap:3,
+  price:d=>Math.floor(120+d*22)},
+ torch:{n:'火把',ic:'good_torch',d:'视野扩大，持续 90 秒',cap:5,
+  price:d=>Math.floor(40+d*8)},
+ ankh:{n:'复活羽毛',ic:'good_ankh',d:'死亡时自动原地复活一次，保住进度',cap:2,
+  price:d=>Math.floor(1100+d*260)}};
+function goodsCount(k){return (player.goods&&player.goods[k])||0;}
+function addGood(k,n){player.goods=player.goods||{};
+ const cap=GOODS[k].cap;
+ if(player.goods[k]>=cap){log(GOODS[k].n+'已达携带上限 '+cap,'#e07820');return false;}
+ player.goods[k]=Math.min(cap,(player.goods[k]||0)+(n||1));return true;}
+window.useGood=k=>{
+ if(goodsCount(k)<=0)return;
+ const G=GOODS[k];
+ if(k==='portal'){if(inTown){log('已经在城镇了','#e07820');return;}
+  player.goods[k]--;doGoTown();return;}
+ if(k==='ankh'){log('复活羽毛会在你倒下时自动生效','#887a99');return;}
+ if(inTown&&k!=='purify'){log('增益类杂货请在地牢里使用','#e07820');return;}
+ player.goods[k]--;
+ if(k==='purify'){player.burnT=0;
+  const before=player.buffs.length;
+  player.buffs=player.buffs.filter(b=>!b.bad);
+  log(before>player.buffs.length?'诅咒已驱散':'灼烧已解除','#8ae0a0');
+  burst(player.px,player.py,'#7fe0c0',18,140);}
+ else if(k==='torch'){player.torchT=90;log('火把点燃了，视野扩大','#ffb040');
+  burst(player.px,player.py,'#ff9020',14,120);}
+ else{
+  const d=Math.max(1,depth);
+  const st=k==='str'?{atk:Math.floor(18+d*3)}:
+           k==='def'?{def:Math.floor(10+d*1.8)}:
+                     {gf:70,mf:45};
+  const nm=G.n.replace('药剂','');
+  player.buffs=player.buffs.filter(b=>b.n!==nm+'增益');
+  player.buffs.push({n:nm+'增益',stats:st,bad:false});
+  log(G.n+'生效，持续到离开本层','#8ae0a0');
+  burst(player.px,player.py,k==='str'?'#e05038':k==='def'?'#5b9bd5':'#e8c040',18,140);}
+ calc();renderBuffs();renderAll();sfx(600,0.15,'triangle',0.05);};
 // ============ 物品 ============
 const GEMS={ruby:{n:'红宝石',stat:'atk',v:[4,8,14],c:'#d03040'},
  sapphire:{n:'蓝宝石',stat:'mag',v:[3,6,10],c:'#3060d0'},
@@ -718,7 +784,7 @@ function itemValue(it){if(it.kind==='gem')return 40*it.tier*it.tier;
  for(const k in s)base+=Math.abs(s[k])*(k==='hp'?0.5:k==='mp'?0.7:k==='crit'||k==='critd'?2.5:2);
  return Math.max(8,Math.floor(base*(1+it.rar*0.45)+it.rar*25+(it.up||0)*30));}
 function upCost(it){return Math.floor((60+itemValue(it)*0.5)*Math.pow(1.45,it.up||0));}
-function invAdd(it){if(player.inv.length>=INV_CAP){log('背包已满！','#e04040');return false;}
+function invAdd(it){if(player.inv.length>=invCap()){log('背包已满！','#e04040');return false;}
  player.inv.push(it);return true;}
 // ============ 消息/特效 ============
 const logEl=document.getElementById('log');let msgs=[];
@@ -810,7 +876,7 @@ function genTown(){inTown=true;depth=0;bossAlive=false;floorMod=null;
  stairs={x:x0+w-3,y:y0+h-2};
  player.px=(x0+3.5)*T;player.py=(y0+h-3.5)*T;player.path=[];player.target=null;
  pet.px=player.px-T;pet.py=player.py;petReset();
- npcs.push({id:'merchant',n:'杂货商人',spr:'npc_merchant',px:(x0+3.5)*T,py:(y0+2.5)*T,near:false});
+ npcs.push({id:'merchant',n:'杂货铺',spr:'npc_merchant',px:(x0+3.5)*T,py:(y0+2.5)*T,near:false});
  npcs.push({id:'smith',n:'铁匠',spr:'npc_smith',px:(x0+9.5)*T,py:(y0+2.5)*T,near:false});
  npcs.push({id:'quest',n:'公会执事',spr:'npc_quest',px:(x0+15.5)*T,py:(y0+2.5)*T,near:false});
  portal={px:(x0+w-3.5)*T,py:(y0+h-3.5)*T};
@@ -1037,7 +1103,16 @@ function hurtPlayer(raw,e){if(player.dead)return;const d=Math.max(1,Math.floor(r
  player.hp-=d;ftext(player.px,player.py-30,'-'+d,'#e04040');sfx(140,0.12,'square',0.05);
  cancelTownCast('伤害');
  if(e&&D.thorns>0){dmgEnemy(e,Math.floor(D.thorns),false,'dot');}
- if(player.hp<=0){player.hp=0;player.dead=true;townCast=-1;
+ if(player.hp<=0){
+  if(goodsCount('ankh')>0){   // 复活羽毛：原地站起来，进度不丢
+   player.goods.ankh--;player.hp=D.maxhp;player.mp=D.maxmp;player.burnT=0;
+   player.cds.p=0;
+   burst(player.px,player.py,'#ffe870',34,220);sfx(700,0.6,'triangle',0.07);
+   ftext(player.px,player.py-46,'复活羽毛！','#ffe870');
+   log('复活羽毛化作金光，你重新站了起来','#ffe870');
+   for(const e of enemies)e.stun=Math.max(e.stun,1.4);
+   renderAll();return;}
+  player.hp=0;player.dead=true;townCast=-1;
   const lost=Math.floor(player.gold*0.12);player.gold-=lost;
   // 进度退回本区域起点，死亡不再是零成本
   const back=inTown?1:Math.floor((depth-1)/FLOORS_PER_BIOME)*FLOORS_PER_BIOME+1;
@@ -1255,6 +1330,7 @@ function update(dt){time+=dt;if(!inTown)floorTime+=dt;
  player.mp=Math.min(D.maxmp,player.mp+dt*(1+D.mag*0.08));
  if(!player.dead)player.hp=Math.min(D.maxhp,player.hp+dt*(inTown?12:0.6));
  if(player.slowT>0)player.slowT-=dt;
+ if(player.torchT>0)player.torchT-=dt;
  if(player.burnT>0&&!player.dead){player.burnT-=dt;
   player.burnTick=(player.burnTick||0)+dt;
   if(player.burnTick>=0.5){player.burnTick=0;
@@ -1579,7 +1655,8 @@ function render(){ctx.fillStyle='#08060b';ctx.fillRect(0,0,VW,VH);
  const lx=player.px-cam.x,ly=player.py-cam.y-8;
  // 越往深处视野越窄
  const bi=clamp(Math.floor((depth-1)/FLOORS_PER_BIOME),0,3);
- const baseR=inTown?11:((IS_MOBILE?6.4:5.6)-bi*0.42-(player.asc||0)*0.25)*(hasMod('dark')?0.62:1);
+ let baseR=inTown?11:((IS_MOBILE?6.4:5.6)-bi*0.42-(player.asc||0)*0.25)*(hasMod('dark')?0.62:1);
+ if(player.torchT>0)baseR+=2.4;
  const R=T*(Math.max(3.2,baseR)+Math.sin(time*7)*0.15);
  const g=ctx.createRadialGradient(lx,ly,R*0.35,lx,ly,R);
  g.addColorStop(0,'rgba(255,180,80,0)');g.addColorStop(0.55,'rgba(10,5,15,0.2)');g.addColorStop(1,biome.fog);
@@ -1709,7 +1786,7 @@ function equipItem(it){if(it.kind!=='eq'){log('宝石需要到铁匠处镶嵌','
  player.inv.splice(player.inv.indexOf(it),1);if(old)player.inv.push(old);
  sfx(600,0.1,'triangle',0.04);calc();renderAll();}
 function unequip(s){const it=player.equip[s];if(!it)return;
- if(player.inv.length>=INV_CAP){log('背包已满！','#e04040');return;}
+ if(player.inv.length>=invCap()){log('背包已满！','#e04040');return;}
  player.inv.push(it);player.equip[s]=null;invSel=null;calc();renderAll();}
 // 选中态：点一下只是查看，装备/卸下由详情里的按钮决定
 let invSel=null;
@@ -1727,29 +1804,43 @@ window.invUnequip=()=>{const it=invTarget();
  if(!it||invSel.from!=='eq')return;
  unequip(invSel.slot);invSel=null;renderInv();};
 window.invClose=()=>{invSel=null;hideTip();renderInv();};
-window.invSell=()=>{const it=invTarget();
- if(!it||invSel.from!=='inv')return;
- if(!inTown){log('只能在城镇出售','#e07820');return;}
- const i=player.inv.indexOf(it);if(i<0)return;
- sellItem(i);invSel=null;renderInv();};
+
 function renderInv(){const eq=document.getElementById('eqRow');eq.innerHTML='';
  for(const s of SLOTS)eq.appendChild(slotDiv(player.equip[s],()=>invPick('eq',s),SLOTAB[s],
   invSel&&invSel.from==='eq'&&invSel.slot===s));
- document.getElementById('invCnt').textContent='('+player.inv.length+'/'+INV_CAP+')';
+ document.getElementById('invCnt').textContent='('+player.inv.length+'/'+invCap()+')';
  const grid=document.getElementById('grid');grid.innerHTML='';
- for(let i=0;i<INV_CAP;i++){const it=player.inv[i];
+ for(let i=0;i<invCap();i++){const it=player.inv[i];
   grid.appendChild(slotDiv(it,it?()=>invPick('inv',i):null,'',
    invSel&&invSel.from==='inv'&&invSel.i===i));}
- renderInvDetail();}
+ renderGoodsRow();renderInvDetail();}
+// 杂货直接点图标使用，不占背包格
+function renderGoodsRow(){const g=document.getElementById('goodsRow');if(!g)return;
+ g.innerHTML='';g.style.display='grid';
+ g.style.gridTemplateColumns='repeat(7,44px)';g.style.gap='5px';
+ const owned=Object.keys(GOODS).filter(k=>goodsCount(k)>0);
+ if(!owned.length){g.style.display='block';
+  g.innerHTML='<span style="color:#887a99;font-size:12px">还没有杂货，去城镇的杂货铺看看</span>';return;}
+ for(const k of owned){const G=GOODS[k];
+  const d=document.createElement('div');d.className='slot';
+  const img=document.createElement('img');img.src=ICON[G.ic];d.appendChild(img);
+  const c=document.createElement('span');c.className='cnt2';c.textContent=goodsCount(k);d.appendChild(c);
+  d.title=G.n+'：'+G.d;
+  const fire=()=>{useGood(k);};
+  if(IS_TOUCH){let t=false,tc=0;
+   d.addEventListener('touchstart',e=>{e.stopPropagation();t=true;clearTimeout(tc);tc=setTimeout(()=>{t=false;},700);fire();},{passive:true});
+   d.addEventListener('click',()=>{if(!t)fire();});}
+  else d.addEventListener('click',fire);
+  g.appendChild(d);}}
 function renderInvDetail(){const d=document.getElementById('invDetail');if(!d)return;
  const it=invTarget();
- if(!it){d.innerHTML='<span style="color:#887a99">点击装备栏或背包里的物品，这里会出现装备 / 卸下 / 出售按钮。</span>';return;}
+ if(!it){d.innerHTML='';d.style.display='none';return;}
+ d.style.display='block';
  if(it.kind==='gem'){const G=GEMS[it.gem];
   d.innerHTML='<b style="color:'+G.c+'">'+it.name+'</b> <span style="color:#887a99">宝石</span><br>'
    +'<span style="color:#8ae0a0">+'+G.v[it.tier-1]+' '+STATN[G.stat]+'</span>'
    +'<br><span style="color:#887a99">到城镇找铁匠可镶嵌到装备插槽上</span>'
    +'<div class="act">'
-   +(invSel.from==='inv'&&inTown?'<button onclick="invSell()">出售 '+Math.floor(itemValue(it)*0.42)+'金</button>':'')
    +'<button onclick="invClose()">关闭</button></div>';return;}
  const equipped=invSel.from==='eq';
  const dl=equipped?'':deltaLines(it);
@@ -1761,7 +1852,6 @@ function renderInvDetail(){const d=document.getElementById('invDetail');if(!d)re
   +(dl?'<br><span style="color:#887a99">— 对比已装备 —</span><br>'+dl:'')
   +'<div class="act">'
   +(equipped?'<button onclick="invUnequip()">卸下</button>':'<button onclick="invEquip()">装备</button>')
-  +(!equipped&&inTown?'<button onclick="invSell()">出售 '+Math.floor(itemValue(it)*0.42)+'金</button>':'')
   +'<button onclick="invClose()">关闭</button></div>';}
 // ============ 角色 ============
 function renderChr(){const b=document.getElementById('chrBody');calc();
@@ -1790,10 +1880,20 @@ function renderChr(){const b=document.getElementById('chrBody');calc();
   '<button onclick="resetSave()">重新开始</button></div>';}
 window.addPt=k=>{if(player.pts>0){player.pts--;player.base[k]++;calc();renderChr();sfx(500,0.08,'triangle',0.04);}};
 // ============ 商店 ============
-let shopStock=[],shopTab='buy';
-function refreshShop(){shopStock=[];const d=Math.max(1,player.maxDepth);
- for(let i=0;i<5;i++)shopStock.push(genItem(d+1,Math.random()<0.25?2:Math.random()<0.5?1:0));
- if(Math.random()<0.5)shopStock.push(genGem(d));}
+let shopStock=[],smithStock=[],shopTab='buy';
+function refreshShop(){shopStock=[];smithStock=[];const d=Math.max(1,player.maxDepth);
+ // 杂货铺不卖装备，装备归铁匠；这里只上消耗品
+ for(let i=0;i<5;i++)smithStock.push(genItem(d+1,Math.random()<0.25?2:Math.random()<0.5?1:0));
+ if(Math.random()<0.5)smithStock.push(genGem(d));}
+function bagPrice(){return Math.floor(800*Math.pow(1.9,player.bagUp||0));}
+window.buyGood=k=>{const G=GOODS[k];const d=Math.max(1,player.maxDepth);const p=G.price(d);
+ if(player.gold<p){log('金币不足','#e04040');return;}
+ if(goodsCount(k)>=G.cap){log('已达携带上限 '+G.cap,'#e07820');return;}
+ player.gold-=p;addGood(k,1);sfx(680,0.12,'triangle',0.05);renderAll();};
+window.buyBag=()=>{const p=bagPrice();
+ if(player.gold<p){log('金币不足','#e04040');return;}
+ player.gold-=p;player.bagUp=(player.bagUp||0)+1;
+ log('背包扩容到 '+invCap()+' 格','#40e060');sfx(520,0.25,'triangle',0.06);renderAll();};
 function potPrice(k){return Math.floor((k==='hp'?28:34)*(1+player.maxDepth*0.22));}
 function buyPot(k){const p=potPrice(k);if(player.gold<p){log('金币不足','#e04040');return;}
  if(player.potions[k]>=potCap()){log('已达携带上限 '+potCap(),'#e07820');return;}
@@ -1801,10 +1901,10 @@ function buyPot(k){const p=potPrice(k);if(player.gold<p){log('金币不足','#e0
 window.buyPot=buyPot;
 window.buyItem=i=>{const it=shopStock[i];if(!it)return;const p=Math.floor(itemValue(it)*1.6);
  if(player.gold<p){log('金币不足','#e04040');return;}
- if(player.inv.length>=INV_CAP){log('背包已满','#e04040');return;}
+ if(player.inv.length>=invCap()){log('背包已满','#e04040');return;}
  player.gold-=p;shopStock.splice(i,1);player.inv.push(it);
  log('购入 '+it.name,RARC[it.rar||0]);sfx(700,0.12,'triangle',0.05);renderAll();};
-window.sellItem=i=>{const it=player.inv[i];if(!it)return;invSel=null;const p=Math.floor(itemValue(it)*0.42);
+window.sellItem=i=>{const it=player.inv[i];if(!it)return;invSel=null;smithSel=null;const p=Math.floor(itemValue(it)*0.42);
  player.gold+=p;player.inv.splice(i,1);log('卖出 '+it.name+' (+'+p+'金)','#f2d060');
  sfx(760,0.1,'triangle',0.04);renderAll();};
 window.shopSetTab=t=>{shopTab=t;renderShop();};
@@ -1813,16 +1913,22 @@ function renderShop(){const b=document.getElementById('shopBody');
   '<div class="tabs"><div class="tb'+(shopTab==='buy'?' on':'')+'" onclick="shopSetTab(\'buy\')">购买</div>'+
   '<div class="tb'+(shopTab==='sell'?' on':'')+'" onclick="shopSetTab(\'sell\')">出售</div></div>';
  if(shopTab==='buy'){h+='<div class="scroll">';
-  h+='<div class="row"><img src="'+ICON.hppot+'"><div class="nm">生命药水<br><span style="color:#887a99">持有 '+player.potions.hp+' / '+potCap()+'</span></div>'+
-   '<div class="pr">'+potPrice('hp')+' 金</div><button onclick="buyPot(\'hp\')">买</button></div>';
-  h+='<div class="row"><img src="'+ICON.mppot+'"><div class="nm">法力药水<br><span style="color:#887a99">持有 '+player.potions.mp+' / '+potCap()+'</span></div>'+
-   '<div class="pr">'+potPrice('mp')+' 金</div><button onclick="buyPot(\'mp\')">买</button></div>';
-  shopStock.forEach((it,i)=>{const p=Math.floor(itemValue(it)*1.6);const c=it.kind==='gem'?'#8ae0ff':RARC[it.rar];
-   h+='<div class="row" style="border-left:3px solid '+c+'"><img src="'+itemURL(it)+'"><div class="nm"><span style="color:'+c+'">'+itemTitle(it)+'</span>'+
-    (isUpgrade(it)?' <span style="color:#40e060">▲</span>':'')+
-    '<br><span style="color:#887a99">'+(it.kind==='gem'?'宝石':RARN[it.rar]+' · '+SLOTN[it.slot])+'</span></div>'+
-    '<div class="pr">'+p+' 金</div><button onclick="buyItem('+i+')"'+(player.gold<p?' disabled':'')+'>买</button></div>';});
-  h+='</div><div style="color:#887a99;font-size:11px;margin-top:6px">每次下潜后库存会刷新</div>';}
+  const potRow=(k,ic,nm)=>{const p=potPrice(k);const full=player.potions[k]>=potCap();
+   return '<div class="row"><img src="'+ic+'"><div class="nm">'+nm+
+    '<br><span style="color:#887a99">持有 '+player.potions[k]+' / '+potCap()+'</span></div>'+
+    '<div class="pr">'+p+' 金</div><button onclick="buyPot(\''+k+'\')"'+(full||player.gold<p?' disabled':'')+'>买</button></div>';};
+  h+=potRow('hp',ICON.hppot,'生命药水');
+  h+=potRow('mp',ICON.mppot,'法力药水');
+  for(const k in GOODS){const G=GOODS[k];const p=G.price(Math.max(1,player.maxDepth));
+   const full=goodsCount(k)>=G.cap;
+   h+='<div class="row"><img src="'+ICON[G.ic]+'"><div class="nm">'+G.n+
+    '<br><span style="color:#887a99">'+G.d+'　持有 '+goodsCount(k)+' / '+G.cap+'</span></div>'+
+    '<div class="pr">'+p+' 金</div><button onclick="buyGood(\''+k+'\')"'+(full||player.gold<p?' disabled':'')+'>买</button></div>';}
+  const bp=bagPrice();
+  h+='<div class="row" style="border-left:3px solid #a060f0"><img src="'+ICON.good_bag+'"><div class="nm">空间袋'+
+   '<br><span style="color:#887a99">背包永久 +6 格　当前 '+invCap()+' 格</span></div>'+
+   '<div class="pr">'+bp+' 金</div><button onclick="buyBag()"'+(player.gold<bp?' disabled':'')+'>买</button></div>';
+  h+='</div><div style="color:#887a99;font-size:11px;margin-top:6px">装备请到铁匠铺购买</div>';}
  else{h+='<div class="scroll">';
   if(!player.inv.length)h+='<div style="color:#887a99;padding:8px">背包是空的</div>';
   player.inv.forEach((it,i)=>{const p=Math.floor(itemValue(it)*0.42);const c=it.kind==='gem'?'#8ae0ff':RARC[it.rar];
@@ -1848,7 +1954,7 @@ window.doSalvage=()=>{const it=smithTarget();if(!it)return;
  const g=Math.floor(itemValue(it)*0.3);player.gold+=g;
  let extra='';
  if(it.kind==='eq'&&Math.random()<0.3+it.rar*0.12){const gem=genGem(Math.max(1,player.maxDepth));
-  if(player.inv.length<INV_CAP+1){player.inv.push(gem);extra='，得到 '+gem.name;}}
+  if(player.inv.length<invCap()+1){player.inv.push(gem);extra='，得到 '+gem.name;}}
  player.inv.splice(player.inv.indexOf(it),1);smithSel=null;invSel=null;
  log('分解 '+it.name+' (+'+g+'金'+extra+')','#f2d060');sfx(240,0.2,'sawtooth',0.05);
  calc();renderAll();};
@@ -1858,22 +1964,51 @@ window.doSocket=i=>{const it=smithTarget();if(!it||it.kind!=='eq')return;
  it.sockets[idx]=gem;player.inv.splice(i,1);
  log(gem.name+' 已镶嵌到 '+it.name,'#8ae0ff');sfx(700,0.18,'triangle',0.05);
  calc();renderAll();};
-window.smithSell=()=>{const it=smithTarget();
- if(!it||smithSel.from!=='inv')return;
- const i=player.inv.indexOf(it);if(i<0)return;
- sellItem(i);smithSel=null;renderAll();};
 window.clearSockets=()=>{const it=smithTarget();if(!it||it.kind!=='eq')return;
  const gems=it.sockets.filter(g=>g);if(!gems.length)return;
  const c=Math.floor(80*gems.length*(1+player.maxDepth*0.15));
  if(player.gold<c){log('金币不足（取出宝石需 '+c+' 金）','#e04040');return;}
- if(player.inv.length+gems.length>INV_CAP){log('背包空间不足','#e04040');return;}
+ if(player.inv.length+gems.length>invCap()){log('背包空间不足','#e04040');return;}
  player.gold-=c;for(const g of gems)player.inv.push(g);
  it.sockets=it.sockets.map(()=>null);
  log('已取出 '+gems.length+' 颗宝石','#8ae0ff');calc();renderAll();};
+let smithTab='work';
+window.smithSetTab=t=>{smithTab=t;renderSmith();};
+window.buySmithItem=i=>{const it=smithStock[i];if(!it)return;
+ const p=Math.floor(itemValue(it)*1.6);
+ if(player.gold<p){log('金币不足','#e04040');return;}
+ if(player.inv.length>=invCap()){log('背包已满','#e04040');return;}
+ player.gold-=p;smithStock.splice(i,1);player.inv.push(it);
+ log('购入 '+it.name,RARC[it.rar||0]);sfx(700,0.12,'triangle',0.05);renderAll();};
 function renderSmith(){const b=document.getElementById('smith');if(!b)return;
  const body=document.getElementById('smithBody');
  const it=smithTarget();
  let h='<div style="color:#f2d060;margin-bottom:6px">金币 '+player.gold+'</div>';
+ h+='<div class="tabs">'+
+  '<div class="tb'+(smithTab==='work'?' on':'')+'" onclick="smithSetTab(\'work\')">打造</div>'+
+  '<div class="tb'+(smithTab==='buy'?' on':'')+'" onclick="smithSetTab(\'buy\')">购买装备</div>'+
+  '<div class="tb'+(smithTab==='sell'?' on':'')+'" onclick="smithSetTab(\'sell\')">出售</div></div>';
+ if(smithTab==='buy'){
+  h+='<div class="scroll">';
+  if(!smithStock.length)h+='<div style="color:#887a99;padding:8px">今天的货都卖光了，下潜一趟再来</div>';
+  smithStock.forEach((x,i)=>{const p=Math.floor(itemValue(x)*1.6);
+   const c=x.kind==='gem'?'#8ae0ff':RARC[x.rar];
+   h+='<div class="row" style="border-left:3px solid '+c+'"><img src="'+itemURL(x)+'"><div class="nm"><span style="color:'+c+'">'+itemTitle(x)+'</span>'+
+    (isUpgrade(x)?' <span style="color:#40e060">▲ 可升级</span>':'')+
+    '<br><span style="color:#887a99">'+(x.kind==='gem'?'宝石':RARN[x.rar]+' · '+SLOTN[x.slot])+'</span></div>'+
+    '<div class="pr">'+p+' 金</div><button onclick="buySmithItem('+i+')"'+(player.gold<p?' disabled':'')+'>买</button></div>';});
+  h+='</div><div style="color:#887a99;font-size:11px;margin-top:6px">每次进城会补货</div>';
+  body.innerHTML=h;return;}
+ if(smithTab==='sell'){
+  h+='<div class="scroll">';
+  if(!player.inv.length)h+='<div style="color:#887a99;padding:8px">背包是空的</div>';
+  player.inv.forEach((x,i)=>{const p=Math.floor(itemValue(x)*0.42);
+   const c=x.kind==='gem'?'#8ae0ff':RARC[x.rar];
+   h+='<div class="row" style="border-left:3px solid '+c+'"><img src="'+itemURL(x)+'"><div class="nm"><span style="color:'+c+'">'+itemTitle(x)+'</span>'+
+    '<br><span style="color:#887a99">'+(x.kind==='gem'?'宝石':RARN[x.rar]+' · '+SLOTN[x.slot])+'</span></div>'+
+    '<div class="pr">'+p+' 金</div><button onclick="sellItem('+i+')">卖</button></div>';});
+  h+='</div>';
+  body.innerHTML=h;return;}
  h+='<h4>选择要处理的装备</h4><div id="smithEq" class="eqrow2"></div>';
  h+='<div id="smithInv"></div>';
  h+='<div id="smithDetail" style="margin-top:8px;min-height:40px"></div>';
@@ -1892,7 +2027,6 @@ function renderSmith(){const b=document.getElementById('smith');if(!b)return;
  if(!it){det.innerHTML='<span style="color:#887a99">点击上方装备或背包中的物品进行强化 / 镶嵌 / 分解。<br>选中装备后，点击背包里的宝石即可镶嵌。</span>';return;}
  if(it.kind==='gem'){det.innerHTML='<b style="color:#8ae0ff">'+it.name+'</b><br><span style="color:#887a99">先选中一件装备，再点击宝石即可镶嵌。</span>'+
    '<div class="act"><button onclick="doSalvage()">分解 (+'+Math.floor(itemValue(it)*0.3)+'金)</button>'
-   +(smithSel.from==='inv'?'<button onclick="smithSell()">出售 (+'+Math.floor(itemValue(it)*0.42)+'金)</button>':'')
    +'</div>';return;}
  const socn=it.sockets.length,used=it.sockets.filter(g=>g).length;
  det.innerHTML='<b style="color:'+RARC[it.rar]+'">'+itemTitle(it)+'</b> <span style="color:#887a99">'+RARN[it.rar]+' · '+SLOTN[it.slot]+'</span><br>'
@@ -1902,7 +2036,6 @@ function renderSmith(){const b=document.getElementById('smith');if(!b)return;
   +'<button onclick="doUpgrade()"'+(it.up>=10?' disabled':'')+'>强化 +'+((it.up||0)+1)+' ('+upCost(it)+'金)</button>'
   +(used?'<button onclick="clearSockets()">取出宝石</button>':'')
   +'<button onclick="doSalvage()">分解 (+'+Math.floor(itemValue(it)*0.3)+'金)</button>'
-  +(smithSel.from==='inv'?'<button onclick="smithSell()">出售 (+'+Math.floor(itemValue(it)*0.42)+'金)</button>':'')
   +'</div>';}
 // ============ 任务面板 ============
 function renderQuestPanel(){const b=document.getElementById('questBody');
@@ -1953,7 +2086,8 @@ const SAVEKEY='ptl_save_v2';
 function save(){try{localStorage.setItem(SAVEKEY,JSON.stringify({
  v:2,depth,inTown,lvl:player.lvl,xp:player.xp,gold:player.gold,pts:player.pts,asc:player.asc,
  maxDepth:player.maxDepth,base:player.base,inv:player.inv,equip:player.equip,potions:player.potions,
- skills:player.skills,spellSlot:player.spellSlot,stat:player.stat,milestones:player.milestones}));}catch(e){}}
+ skills:player.skills,spellSlot:player.spellSlot,goods:player.goods,bagUp:player.bagUp,
+ stat:player.stat,milestones:player.milestones}));}catch(e){}}
 function migrate(it){if(!it||it.kind!=='eq')return it;
  if(it.up===undefined)it.up=0;if(!it.sockets)it.sockets=[];if(it.set===undefined)it.set=null;
  if(!SLOTN[it.slot])it.slot='weapon';
@@ -1974,6 +2108,9 @@ function load(){try{const s=JSON.parse(localStorage.getItem(SAVEKEY));if(!s)retu
  player.stat=Object.assign({kills:0,chests:0,bounties:0,deepest:1},s.stat||{});
  player.milestones=s.milestones||{};
  player.spellSlot=s.spellSlot||0;
+ player.goods=s.goods||{};player.bagUp=s.bagUp||0;
+ for(const k in player.goods)if(!GOODS[k])delete player.goods[k];
+ for(const k in player.goods)player.goods[k]=clamp(player.goods[k]|0,0,GOODS[k].cap);
  depth=s.depth||1;inTown=s.inTown!==false;
  return true;}catch(e){return false;}}
 window.resetSave=()=>{try{localStorage.removeItem(SAVEKEY);localStorage.removeItem('ptl_save');}catch(e){}location.reload();};
